@@ -293,6 +293,18 @@ function renderBlock(block: ContentBlock, i: number) {
           </ul>
         </div>
       );
+    case "image":
+      return (
+        <div key={i} style={{ margin: "2rem 0", display: "flex", flexDirection: "column", alignItems: "center", gap: "0.75rem" }}>
+          <div style={{ borderRadius: 24, overflow: "hidden", boxShadow: "0 20px 60px rgba(0,0,0,0.6)", maxWidth: 260 }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={block.src} alt={block.alt} style={{ display: "block", width: "100%", height: "auto" }} />
+          </div>
+          {block.caption && (
+            <p style={{ color: MUTED, fontSize: "0.8rem", fontStyle: "italic", textAlign: "center" }}>{block.caption}</p>
+          )}
+        </div>
+      );
     default:
       return null;
   }
