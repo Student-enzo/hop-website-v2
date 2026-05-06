@@ -111,7 +111,7 @@ const ScrollExpandMedia = ({
   }, [embedSrc]);
 
   return (
-    <div ref={wrapperRef} className="scroll-expand-wrapper" style={{ height: 'var(--scroll-expand-height)' }}>
+    <div ref={wrapperRef} style={{ height: 'clamp(200vh, 300vh, 300vh)' }}>
       <div
         style={{
           position: 'sticky',
