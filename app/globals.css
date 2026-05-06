@@ -48,8 +48,19 @@
   --shadow-orange-glow-lg: 0 0 48px rgba(245,160,32,0.2);
 }
 
+:root {
+  --scroll-expand-height: 300vh;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --scroll-expand-height: 200vh;
+  }
+}
+
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {

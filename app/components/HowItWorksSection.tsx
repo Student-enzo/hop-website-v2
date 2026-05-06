@@ -174,6 +174,42 @@ export default function HowItWorksSection() {
           </h2>
         </div>
 
+        {/* ── Mobile phone preview — hidden on desktop ── */}
+        <div className="flex md:hidden" style={{ justifyContent: "center", marginBottom: "2rem" }}>
+          <div>
+            <div style={{
+              borderRadius: 44, padding: 8,
+              background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
+              boxShadow: "0 24px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08)",
+            }}>
+              <div style={{ position: "relative", borderRadius: 38, overflow: "hidden", width: 190, height: 410 }}>
+                <div style={{ position: "absolute", top: 8, left: "50%", transform: "translateX(-50%)", width: 50, height: 16, backgroundColor: "#111", borderRadius: 8, zIndex: 5 }} />
+                {STEPS.map((s, i) => (
+                  <div key={s.num} style={{
+                    position: "absolute", inset: 0,
+                    opacity: active === i && !flipping ? 1 : 0,
+                    transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
+                    transition: "opacity 0.35s ease, transform 0.35s ease",
+                  }}>
+                    <Image src={s.img} alt={s.imgAlt} width={190} height={410} style={{ objectFit: "cover", display: "block" }} unoptimized />
+                  </div>
+                ))}
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
+              </div>
+            </div>
+            <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", marginTop: "0.875rem", alignItems: "center" }}>
+              {STEPS.map((_, i) => (
+                <button key={i} onClick={() => goTo(i)} style={{
+                  width: active === i ? 22 : 6, height: 6, borderRadius: 999, border: "none", padding: 0,
+                  backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
+                  transition: "width 0.35s ease, background-color 0.35s ease",
+                  cursor: "pointer",
+                }} />
+              ))}
+            </div>
+          </div>
+        </div>
+
         <div style={{ display: "grid", gap: "4rem", alignItems: "center" }} className="grid grid-cols-1 md:grid-cols-2">
 
           {/* ── LEFT: vertical timeline ── */}
