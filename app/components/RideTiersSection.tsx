@@ -22,7 +22,7 @@ const TIERS = [
     image: "https://images.pexels.com/photos/12960352/pexels-photo-12960352.jpeg?auto=compress&cs=tinysrgb&w=560&h=360&fit=crop",
   },
   {
-    tag: "STAND",
+    tag: "STD",
     tagColor: ORANGE,
     name: "Standard",
     description: "The most popular tier. Reliable, comfortable, confirmed fare before you move.",

@@ -13,7 +13,7 @@ const TESTIMONIALS = [
   {
     id: "t1",
     name: "Rachel M.",
-    trip: "Airport → Atlantis · May 2025",
+    trip: "Airport → Atlantis · May 2026",
     rating: 5,
     text: "Landed at LPIA and my HOP driver was already there. Flat rate shown before I even left baggage claim. No haggling, no stress — exactly what you need after a long flight.",
     initials: "RM",
@@ -23,7 +23,7 @@ const TESTIMONIALS = [
   {
     id: "t2",
     name: "James T.",
-    trip: "Baha Mar → Downtown · April 2025",
+    trip: "Baha Mar → Downtown · April 2026",
     rating: 5,
     text: "Every other time I've taken a taxi in Nassau I've had to argue the price. With HOP the fare was locked before I got in. Driver was on time, car was clean. This is how it should work.",
     initials: "JT",
@@ -33,7 +33,7 @@ const TESTIMONIALS = [
   {
     id: "t3",
     name: "Sofia K.",
-    trip: "Paradise Island → Fox Hill · March 2025",
+    trip: "Paradise Island → Fox Hill · May 2026",
     rating: 4.5,
     text: "Scheduled my airport ride at 5 AM the night before. Got a confirmation, driver showed up on time, price was exactly what the app said. Couldn't ask for more.",
     initials: "SK",
@@ -43,7 +43,7 @@ const TESTIMONIALS = [
   {
     id: "t4",
     name: "Marcus W.",
-    trip: "Nassau Airport → Cable Beach · Feb 2025",
+    trip: "Nassau Airport → Cable Beach · April 2026",
     rating: 5,
     text: "Group of 6 from our cruise. HOP handled all of us with one booking, split the fare clearly on screen. Way better than fighting over taxis at the port.",
     initials: "MW",

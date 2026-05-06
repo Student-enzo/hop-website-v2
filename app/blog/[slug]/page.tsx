@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import StickyMobileCTA from "../../components/StickyMobileCTA";
 import { BLOG_POSTS, getPostBySlug, getRelatedPosts, type ContentBlock } from "@/lib/blog-posts";
 
 interface Props {
@@ -13,19 +14,40 @@ export async function generateStaticParams() {
   return BLOG_POSTS.map((p) => ({ slug: p.slug }));
 }
 
+function parsePostDate(dateStr: string): string {
+  // Convert "May 3, 2026" → "2026-05-03" for ISO 8601
+  try {
+    return new Date(dateStr).toISOString().split("T")[0];
+  } catch {
+    return new Date().toISOString().split("T")[0];
+  }
+}
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getPostBySlug(slug);
   if (!post) return {};
+  const isoDate = parsePostDate(post.date);
+  const canonical = `https://hopbahamas.com/blog/${slug}`;
   return {
     title: post.metaTitle,
     description: post.metaDescription,
     keywords: [post.targetKeyword, "nassau bahamas transportation", "hop bahamas"],
+    alternates: { canonical },
     openGraph: {
       title: post.metaTitle,
       description: post.metaDescription,
       type: "article",
-      publishedTime: post.date,
+      publishedTime: isoDate,
+      url: canonical,
+      siteName: "HOP Bahamas",
+      images: post.coverImage ? [{ url: `https://hopbahamas.com${post.coverImage}`, width: 1200, height: 630 }] : [],
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.metaTitle,
+      description: post.metaDescription,
+      images: post.coverImage ? [`https://hopbahamas.com${post.coverImage}`] : [],
     },
   };
 }
@@ -242,6 +264,35 @@ function renderBlock(block: ContentBlock, i: number) {
           )}
         </div>
       );
+    case "related":
+      return (
+        <div
+          key={i}
+          style={{
+            backgroundColor: "rgba(255,255,255,0.03)",
+            border: `1px solid ${BORDER}`,
+            borderRadius: 12,
+            padding: "1rem 1.25rem",
+            marginBottom: "1.5rem",
+          }}
+        >
+          <p style={{ color: ORANGE, fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: "0.5rem" }}>
+            RELATED READING
+          </p>
+          <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: "0.4rem" }}>
+            {block.posts.map((rp, j) => (
+              <li key={j}>
+                <Link
+                  href={`/blog/${rp.slug}`}
+                  style={{ color: TEXT, fontSize: "0.9rem", textDecoration: "underline", textDecorationColor: "rgba(245,160,32,0.4)" }}
+                >
+                  {rp.title}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      );
     default:
       return null;
   }
@@ -255,40 +306,57 @@ export default async function BlogPostPage({ params }: Props) {
   const related = getRelatedPosts(post, 3);
   const catColor = CATEGORY_COLORS[post.category] || ORANGE;
 
+  const isoDate = parsePostDate(post.date);
+  const postUrl = `https://hopbahamas.com/blog/${post.slug}`;
+
   const faqSchema = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
     mainEntity: post.faq.map((item) => ({
       "@type": "Question",
       name: item.q,
-      acceptedAnswer: {
-        "@type": "Answer",
-        text: item.a,
-      },
+      acceptedAnswer: { "@type": "Answer", text: item.a },
     })),
   };
 
   const articleSchema = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "BlogPosting",
     headline: post.title,
     description: post.metaDescription,
-    datePublished: post.date,
-    author: { "@type": "Organization", name: "HOP Bahamas" },
-    publisher: { "@type": "Organization", name: "HOP Bahamas", url: "https://hopbahamas.com" },
+    url: postUrl,
+    datePublished: isoDate,
+    dateModified: isoDate,
+    image: post.coverImage ? `https://hopbahamas.com${post.coverImage}` : undefined,
+    author: { "@type": "Organization", name: "HOP Bahamas", url: "https://hopbahamas.com" },
+    publisher: {
+      "@type": "Organization",
+      name: "HOP Bahamas",
+      url: "https://hopbahamas.com",
+      logo: { "@type": "ImageObject", url: "https://hopbahamas.com/hop-logo.png" },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": postUrl },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: "https://hopbahamas.com" },
+      { "@type": "ListItem", position: 2, name: "Blog", item: "https://hopbahamas.com/blog" },
+      { "@type": "ListItem", position: 3, name: post.title, item: postUrl },
+    ],
   };
 
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
-      />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {post.faq.length > 0 && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
       <Navbar />
+      <StickyMobileCTA />
       <main style={{ paddingTop: "88px" }}>
         {/* Article header */}
         <section style={{ backgroundColor: "#161616", padding: "3.5rem 1.5rem 2.5rem" }}>

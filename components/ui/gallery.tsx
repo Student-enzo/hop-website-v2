@@ -25,8 +25,6 @@ const NASSAU_PHOTOS = [
     zIndex: 50, direction: "left" as Direction,
     src: "https://images.unsplash.com/photo-1548574505-5e239809ee19?w=520&h=520&fit=crop",
     alt: "Nassau from above",
-    label: "Nassau from Above",
-    sub: "Nassau, Bahamas",
   },
   {
     id: 2, order: 1,
@@ -34,8 +32,6 @@ const NASSAU_PHOTOS = [
     zIndex: 40, direction: "left" as Direction,
     src: "https://images.unsplash.com/photo-1506953823976-52e1fdc0149a?w=520&h=520&fit=crop",
     alt: "Bahamas crystal waters",
-    label: "Crystal Waters",
-    sub: "Nassau, Bahamas",
   },
   {
     id: 3, order: 2,
@@ -52,8 +48,6 @@ const NASSAU_PHOTOS = [
     zIndex: 20, direction: "right" as Direction,
     src: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=520&h=520&fit=crop",
     alt: "Cable Beach white sands",
-    label: "Cable Beach",
-    sub: "Nassau, Bahamas",
   },
   {
     id: 5, order: 4,
@@ -61,8 +55,6 @@ const NASSAU_PHOTOS = [
     zIndex: 10, direction: "left" as Direction,
     src: "https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=520&h=520&fit=crop",
     alt: "Arriving in Nassau",
-    label: "Arrive in Style",
-    sub: "Nassau, Bahamas",
   },
 ];
 

@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 
-const SECRET = "hop2025admin";
+const SECRET = "hop2026admin";
 
 const BG = "#161616";
 const CARD = "#1e1c14";

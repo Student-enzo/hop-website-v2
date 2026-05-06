@@ -61,9 +61,8 @@ const DESTINATIONS = [
 
 const NASSAU_VIDEOS = [
   { id: "qfeJ5kWswgc", title: "Nassau, Bahamas — Life on the Island" },
-  { id: "UEJ8Ozio4Lk", title: "Getting Around Nassau" },
   { id: "T-gzRdP2t18", title: "Atlantis Paradise Island Tour" },
-  { id: "hQ6ocg_7MrY", title: "Nassau Travel Guide 2025" },
+  { id: "hQ6ocg_7MrY", title: "Nassau Travel Guide 2026" },
 ];
 
 
@@ -372,7 +371,7 @@ export default function HomePage() {
                 Plan your first ride to the right place.
               </p>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "1rem" }}>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 340px))", gap: "1rem", justifyContent: "center" }}>
               {NASSAU_VIDEOS.map((v) => (
                 <div
                   key={v.id}
@@ -444,12 +443,12 @@ export default function HomePage() {
                     image: "https://images.pexels.com/photos/34167075/pexels-photo-34167075.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
                   },
                   {
-                    slug: "nassau-taxi-cost-guide-2025",
-                    title: "How Much Does a Taxi Cost in Nassau in 2025?",
+                    slug: "nassau-taxi-cost-guide-2026",
+                    title: "How Much Does a Taxi Cost in Nassau in 2026?",
                     excerpt: "Government-regulated fares, airport pricing tables, and how to avoid being overcharged on your first ride.",
                     category: "Nassau Travel Guide",
                     readTime: "5 min read",
-                    image: "https://images.pexels.com/photos/5647593/pexels-photo-5647593.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
+                    image: "/images/dest-airport.jpg",
                   },
                   {
                     slug: "nassau-airport-to-atlantis-transfer",

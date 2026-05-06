@@ -364,3 +364,66 @@ body {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* ── Mobile / Tablet responsive ─────────────────────────────────────── */
+@media (max-width: 767px) {
+  /* Hero — stack phones below text on mobile */
+  .photo-hero {
+    background-position: center 30%;
+  }
+
+  /* Gallery spread: hide outer 2 cards, only center 3 visible */
+  .gallery-outer-card {
+    display: none !important;
+  }
+
+  /* Video grid: single column on mobile */
+  .nassau-video-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Context strip: allow wrapping, smaller text */
+  .context-strip-inner {
+    gap: 0 !important;
+    justify-content: flex-start !important;
+  }
+
+  /* Blog guide carousel: stack vertically */
+  .blog-guide-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Schedule section: hide third phone on mobile */
+  .schedule-phones-side {
+    display: none !important;
+  }
+
+  /* HOP moments camera section: stack */
+  .hop-moments-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Destination cards: 2-column on mobile */
+  .destinations-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media (max-width: 480px) {
+  /* Extra small phones */
+  .destinations-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .stat-pill {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.75rem;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  /* Tablet — iPad */
+  .schedule-phones-side {
+    display: none !important;
+  }
+}

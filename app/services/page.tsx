@@ -1,148 +1,57 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
-import type { Metadata } from "next";
-
-export const metadata: Metadata = {
-  title: "HOP Rides — Nassau Bahamas Transportation Services",
-  description:
-    "Economic, Standard, and Luxury rides in Nassau. Sedan from $95, SUV from $120, Mini Bus from $190. Scheduled pickups, ride share, priority rides, and Low Data Mode.",
-};
+import { motion } from "framer-motion";
+import { FeatureCarousel } from "@/components/ui/feature-carousel";
 
 const ORANGE = "#F5A020";
-const BG = "#161616";
-const CARD = "#1e1c14";
-const CARD2 = "#222018";
+const BG = "#0a0806";
+const CARD = "#161410";
+const CARD2 = "#1e1c14";
+const GOLD = "#d4a855";
 const TEXT = "#f0ede8";
 const MUTED = "#8a8070";
 const BORDER = "rgba(255,255,255,0.06)";
 
-function SectionDivider({ id, label, color = ORANGE }: { id: string; label: string; color?: string }) {
+function FadeUp({ children, delay = 0, style }: { children: React.ReactNode; delay?: number; style?: React.CSSProperties }) {
   return (
-    <div id={id} style={{ borderTop: `1px solid ${BORDER}`, padding: "3.5rem 1.5rem 0" }}>
-      <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-        <span
-          style={{
-            display: "inline-block",
-            padding: "0.3rem 0.8rem",
-            backgroundColor: `${color}18`,
-            border: `1px solid ${color}30`,
-            borderRadius: "999px",
-            color,
-            fontSize: "0.75rem",
-            fontWeight: 700,
-            letterSpacing: "0.08em",
-            marginBottom: "2rem",
-          }}
-        >
-          {label}
-        </span>
-      </div>
-    </div>
+    <motion.div
+      initial={{ opacity: 0, y: 28 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-60px" }}
+      transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1], delay }}
+      style={style}
+    >
+      {children}
+    </motion.div>
   );
 }
 
-const VEHICLES = [
+const TIERS = [
   {
-    name: "Sedan",
-    capacity: "4 passengers",
-    price: "$95 fixed",
-    desc: "Executive sedan for city rides and premium pickups. Great for solo or duo airport transfers.",
-    tag: "Most popular for tourists",
+    badge: "ECO", color: MUTED,
+    name: "Economic",
+    price: "from $15",
+    desc: "Lowest fare tier. Best for solo trips and flexible timing.",
+    sub: "~5 min longer pickup · standard comfort",
   },
   {
-    name: "SUV",
-    capacity: "7 passengers",
-    price: "$120 fixed",
-    desc: "More comfort, more luggage room, and premium space for families or small groups.",
-    tag: "Best for families",
+    badge: "STD", color: ORANGE,
+    name: "Standard",
+    price: "from $20",
+    desc: "Most popular. Reliable matching and fair pricing.",
+    sub: "Fastest average pickup · daily driver comfort",
+    popular: true,
   },
   {
-    name: "Mini Bus",
-    capacity: "15 passengers",
-    price: "$190 fixed",
-    desc: "Best for large groups, wedding parties, airport pickups, and corporate transfers.",
-    tag: "Best for large groups",
-  },
-  {
-    name: "Luggage Car",
-    capacity: "Add-on",
-    price: "Add-on",
-    desc: "A dedicated support vehicle for extra boxes, bags, and oversized luggage. Added alongside another vehicle.",
-    tag: "Extra luggage option",
-  },
-];
-
-const DIFFERENTIATORS = [
-  {
-    id: "transparent",
-    title: "Transparent pricing",
-    desc: "You see the fare before the driver moves. No meter running. No surprises. Luxury rides are flat-rate across all of Nassau — Sedan $95, SUV $120, Mini Bus $190.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2">
-        <circle cx="12" cy="12" r="10" />
-        <path d="M12 6v6l4 2" />
-      </svg>
-    ),
-  },
-  {
-    id: "low-data",
-    title: "Low Data Mode",
-    desc: "On weak Bahamian signal, HOP stays functional. Maps pause — but ride tracking, ETA updates, and driver chat continue. Designed for island connectivity.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2">
-        <line x1="1" y1="1" x2="23" y2="23" />
-        <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55M5 12.55a10.94 10.94 0 0 1 5.17-2.39M10.71 5.05A16 16 0 0 1 22.56 9M1.42 9a15.91 15.91 0 0 1 4.7-2.88M8.53 16.11a6 6 0 0 1 6.95 0M12 20h.01" />
-      </svg>
-    ),
-  },
-  {
-    id: "rideshare",
-    title: "Ride Share",
-    desc: "Split the cost on Standard rides. Same great experience, shared fare. Available on any Standard trip.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2">
-        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-        <circle cx="9" cy="7" r="4" />
-        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-      </svg>
-    ),
-  },
-  {
-    id: "priority",
-    title: "Priority queue",
-    desc: "Add +$4 to any ride to jump the driver matching queue. Requires a saved HOP card. Useful when time matters.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2">
-        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2" />
-      </svg>
-    ),
-  },
-  {
-    id: "luggage",
-    title: "Luggage-aware",
-    desc: "Every ride has a separate luggage counter. Add large bags and the app adjusts your vehicle recommendation automatically.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2">
-        <rect x="2" y="7" width="20" height="14" rx="2" />
-        <path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2" />
-        <line x1="12" y1="12" x2="12" y2="16" />
-        <line x1="10" y1="14" x2="14" y2="14" />
-      </svg>
-    ),
-  },
-  {
-    id: "cash",
-    title: "Credit/debit card",
-    desc: "Pay with any major credit or debit card. Secure, fast, and accepted across all ride types.",
-    icon: (
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2">
-        <rect x="1" y="4" width="22" height="16" rx="2" />
-        <line x1="1" y1="10" x2="23" y2="10" />
-      </svg>
-    ),
+    badge: "LUX", color: GOLD,
+    name: "Luxury",
+    price: "from $95",
+    desc: "Flat rate across all Nassau. Sedan, SUV, or Mini Bus.",
+    sub: "Priority matching · premium comfort",
   },
 ];
 
@@ -150,397 +59,275 @@ export default function ServicesPage() {
   return (
     <>
       <Navbar />
-      <main style={{ paddingTop: "88px" }}>
-        {/* Header */}
-        <section style={{ backgroundColor: BG, padding: "4rem 1.5rem 3rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-              <Link href="/" style={{ color: MUTED, fontSize: "0.875rem", textDecoration: "none" }}>Home</Link>
-              <span style={{ color: MUTED, fontSize: "0.875rem" }}>/</span>
-              <span style={{ color: ORANGE, fontSize: "0.875rem", fontWeight: 600 }}>Rides</span>
-            </div>
-            <h1
-              style={{
-                fontSize: "clamp(2rem, 4vw, 3.5rem)",
+      <main style={{ backgroundColor: BG, minHeight: "100vh" }}>
+
+        {/* ── HERO ── */}
+        <section style={{ position: "relative", overflow: "hidden", minHeight: "60vh", display: "flex", alignItems: "center" }}>
+          <Image
+            src="/images/hero-bahamas.jpg"
+            alt="Nassau Bahamas"
+            fill
+            style={{ objectFit: "cover", objectPosition: "center 40%", opacity: 0.3 }}
+            priority
+          />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(160deg, rgba(10,8,6,0.85) 0%, rgba(10,8,6,0.5) 55%, rgba(10,8,6,0.9) 100%)" }} />
+
+          <div style={{ position: "relative", width: "100%", maxWidth: 1200, margin: "0 auto", padding: "clamp(5.5rem,10vw,8rem) 1.5rem 4rem" }}>
+            <FadeUp>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1.25rem" }}>
+                <Link href="/" style={{ color: MUTED, fontSize: "0.875rem", textDecoration: "none" }}>Home</Link>
+                <span style={{ color: MUTED, fontSize: "0.875rem" }}>/</span>
+                <span style={{ color: ORANGE, fontSize: "0.875rem", fontWeight: 600 }}>Rides</span>
+              </div>
+            </FadeUp>
+            <FadeUp delay={0.05}>
+              <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "1rem" }}>NASSAU, BAHAMAS</p>
+            </FadeUp>
+            <FadeUp delay={0.1}>
+              <h1 style={{
+                fontSize: "clamp(2.75rem, 5.5vw, 4.5rem)",
                 fontWeight: 900,
                 color: TEXT,
                 letterSpacing: "-0.03em",
-                marginBottom: "1rem",
-                maxWidth: 700,
-              }}
-            >
-              Every ride option — explained clearly.
-            </h1>
-            <p style={{ color: MUTED, fontSize: "1.05rem", lineHeight: 1.7, maxWidth: 560 }}>
-              Economic, Standard, and Luxury. Fixed pricing, scheduled pickups, and ride-share — all designed for Nassau.
-            </p>
-          </div>
-        </section>
-
-        {/* ── RIDE TIERS ── */}
-        <section style={{ backgroundColor: CARD, padding: "4rem 1.5rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.5rem" }}>
-              Ride tiers
-            </h2>
-            <p style={{ color: MUTED, fontSize: "0.9rem", marginBottom: "2.5rem" }}>
-              Three options. All show the full price before you confirm.
-            </p>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "1.25rem" }}>
-              {/* Economic */}
-              <div style={{ backgroundColor: CARD2, borderRadius: 20, border: `1px solid ${BORDER}`, padding: "2rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "start" }} className="grid-cols-1 md:grid-cols-2">
-                <div>
-                  <span style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.08em", color: MUTED, backgroundColor: `${MUTED}18`, padding: "0.2rem 0.6rem", borderRadius: "999px" }}>ECO</span>
-                  <h3 style={{ color: TEXT, fontWeight: 800, fontSize: "1.4rem", margin: "0.5rem 0 0.75rem" }}>Economic</h3>
-                  <p style={{ color: MUTED, fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1rem" }}>
-                    The lowest fare tier. Best for solo trips and short distances where timing is flexible. May take slightly longer to match with a driver.
-                  </p>
-                  <p style={{ color: MUTED, fontSize: "0.85rem", lineHeight: 1.65, padding: "0.875rem", backgroundColor: "rgba(255,255,255,0.03)", borderRadius: 12, border: `1px solid ${BORDER}` }}>
-                    <strong style={{ color: TEXT }}>Good to know:</strong> Economic keeps your fare lower, but it may be less attractive to nearby drivers. You can start the search; if matching takes longer, you can improve the offer while HOP keeps looking.
-                  </p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                  <div style={{ padding: "1rem 1.25rem", backgroundColor: BG, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: MUTED, fontSize: "0.75rem", marginBottom: "0.2rem" }}>Fare</p>
-                    <p style={{ color: TEXT, fontWeight: 700 }}>Distance-based · Lowest tier</p>
-                  </div>
-                  <div style={{ padding: "1rem 1.25rem", backgroundColor: BG, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: MUTED, fontSize: "0.75rem", marginBottom: "0.2rem" }}>VAT</p>
-                    <p style={{ color: TEXT, fontWeight: 700 }}>12% applied to all rides</p>
-                  </div>
-                  <div style={{ padding: "1rem 1.25rem", backgroundColor: BG, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: MUTED, fontSize: "0.75rem", marginBottom: "0.2rem" }}>Best for</p>
-                    <p style={{ color: TEXT, fontWeight: 700 }}>Budget trips, flexible timing</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Standard */}
-              <div style={{ backgroundColor: "rgba(245,160,32,0.06)", borderRadius: 20, border: "1px solid rgba(245,160,32,0.2)", padding: "2rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "start", position: "relative" }} className="grid-cols-1 md:grid-cols-2">
-                <div style={{ position: "absolute", top: -1, right: 20, backgroundColor: ORANGE, color: BG, fontSize: "0.7rem", fontWeight: 800, padding: "0.25rem 0.75rem", borderRadius: "0 0 8px 8px" }}>MOST COMMON</div>
-                <div>
-                  <span style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.08em", color: ORANGE, backgroundColor: `${ORANGE}18`, padding: "0.2rem 0.6rem", borderRadius: "999px" }}>STAND</span>
-                  <h3 style={{ color: TEXT, fontWeight: 800, fontSize: "1.4rem", margin: "0.5rem 0 0.75rem" }}>Standard</h3>
-                  <p style={{ color: MUTED, fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1rem" }}>
-                    The default tier. Reliable matching, comfortable vehicle, fair pricing. Most passengers use Standard for everyday trips across Nassau.
-                  </p>
-                  <p style={{ color: MUTED, fontSize: "0.85rem", lineHeight: 1.65, padding: "0.875rem", backgroundColor: "rgba(245,160,32,0.04)", borderRadius: 12, border: "1px solid rgba(245,160,32,0.12)" }}>
-                    <strong style={{ color: TEXT }}>Bahamian law:</strong> For more than 2 passengers, HOP is obligated by Bahamian law to charge per extra passenger. This is a required disclosure — not an upsell.
-                  </p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                  <div style={{ padding: "1rem 1.25rem", backgroundColor: BG, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: MUTED, fontSize: "0.75rem", marginBottom: "0.2rem" }}>Fare</p>
-                    <p style={{ color: TEXT, fontWeight: 700 }}>Distance-based · Standard rate</p>
-                  </div>
-                  <div style={{ padding: "1rem 1.25rem", backgroundColor: BG, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: MUTED, fontSize: "0.75rem", marginBottom: "0.2rem" }}>Ride Share</p>
-                    <p style={{ color: ORANGE, fontWeight: 700 }}>Available — split cost with others</p>
-                  </div>
-                  <div style={{ padding: "1rem 1.25rem", backgroundColor: BG, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: MUTED, fontSize: "0.75rem", marginBottom: "0.2rem" }}>Best for</p>
-                    <p style={{ color: TEXT, fontWeight: 700 }}>Most everyday trips in Nassau</p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Luxury */}
-              <div id="luxury" style={{ backgroundColor: "rgba(212,168,85,0.04)", borderRadius: 20, border: "1px solid rgba(212,168,85,0.15)", padding: "2rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "2rem", alignItems: "start" }} className="grid-cols-1 md:grid-cols-2">
-                <div>
-                  <span style={{ fontSize: "0.7rem", fontWeight: 800, letterSpacing: "0.08em", color: "#d4a855", backgroundColor: "#d4a85518", padding: "0.2rem 0.6rem", borderRadius: "999px" }}>LUX</span>
-                  <h3 style={{ color: TEXT, fontWeight: 800, fontSize: "1.4rem", margin: "0.5rem 0 0.75rem" }}>Luxury</h3>
-                  <p style={{ color: MUTED, fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "1rem" }}>
-                    Premium vehicles at flat rates. No distance charges — just one price for any destination in Nassau. Two pricing modes: Fixed Price (flat rate) or Hourly Service (private driver by the hour).
-                  </p>
-                  <div style={{ display: "flex", gap: "0.5rem", flexWrap: "wrap" }}>
-                    {VEHICLES.map((v) => (
-                      <div
-                        key={v.name}
-                        style={{
-                          padding: "0.5rem 0.875rem",
-                          backgroundColor: CARD2,
-                          borderRadius: 10,
-                          border: "1px solid rgba(212,168,85,0.15)",
-                        }}
-                      >
-                        <p style={{ color: "#d4a855", fontWeight: 700, fontSize: "0.8rem" }}>{v.name}</p>
-                        <p style={{ color: MUTED, fontSize: "0.7rem" }}>{v.capacity} · {v.price}</p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div style={{ borderRadius: 16, overflow: "hidden", border: `1px solid ${BORDER}`, position: "relative", minHeight: 260 }} className="hidden md:block">
-                  <Image
-                    src="/screenshots/luxury-vehicles.png"
-                    alt="HOP Luxury vehicle options: Sedan, SUV, Mini Bus, Luggage Car"
-                    fill
-                    style={{ objectFit: "cover", objectPosition: "top" }}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── SCHEDULE ── */}
-        <SectionDivider id="schedule" label="SCHEDULE" />
-        <section style={{ backgroundColor: BG, padding: "2rem 1.5rem 4rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.5rem" }}>
-              Scheduled rides
-            </h2>
-            <p style={{ color: MUTED, fontSize: "0.9rem", marginBottom: "3rem", maxWidth: 560 }}>
-              Plan rides days or weeks in advance. Route, date, time, group size — all locked in before the ride day.
-            </p>
-
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1.25rem", marginBottom: "3rem" }}>
-              {[
-                {
-                  step: "Route",
-                  desc: "Set your pickup and dropoff. HOP shows the trip distance and estimated time.",
-                },
-                {
-                  step: "Calendar",
-                  desc: "Pick the date, exact time (morning / afternoon / night), and how often it repeats.",
-                },
-                {
-                  step: "Group",
-                  desc: "Choose Economic, Standard, or Luxury. Set passenger count and luggage.",
-                },
-                {
-                  step: "Summary",
-                  desc: "Full price breakdown — base fare + 12% VAT. Confirm with cash or a saved card.",
-                },
-              ].map((s, i) => (
-                <div key={s.step} style={{ backgroundColor: CARD, borderRadius: 20, border: `1px solid ${BORDER}`, padding: "1.5rem" }}>
-                  <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.8rem", letterSpacing: "0.05em" }}>STEP {i + 1}</span>
-                  <h3 style={{ color: TEXT, fontWeight: 700, fontSize: "1.1rem", margin: "0.4rem 0 0.5rem" }}>{s.step}</h3>
-                  <p style={{ color: MUTED, fontSize: "0.875rem", lineHeight: 1.65 }}>{s.desc}</p>
-                </div>
-              ))}
-            </div>
-
-            {/* Use cases */}
-            <div style={{ backgroundColor: CARD, borderRadius: 20, border: `1px solid ${BORDER}`, padding: "2rem" }}>
-              <h3 style={{ color: TEXT, fontWeight: 700, fontSize: "1.1rem", marginBottom: "1.25rem" }}>Common scheduled ride use cases</h3>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
-                {[
-                  { title: "Airport pickups", detail: "Lynden Pindling International — schedule days in advance." },
-                  { title: "Hotel transfers", detail: "Atlantis, Baha Mar, Nassau Cruise Terminal." },
-                  { title: "School runs", detail: "Weekday repeating schedules for regular routes." },
-                  { title: "Hospital appointments", detail: "One-time pickup at a specific morning time." },
-                  { title: "Group events", detail: "Coordinate multi-passenger pickup for parties and events." },
-                ].map((uc) => (
-                  <div key={uc.title} style={{ padding: "1rem", backgroundColor: CARD2, borderRadius: 14, border: `1px solid ${BORDER}` }}>
-                    <p style={{ color: ORANGE, fontWeight: 700, fontSize: "0.875rem", marginBottom: "0.3rem" }}>{uc.title}</p>
-                    <p style={{ color: MUTED, fontSize: "0.8rem" }}>{uc.detail}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── SAFETY ── */}
-        <SectionDivider id="safety" label="SAFETY" color="#E84040" />
-        <section style={{ backgroundColor: CARD, padding: "2rem 1.5rem 4rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "start" }} className="grid-cols-1 md:grid-cols-2">
-              <div>
-                <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.5rem" }}>
-                  Safety features
-                </h2>
-                <p style={{ color: MUTED, fontSize: "0.9rem", marginBottom: "2rem", lineHeight: 1.7 }}>
-                  Safety is built into every ride — not an add-on. These features work automatically in the background, and activate instantly when you need them.
-                </p>
-                <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                  {[
-                    {
-                      title: "SOS button",
-                      desc: "Visible on the home screen and throughout every ride state. Tap to trigger a 3-second countdown. Can call 919, alert the RIDE Safety Desk, and message trusted contacts — all at once.",
-                      color: "#E84040",
-                    },
-                    {
-                      title: "RIDE Safety Desk",
-                      desc: "HOP's internal monitoring team. When you trigger SOS, they receive your ride details and coordinate help with local services.",
-                      color: "#E84040",
-                    },
-                    {
-                      title: "Trusted contacts",
-                      desc: "Pre-set contacts receive a live tracking link when SOS is triggered. Set up in the Safety Toolkit under your profile.",
-                      color: "#E84040",
-                    },
-                    {
-                      title: "Share location",
-                      desc: "During any ride, send a live location link to anyone directly from the map screen.",
-                      color: ORANGE,
-                    },
-                    {
-                      title: "Driver verification",
-                      desc: "Drivers are ID-verified before they can accept rides. Rating system creates additional accountability.",
-                      color: "#3aad6e",
-                    },
-                  ].map((item) => (
-                    <div
-                      key={item.title}
-                      style={{
-                        display: "flex",
-                        gap: "1rem",
-                        padding: "1.125rem",
-                        backgroundColor: CARD2,
-                        borderRadius: 16,
-                        border: `1px solid ${BORDER}`,
-                        alignItems: "flex-start",
-                      }}
-                    >
-                      <div
-                        style={{
-                          width: 36,
-                          height: 36,
-                          borderRadius: 10,
-                          backgroundColor: `${item.color}18`,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          flexShrink: 0,
-                        }}
-                      >
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={item.color} strokeWidth="2.5">
-                          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                        </svg>
-                      </div>
-                      <div>
-                        <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.9rem", marginBottom: "0.25rem" }}>{item.title}</p>
-                        <p style={{ color: MUTED, fontSize: "0.8rem", lineHeight: 1.6 }}>{item.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div style={{ display: "flex", justifyContent: "center", paddingTop: "3rem" }} className="hidden md:flex">
-                <div style={{ borderRadius: 48, padding: 10, background: "linear-gradient(145deg, #2a2a2a, #1a1a1a)", boxShadow: "0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)" }}>
-                  <div style={{ borderRadius: 40, overflow: "hidden", width: 220, height: 476 }}>
-                    <Image src="/screenshots/sos.png" alt="HOP SOS modal with emergency alert options" width={220} height={476} style={{ objectFit: "cover", display: "block" }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── REWARDS ── */}
-        <SectionDivider id="rewards" label="HOP MOMENTS & REWARDS" />
-        <section style={{ backgroundColor: BG, padding: "2rem 1.5rem 4rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "4rem", alignItems: "center" }} className="grid-cols-1 md:grid-cols-2">
-              <div>
-                <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.5rem" }}>
-                  Hop Moments & Rewards
-                </h2>
-                <p style={{ color: MUTED, fontSize: "0.9rem", lineHeight: 1.7, marginBottom: "2rem" }}>
-                  Share moments of Nassau — photos, videos, reels — and earn points. Hit milestones to unlock rewards. It&apos;s part loyalty program, part community.
-                </p>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "2rem" }}>
-                  {[
-                    { type: "Photo", pts: "50 pts", icon: "📷" },
-                    { type: "Video", pts: "100 pts", icon: "🎬" },
-                    { type: "Reel", pts: "195 pts", icon: "✨" },
-                    { type: "Ride complete", pts: "TBD", icon: "🚗" },
-                  ].map((item) => (
-                    <div
-                      key={item.type}
-                      style={{
-                        padding: "1rem",
-                        backgroundColor: CARD,
-                        borderRadius: 14,
-                        border: `1px solid ${BORDER}`,
-                        textAlign: "center",
-                      }}
-                    >
-                      <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.875rem", marginBottom: "0.25rem" }}>{item.type}</p>
-                      <p style={{ color: ORANGE, fontSize: "0.875rem", fontWeight: 700 }}>{item.pts}</p>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: "1.25rem" }}>
-                  <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.875rem", marginBottom: "0.75rem" }}>Reward milestones</p>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem" }}>
-                    <div style={{ flex: 1, height: 6, backgroundColor: CARD2, borderRadius: 999, overflow: "hidden" }}>
-                      <div style={{ width: "25%", height: "100%", backgroundColor: ORANGE, borderRadius: 999 }} />
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.5rem" }}>
-                    {["250", "500", "750", "1000"].map((m) => (
-                      <span key={m} style={{ color: MUTED, fontSize: "0.7rem" }}>{m}</span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-              <div style={{ display: "flex", justifyContent: "center" }} className="hidden md:flex">
-                <div style={{ borderRadius: 48, padding: 10, background: "linear-gradient(145deg, #2a2a2a, #1a1a1a)", boxShadow: "0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)" }}>
-                  <div style={{ borderRadius: 40, overflow: "hidden", width: 220, height: 476 }}>
-                    <Image src="/screenshots/hop-moments-rewards.png" alt="HOP Moments rewards screen" width={220} height={476} style={{ objectFit: "cover", display: "block" }} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── DIFFERENTIATORS ── */}
-        <section style={{ backgroundColor: CARD, padding: "4rem 1.5rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "2.5rem" }}>
-              More reasons to use HOP
-            </h2>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "1.25rem" }}>
-              {DIFFERENTIATORS.map((d) => (
-                <div
-                  key={d.id}
-                  id={d.id}
-                  style={{ backgroundColor: CARD2, borderRadius: 20, border: `1px solid ${BORDER}`, padding: "1.5rem" }}
+                lineHeight: 1.0,
+                marginBottom: "1.25rem",
+                maxWidth: 740,
+              }}>
+                Every way to ride<br />
+                <span style={{ color: ORANGE }}>in Nassau.</span>
+              </h1>
+            </FadeUp>
+            <FadeUp delay={0.15}>
+              <p style={{ color: MUTED, fontSize: "1.1rem", lineHeight: 1.7, maxWidth: 500, marginBottom: "2rem" }}>
+                Economic, Standard, and Luxury. Fixed pricing, scheduled pickups, and ride-share — all designed for Nassau.
+              </p>
+            </FadeUp>
+            <FadeUp delay={0.2}>
+              <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
+                <a
+                  href="https://app.hopbahamas.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary"
+                  style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", textDecoration: "none", gap: "0.5rem" }}
                 >
-                  <div style={{ width: 44, height: 44, borderRadius: 12, backgroundColor: "rgba(245,160,32,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "1rem" }}>
-                    {d.icon}
+                  Book a Ride
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </a>
+                <a href="#tiers" style={{ padding: "0.875rem 1.75rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.12)", color: TEXT, borderRadius: 999, fontWeight: 600, fontSize: "0.95rem", textDecoration: "none" }}>
+                  Compare tiers
+                </a>
+              </div>
+            </FadeUp>
+          </div>
+        </section>
+
+        {/* ── FEATURE CAROUSEL ── */}
+        <section style={{ backgroundColor: BG, padding: "5rem 1.5rem" }}>
+          <div style={{ maxWidth: 1400, margin: "0 auto" }}>
+            <FadeUp>
+              <div style={{ textAlign: "center", marginBottom: "3rem" }}>
+                <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.75rem" }}>WHAT HOP OFFERS</p>
+                <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.75rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.03em", marginBottom: "0.75rem" }}>
+                  Every feature. Explored.
+                </h2>
+                <p style={{ color: MUTED, fontSize: "0.95rem", maxWidth: 420, margin: "0 auto" }}>
+                  Tap any feature to learn what makes HOP different for Nassau travel.
+                </p>
+              </div>
+            </FadeUp>
+            <FeatureCarousel />
+          </div>
+        </section>
+
+        {/* ── RIDE TIERS SUMMARY ── */}
+        <section id="tiers" style={{ backgroundColor: CARD, padding: "5rem 1.5rem" }}>
+          <div style={{ maxWidth: 860, margin: "0 auto" }}>
+            <FadeUp>
+              <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.75rem" }}>RIDE TIERS</p>
+              <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.025em", marginBottom: "0.5rem" }}>
+                Three tiers. One price shown upfront.
+              </h2>
+              <p style={{ color: MUTED, fontSize: "0.95rem", lineHeight: 1.7, marginBottom: "3rem", maxWidth: 480 }}>
+                Every tier shows your complete fare before you confirm. No meter, no surprise at drop-off.
+              </p>
+            </FadeUp>
+
+            <div>
+              {TIERS.map((tier, i) => (
+                <motion.div
+                  key={tier.badge}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: i * 0.1 }}
+                  style={{
+                    borderTop: `1px solid ${BORDER}`,
+                    padding: "1.75rem 1rem",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "1.25rem",
+                    position: "relative",
+                  }}
+                >
+                  {tier.popular && (
+                    <div style={{
+                      position: "absolute", top: 0, right: 0,
+                      backgroundColor: ORANGE, color: BG,
+                      fontSize: "0.6rem", fontWeight: 800, padding: "0.2rem 0.75rem",
+                      borderRadius: "0 0 0 8px",
+                    }}>MOST POPULAR</div>
+                  )}
+                  <span style={{
+                    fontSize: "0.65rem", fontWeight: 800, letterSpacing: "0.1em",
+                    color: tier.color, backgroundColor: `${tier.color}1a`,
+                    border: `1px solid ${tier.color}30`,
+                    padding: "0.25rem 0.6rem", borderRadius: 999,
+                    flexShrink: 0, minWidth: 48, textAlign: "center",
+                  }}>
+                    {tier.badge}
+                  </span>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ color: TEXT, fontWeight: 700, fontSize: "1.05rem", marginBottom: "0.2rem" }}>{tier.name}</p>
+                    <p style={{ color: MUTED, fontSize: "0.875rem", lineHeight: 1.5, marginBottom: "0.25rem" }}>{tier.desc}</p>
+                    <p style={{ color: tier.color, fontSize: "0.75rem", fontWeight: 600, opacity: 0.75 }}>{tier.sub}</p>
                   </div>
-                  <h3 style={{ color: TEXT, fontWeight: 700, fontSize: "1rem", marginBottom: "0.5rem" }}>{d.title}</h3>
-                  <p style={{ color: MUTED, fontSize: "0.875rem", lineHeight: 1.65 }}>{d.desc}</p>
-                </div>
+                  <span style={{ color: tier.color, fontWeight: 700, fontSize: "0.95rem", flexShrink: 0 }}>{tier.price}</span>
+                </motion.div>
               ))}
+              <div style={{ borderTop: `1px solid ${BORDER}` }} />
+            </div>
+
+            <FadeUp delay={0.1}>
+              <div style={{ marginTop: "2.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
+                <a
+                  href="https://app.hopbahamas.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn-primary"
+                  style={{ padding: "0.875rem 1.75rem", fontSize: "0.925rem", textDecoration: "none", gap: "0.5rem" }}
+                >
+                  Book your ride
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </a>
+                <Link
+                  href="/#download"
+                  style={{ color: ORANGE, fontWeight: 600, fontSize: "0.9rem", textDecoration: "none", display: "inline-flex", alignItems: "center", gap: "0.4rem", padding: "0.875rem 0" }}
+                >
+                  Download the app
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+                </Link>
+              </div>
+            </FadeUp>
+          </div>
+        </section>
+
+        {/* ── SAFETY + SCREENSHOTS ── */}
+        <section style={{ backgroundColor: BG, padding: "5rem 1.5rem" }}>
+          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
+            <div style={{ display: "grid", gap: "4rem", alignItems: "center" }} className="services-two-col">
+              <FadeUp>
+                <p style={{ color: "#E84040", fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.75rem" }}>SAFETY</p>
+                <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.025em", marginBottom: "0.75rem" }}>
+                  Safety built in.<br /><span style={{ color: "#E84040" }}>Not an afterthought.</span>
+                </h2>
+                <p style={{ color: MUTED, fontSize: "0.95rem", lineHeight: 1.7, marginBottom: "2rem", maxWidth: 440 }}>
+                  SOS button, trusted contacts, live location sharing, driver verification, and a dedicated Safety Desk — all active on every ride.
+                </p>
+                {[
+                  { label: "SOS button — calls 919 + alerts safety desk", color: "#E84040" },
+                  { label: "Trusted contacts receive live tracking on SOS", color: "#E84040" },
+                  { label: "Share live location from any ride screen", color: ORANGE },
+                  { label: "All drivers are ID-verified", color: "#3aad6e" },
+                ].map((item, i) => (
+                  <motion.div
+                    key={item.label}
+                    initial={{ opacity: 0, x: -16 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08, duration: 0.45 }}
+                    style={{ display: "flex", alignItems: "flex-start", gap: "0.75rem", marginBottom: "0.875rem" }}
+                  >
+                    <div style={{ width: 8, height: 8, borderRadius: "50%", backgroundColor: item.color, flexShrink: 0, marginTop: 6 }} />
+                    <p style={{ color: MUTED, fontSize: "0.9rem", lineHeight: 1.5 }}>{item.label}</p>
+                  </motion.div>
+                ))}
+              </FadeUp>
+
+              <motion.div
+                initial={{ opacity: 0, y: 32 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.7 }}
+                style={{ display: "flex", justifyContent: "center", gap: "1.5rem" }}
+              >
+                <div style={{ opacity: 0.7, transform: "rotate(-4deg) translateY(10px) scale(0.88)" }}>
+                  <div style={{ display: "inline-block", borderRadius: 36, padding: 8, background: "linear-gradient(145deg, #2a2a2a, #1a1a1a)", boxShadow: "0 24px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.07)" }}>
+                    <div style={{ borderRadius: 30, overflow: "hidden", width: 180, height: 390 }}>
+                      <Image src="/screenshots/home-map.png" alt="HOP ride map" width={180} height={390} style={{ objectFit: "cover", display: "block" }} />
+                    </div>
+                  </div>
+                </div>
+                <div style={{ transform: "translateY(-10px)" }}>
+                  <div style={{ display: "inline-block", borderRadius: 44, padding: 10, background: "linear-gradient(145deg, #2e2e2e, #181818)", boxShadow: "0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.09)", filter: "drop-shadow(0 16px 48px rgba(245,160,32,0.12))" }}>
+                    <div style={{ borderRadius: 36, overflow: "hidden", width: 210, height: 454 }}>
+                      <Image src="/screenshots/sos.png" alt="HOP SOS emergency screen" width={210} height={454} style={{ objectFit: "cover", display: "block" }} />
+                    </div>
+                  </div>
+                </div>
+                <div style={{ opacity: 0.7, transform: "rotate(4deg) translateY(10px) scale(0.88)" }}>
+                  <div style={{ display: "inline-block", borderRadius: 36, padding: 8, background: "linear-gradient(145deg, #2a2a2a, #1a1a1a)", boxShadow: "0 24px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.07)" }}>
+                    <div style={{ borderRadius: 30, overflow: "hidden", width: 180, height: 390 }}>
+                      <Image src="/screenshots/ride-in-progress.png" alt="HOP ride in progress" width={180} height={390} style={{ objectFit: "cover", display: "block" }} />
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
             </div>
           </div>
         </section>
 
-        {/* CTA */}
-        <section style={{ backgroundColor: BG, padding: "4rem 1.5rem", textAlign: "center" }}>
-          <div style={{ maxWidth: 600, margin: "0 auto" }}>
-            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 900, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.75rem" }}>
-              Ready to ride?
+        {/* ── CTA ── */}
+        <section style={{ position: "relative", overflow: "hidden", padding: "6rem 1.5rem", textAlign: "center" }}>
+          <Image src="/images/cta-bahamas.jpg" alt="Nassau" fill style={{ objectFit: "cover", opacity: 0.2 }} />
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(10,8,6,0.75) 0%, rgba(10,8,6,0.96) 100%)" }} />
+          <motion.div
+            initial={{ opacity: 0, y: 28 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.65 }}
+            style={{ position: "relative", maxWidth: 560, margin: "0 auto" }}
+          >
+            <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "1rem" }}>READY TO RIDE</p>
+            <h2 style={{ fontSize: "clamp(2rem, 4vw, 3rem)", fontWeight: 900, color: TEXT, letterSpacing: "-0.03em", lineHeight: 1.05, marginBottom: "0.75rem" }}>
+              Book your first HOP<br />ride in Nassau.
             </h2>
-            <p style={{ color: MUTED, fontSize: "1rem", marginBottom: "2rem" }}>
-              Book now via the web app or download HOP on your phone.
+            <p style={{ color: MUTED, fontSize: "0.95rem", lineHeight: 1.7, marginBottom: "2.5rem" }}>
+              Fixed price. Real-time tracking. No flagging required. Available now.
             </p>
-            <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
+            <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "0.875rem" }}>
               <a
                 href="https://app.hopbahamas.com"
                 target="_blank"
                 rel="noopener noreferrer"
-                style={{ padding: "0.875rem 2rem", backgroundColor: ORANGE, color: BG, borderRadius: "999px", fontWeight: 700, textDecoration: "none" }}
+                className="btn-primary"
+                style={{ padding: "0.9rem 2rem", fontSize: "0.95rem", textDecoration: "none" }}
               >
-                Book a Ride Now
+                Book via Web App
               </a>
-              <a
-                href="#"
-                style={{ padding: "0.875rem 2rem", backgroundColor: CARD, border: `1px solid ${BORDER}`, color: TEXT, borderRadius: "999px", fontWeight: 600, textDecoration: "none" }}
-              >
+              <a href="/#download" style={{ padding: "0.9rem 2rem", backgroundColor: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.14)", color: TEXT, borderRadius: 999, fontWeight: 600, fontSize: "0.95rem", textDecoration: "none" }}>
                 Download the App
               </a>
             </div>
-          </div>
+          </motion.div>
         </section>
       </main>
       <Footer />
+
+      <style>{`
+        @media (min-width: 768px) { .services-two-col { grid-template-columns: 1fr 1fr; } }
+        @media (max-width: 767px) { .services-two-col { grid-template-columns: 1fr !important; } }
+      `}</style>
     </>
   );
 }

@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
 // GET /api/book?secret=... — list bookings (dashboard)
 export async function GET(request: NextRequest) {
   const secret = request.nextUrl.searchParams.get("secret");
-  if (secret !== process.env.DASHBOARD_SECRET && secret !== "hop2025admin") {
+  if (secret !== process.env.DASHBOARD_SECRET && secret !== "hop2026admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   return NextResponse.json(readBookings());
@@ -42,7 +42,7 @@ export async function GET(request: NextRequest) {
 // PATCH /api/book — update status
 export async function PATCH(request: NextRequest) {
   const secret = request.nextUrl.searchParams.get("secret");
-  if (secret !== process.env.DASHBOARD_SECRET && secret !== "hop2025admin") {
+  if (secret !== process.env.DASHBOARD_SECRET && secret !== "hop2026admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id, status } = await request.json();
