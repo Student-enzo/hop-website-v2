@@ -48,9 +48,13 @@
   --shadow-orange-glow-lg: 0 0 48px rgba(245,160,32,0.2);
 }
 
+:root {
+  --scroll-expand-height: 300vh; /* desktop default */
+}
+
 html {
   scroll-behavior: smooth;
-  overflow-x: clip; /* clip instead of hidden — avoids creating a scroll container that breaks window.scroll events */
+  overflow-x: hidden;
 }
 
 /* ── HowItWorksSection keyframe animations ── */
@@ -388,6 +392,10 @@ body {
 
 /* ── Mobile / Tablet responsive ─────────────────────────────────────── */
 @media (max-width: 767px) {
+  :root {
+    --scroll-expand-height: 200vh; /* shorter scroll zone on mobile — no layout shift */
+  }
+
   /* Hero — stack phones below text on mobile */
   .photo-hero {
     background-position: center 30%;
