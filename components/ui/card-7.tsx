@@ -97,13 +97,7 @@ export const InteractiveTravelCard = React.forwardRef<
         {/* Title */}
         <motion.h3
           className="px-1 text-center text-[15px] font-bold leading-snug tracking-[-0.01em] line-clamp-3"
-          style={{
-            background: "linear-gradient(135deg, #F5C842 0%, #F5A020 60%, #e8902a 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
-            backgroundClip: "text",
-            transform: "translateZ(22px)",
-          }}
+          style={{ color: "#F5A020", transform: "translateZ(22px)" }}
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.45 }}
