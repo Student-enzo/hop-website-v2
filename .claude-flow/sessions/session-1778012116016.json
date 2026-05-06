@@ -1,0 +1,14 @@
+{
+  "id": "session-1778012116016",
+  "startedAt": "2026-05-05T20:15:16.016Z",
+  "cwd": "/Users/enissongodoy/SEO Breif/hop-website",
+  "context": {},
+  "metrics": {
+    "edits": 12,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-05-05T20:43:02.805Z",
+  "duration": 1666790
+}
