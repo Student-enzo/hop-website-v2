@@ -69,7 +69,7 @@ export default function DestinationsSection() {
         <div style={{ display: "grid", gap: "4rem", alignItems: "start" }} className="grid grid-cols-1 lg:grid-cols-2">
 
           {/* LEFT: Interactive stacked cards */}
-          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", position: "relative", paddingBottom: "2.5rem" }}
+          <div style={{ flexDirection: "column", alignItems: "center", position: "relative", paddingBottom: "2.5rem" }}
                className="hidden lg:flex">
             <StackedCardsInteraction cards={FEATURED} />
           </div>

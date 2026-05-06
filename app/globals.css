@@ -427,6 +427,11 @@ body {
     grid-template-columns: 1fr 1fr !important;
   }
 
+  /* HIW feature highlights: 2 columns on mobile */
+  .hiw-features-grid {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+
   /* Section padding reduction */
   .mob-pad-section {
     padding-top: 3rem !important;

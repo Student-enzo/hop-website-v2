@@ -174,43 +174,87 @@ export default function HowItWorksSection() {
           </h2>
         </div>
 
-        {/* ── Mobile phone preview — hidden on desktop ── */}
-        <div className="flex md:hidden" style={{ justifyContent: "center", marginBottom: "2rem" }}>
-          <div>
-            <div style={{
-              borderRadius: 44, padding: 8,
-              background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
-              boxShadow: "0 24px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.08)",
-            }}>
-              <div style={{ position: "relative", borderRadius: 38, overflow: "hidden", width: 190, height: 410 }}>
-                <div style={{ position: "absolute", top: 8, left: "50%", transform: "translateX(-50%)", width: 50, height: 16, backgroundColor: "#111", borderRadius: 8, zIndex: 5 }} />
-                {STEPS.map((s, i) => (
-                  <div key={s.num} style={{
-                    position: "absolute", inset: 0,
-                    opacity: active === i && !flipping ? 1 : 0,
-                    transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
-                    transition: "opacity 0.35s ease, transform 0.35s ease",
-                  }}>
-                    <Image src={s.img} alt={s.imgAlt} width={190} height={410} style={{ objectFit: "cover", display: "block" }} unoptimized />
-                  </div>
+        {/* ── Mobile layout — hidden on desktop ── */}
+        <div className="md:hidden" style={{ marginBottom: "0" }}>
+          {/* Phone left + active step right */}
+          <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start" }}>
+            {/* Phone */}
+            <div style={{ flexShrink: 0 }}>
+              <div style={{
+                borderRadius: 36, padding: 7,
+                background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
+                boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)",
+              }}>
+                <div style={{ position: "relative", borderRadius: 30, overflow: "hidden", width: 148, height: 320 }}>
+                  <div style={{ position: "absolute", top: 7, left: "50%", transform: "translateX(-50%)", width: 44, height: 14, backgroundColor: "#111", borderRadius: 7, zIndex: 5 }} />
+                  {STEPS.map((s, i) => (
+                    <div key={s.num} style={{
+                      position: "absolute", inset: 0,
+                      opacity: active === i && !flipping ? 1 : 0,
+                      transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
+                      transition: "opacity 0.35s ease, transform 0.35s ease",
+                    }}>
+                      <Image src={s.img} alt={s.imgAlt} width={148} height={320} style={{ objectFit: "cover", display: "block" }} unoptimized />
+                    </div>
+                  ))}
+                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
+                </div>
+              </div>
+              {/* Dots */}
+              <div style={{ display: "flex", gap: "0.35rem", justifyContent: "center", marginTop: "0.75rem", alignItems: "center" }}>
+                {STEPS.map((_, i) => (
+                  <button key={i} onClick={() => goTo(i)} style={{
+                    width: active === i ? 18 : 5, height: 5, borderRadius: 999, border: "none", padding: 0,
+                    backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
+                    transition: "width 0.35s ease, background-color 0.35s ease",
+                    cursor: "pointer",
+                  }} />
                 ))}
-                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
               </div>
             </div>
-            <div style={{ display: "flex", gap: "0.4rem", justifyContent: "center", marginTop: "0.875rem", alignItems: "center" }}>
-              {STEPS.map((_, i) => (
-                <button key={i} onClick={() => goTo(i)} style={{
-                  width: active === i ? 22 : 6, height: 6, borderRadius: 999, border: "none", padding: 0,
-                  backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
-                  transition: "width 0.35s ease, background-color 0.35s ease",
-                  cursor: "pointer",
-                }} />
-              ))}
+
+            {/* Active step info */}
+            <div style={{ flex: 1, paddingTop: "0.25rem" }}>
+              <div style={{
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                width: 28, height: 28, borderRadius: "50%",
+                backgroundColor: "rgba(245,160,32,0.15)", marginBottom: "0.625rem",
+              }}>
+                <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.65rem" }}>
+                  {step.num === "✦" ? "✦" : step.num}
+                </span>
+              </div>
+              <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.975rem", lineHeight: 1.3, marginBottom: "0.5rem" }}>
+                {step.title}
+              </p>
+              <p style={{ color: MUTED, fontSize: "0.8rem", lineHeight: 1.65 }}>{step.desc}</p>
+              {/* Progress bar */}
+              <div style={{ height: 2, backgroundColor: "rgba(245,160,32,0.1)", borderRadius: 99, marginTop: "0.875rem", overflow: "hidden" }}>
+                <div style={{ height: "100%", width: `${progress}%`, backgroundColor: ORANGE, transition: "width 0.1s linear", borderRadius: 99 }} />
+              </div>
             </div>
+          </div>
+
+          {/* Step tabs */}
+          <div style={{ display: "flex", gap: "0.4rem", marginTop: "1.25rem", overflowX: "auto", paddingBottom: "0.25rem" }}>
+            {STEPS.map((s, i) => (
+              <button key={i} onClick={() => goTo(i)} style={{
+                flexShrink: 0, padding: "0.35rem 0.75rem",
+                borderRadius: 999,
+                border: `1px solid ${i === active ? ORANGE : "rgba(255,255,255,0.08)"}`,
+                backgroundColor: i === active ? "rgba(245,160,32,0.1)" : "transparent",
+                color: i === active ? ORANGE : MUTED,
+                fontSize: "0.7rem", fontWeight: i === active ? 700 : 500,
+                cursor: "pointer", fontFamily: "inherit",
+                transition: "border-color 0.2s, color 0.2s, background-color 0.2s",
+              }}>
+                {s.num === "✦" ? "✦ Tip" : `${s.num} ${s.title.split(" ").slice(0, 2).join(" ")}`}
+              </button>
+            ))}
           </div>
         </div>
 
-        <div style={{ display: "grid", gap: "4rem", alignItems: "center" }} className="grid grid-cols-1 md:grid-cols-2">
+        <div style={{ display: "grid", gap: "4rem", alignItems: "center" }} className="hidden md:grid grid-cols-1 md:grid-cols-2">
 
           {/* ── LEFT: vertical timeline ── */}
           <div style={{ position: "relative" }}>
@@ -394,7 +438,7 @@ export default function HowItWorksSection() {
         </div>
 
         {/* ── Feature highlights (replaces standalone Features section) ── */}
-        <div style={{ marginTop: "3.5rem", display: "grid", gap: "1px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", backgroundColor: BORDER, borderRadius: 20, overflow: "hidden", border: `1px solid ${BORDER}` }}>
+        <div className="hiw-features-grid" style={{ marginTop: "3.5rem", display: "grid", gap: "1px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", backgroundColor: BORDER, borderRadius: 20, overflow: "hidden", border: `1px solid ${BORDER}` }}>
           {[
             {
               icon: (

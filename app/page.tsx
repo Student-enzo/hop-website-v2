@@ -200,7 +200,7 @@ export default function HomePage() {
           scrollToExpand="Scroll to expand"
           textBlend={false}
         >
-          <div style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
+          <div className="hidden md:block" style={{ maxWidth: 860, margin: "0 auto", textAlign: "center" }}>
             <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.1em", marginBottom: "1rem", textShadow: "0 1px 8px rgba(0,0,0,0.9)" }}>THE HOP EXPERIENCE</p>
             <h3 style={{ fontSize: "clamp(1.5rem, 3vw, 2.25rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "1.25rem", lineHeight: 1.2, textShadow: "0 2px 16px rgba(0,0,0,0.95), 0 1px 4px rgba(0,0,0,0.9)" }}>
               Nassau is waiting. Your ride is one tap away.
