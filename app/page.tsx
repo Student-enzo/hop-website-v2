@@ -415,7 +415,7 @@ export default function HomePage() {
         <HopMomentsSection />
 
         {/* ── BLOG PREVIEW ── */}
-        <section className="mob-pad-section" style={{ backgroundColor: CARD, padding: "5rem 1.5rem", borderTop: `1px solid ${BORDER}` }}>
+        <section className="mob-pad-section" style={{ backgroundColor: CARD, padding: "5rem 1.5rem", borderTop: `1px solid ${BORDER}`, overflow: "hidden" }}>
           <div style={{ maxWidth: 1100, margin: "0 auto" }}>
             {/* Header row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", marginBottom: "3rem" }}>

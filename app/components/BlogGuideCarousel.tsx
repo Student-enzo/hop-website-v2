@@ -80,6 +80,8 @@ export default function BlogGuideCarousel({ posts }: { posts: BlogPost[] }) {
       transform: "translateX(0px) translateY(0px) scale(1) rotateY(0deg)",
       transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
     };
+    // Mobile: crossfade only — side cards hidden to prevent viewport overflow
+    if (containerWidth < 520) return { zIndex: 1, opacity: 0, pointerEvents: "none", transition: "all 0.8s cubic-bezier(.4,2,.3,1)" };
     if (isLeft) return {
       zIndex: 2, opacity: 1, pointerEvents: "auto",
       transform: `translateX(-${gap}px) translateY(-${stickUp}px) scale(0.84) rotateY(14deg)`,
@@ -102,7 +104,7 @@ export default function BlogGuideCarousel({ posts }: { posts: BlogPost[] }) {
         {/* Image fan */}
         <div
           ref={imageContainerRef}
-          style={{ position: "relative", width: "100%", height: "22rem", perspective: 1000, overflow: "hidden" }}
+          style={{ position: "relative", width: "100%", height: "22rem", perspective: 1000 }}
         >
           {posts.map((post, index) => (
             // eslint-disable-next-line @next/next/no-img-element
