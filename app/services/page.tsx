@@ -443,9 +443,9 @@ export default function ServicesPage() {
                 </p>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1rem", marginBottom: "2rem" }}>
                   {[
-                    { type: "Photo", pts: "5 pts", icon: "📷" },
-                    { type: "Video", pts: "10 pts", icon: "🎬" },
-                    { type: "Reel", pts: "30 pts", icon: "✨" },
+                    { type: "Photo", pts: "50 pts", icon: "📷" },
+                    { type: "Video", pts: "100 pts", icon: "🎬" },
+                    { type: "Reel", pts: "195 pts", icon: "✨" },
                     { type: "Ride complete", pts: "TBD", icon: "🚗" },
                   ].map((item) => (
                     <div

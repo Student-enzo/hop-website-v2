@@ -45,9 +45,9 @@ function StaggerText({ lines }: { lines: string[] }) {
 }
 
 const PILLS = [
-  { label: "Photo", pts: "5 pts" },
-  { label: "Video", pts: "10 pts" },
-  { label: "Reel", pts: "30 pts = $5 back" },
+  { label: "Photo", pts: "50 pts" },
+  { label: "Video", pts: "100 pts" },
+  { label: "Reel", pts: "195 pts" },
 ]
 
 export default function HopMomentsSection() {
