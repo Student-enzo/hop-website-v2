@@ -1,6 +1,6 @@
 "use client";
 
-import { Ref, forwardRef, useState, useEffect } from "react";
+import { Ref, forwardRef, useState, useEffect, useRef } from "react";
 import Image, { ImageProps } from "next/image";
 import { motion, useMotionValue } from "framer-motion";
 import { cn } from "@/lib/utils";
@@ -190,15 +190,28 @@ const Photo = ({
 export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number }) {
   const [isVisible, setIsVisible] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const visibilityTimer = setTimeout(() => setIsVisible(true), animationDelay * 1000);
-    const animationTimer = setTimeout(() => setIsLoaded(true), (animationDelay + 0.4) * 1000);
-    return () => { clearTimeout(visibilityTimer); clearTimeout(animationTimer); };
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const visibilityTimer = setTimeout(() => setIsVisible(true), animationDelay * 1000);
+          const animationTimer = setTimeout(() => setIsLoaded(true), (animationDelay + 0.4) * 1000);
+          observer.disconnect();
+          return () => { clearTimeout(visibilityTimer); clearTimeout(animationTimer); };
+        }
+      },
+      { threshold: 0.2 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
   }, [animationDelay]);
 
   return (
-    <div className="relative">
+    <div className="relative" ref={sectionRef}>
       {/* Subtle grid backdrop */}
       <div className="absolute inset-0 max-md:hidden top-[180px] -z-10 h-[340px] w-full bg-[linear-gradient(to_right,#57534e_1px,transparent_1px),linear-gradient(to_bottom,#57534e_1px,transparent_1px)] bg-[size:3rem_3rem] opacity-15 [mask-image:radial-gradient(ellipse_80%_50%_at_50%_0%,#000_70%,transparent_110%)]" />
 
