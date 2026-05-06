@@ -6,7 +6,7 @@ import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
 import { TravelCard, CATEGORY_ACCENT } from "@/components/ui/card-7";
-import { FocusCards, type FocusCard } from "@/components/ui/focus-rail";
+import { FocusRail, type FocusRailItem } from "@/components/ui/focus-rail";
 
 const ORANGE = "#F5A020";
 const BG = "#0e0c09";
@@ -43,8 +43,8 @@ function getImage(slug: string, coverImage?: string) {
 export default function BlogPage() {
   const [activeCategory, setActiveCategory] = useState("All");
 
-  // Build FocusCards data
-  const focusPosts: FocusCard[] = FOCUS_SLUGS
+  // Build FocusRail items
+  const focusItems: FocusRailItem[] = FOCUS_SLUGS
     .map((slug, i) => {
       const post = BLOG_POSTS.find((p) => p.slug === slug);
       if (!post) return null;
@@ -57,7 +57,7 @@ export default function BlogPage() {
         href: `/blog/${post.slug}`,
       };
     })
-    .filter(Boolean) as FocusCard[];
+    .filter(Boolean) as FocusRailItem[];
 
   // Grid posts (exclude focus posts when showing "All")
   const gridPosts =
@@ -135,19 +135,9 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* ── FocusCards hero — only on "All" ── */}
+        {/* ── FocusRail hero — only on "All" ── */}
         {activeCategory === "All" && (
-          <section style={{ padding: "3.5rem 1.5rem 2rem" }}>
-            <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-              <div className="flex items-center gap-3 mb-6">
-                <p style={{ color: MUTED }} className="text-xs font-bold tracking-widest uppercase whitespace-nowrap">
-                  Featured Guides
-                </p>
-                <div style={{ flex: 1, height: 1, backgroundColor: BORDER }} />
-              </div>
-              <FocusCards cards={focusPosts} />
-            </div>
-          </section>
+          <FocusRail items={focusItems} />
         )}
 
         {/* ── TravelCard grid ── */}
