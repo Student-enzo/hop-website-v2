@@ -391,12 +391,20 @@ body {
   /* Video grid: single column on mobile */
   .nassau-video-grid {
     grid-template-columns: 1fr !important;
+    max-width: 420px !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
   }
 
-  /* Context strip: allow wrapping, smaller text */
+  /* Context strip: stack vertically, hide separators */
   .context-strip-inner {
-    gap: 0 !important;
-    justify-content: flex-start !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 0.35rem !important;
+    justify-content: center !important;
+  }
+  .context-sep {
+    display: none !important;
   }
 
   /* Blog guide carousel: stack vertically */
@@ -417,6 +425,27 @@ body {
   /* Destination cards: 2-column on mobile */
   .destinations-grid {
     grid-template-columns: 1fr 1fr !important;
+  }
+
+  /* Section padding reduction */
+  .mob-pad-section {
+    padding-top: 3rem !important;
+    padding-bottom: 3rem !important;
+  }
+  .mob-pad-hero {
+    padding-top: 4.5rem !important;
+    padding-bottom: 3rem !important;
+  }
+  /* Schedule / photo-hero sections: tighten padding + remove forced height */
+  .mob-schedule-section {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
+    min-height: auto !important;
+  }
+  /* Download CTA: less vertical space */
+  .mob-cta-section {
+    padding-top: 4rem !important;
+    padding-bottom: 4rem !important;
   }
 }
 

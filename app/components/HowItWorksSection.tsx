@@ -144,7 +144,7 @@ export default function HowItWorksSection() {
   const step = STEPS[active];
 
   return (
-    <section style={{ backgroundColor: "#0e0c09", padding: "5rem 1.5rem", overflow: "hidden" }}>
+    <section className="mob-pad-section" style={{ backgroundColor: "#0e0c09", padding: "5rem 1.5rem", overflow: "hidden" }}>
       <style>{`
         @keyframes hiw-float {
           0%,100% { transform: translateY(0px); }

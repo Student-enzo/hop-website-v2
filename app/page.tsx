@@ -123,7 +123,7 @@ export default function HomePage() {
 
           <div
             style={{ position: "relative", width: "100%", maxWidth: 1200, margin: "0 auto", padding: "7rem 1.5rem 5rem", display: "grid", gap: "3rem", alignItems: "center" }}
-            className="grid grid-cols-1 lg:grid-cols-2"
+            className="grid grid-cols-1 lg:grid-cols-2 mob-pad-hero"
           >
             {/* Left — headline + booking widget */}
             <div>
@@ -224,7 +224,7 @@ export default function HomePage() {
 
         {/* ── SCHEDULE FEATURE ── */}
         <section
-          className="photo-hero"
+          className="photo-hero mob-schedule-section"
           style={{ backgroundImage: `url('${PHOTOS.palmRoad}')`, padding: "6rem 1.5rem", minHeight: 580 }}
         >
           {/* Overlay: heavy left → fades right */}
@@ -313,6 +313,7 @@ export default function HomePage() {
           }}
         >
           <div
+            className="context-strip-inner"
             style={{
               maxWidth: 1200,
               margin: "0 auto",
@@ -329,7 +330,7 @@ export default function HomePage() {
               { label: "HOP shows your fare upfront", icon: "✓" },
             ].map((item, i) => (
               <div key={item.label} style={{ display: "flex", alignItems: "center", gap: "0.4rem", padding: "0.4rem 1.25rem", flexShrink: 0 }}>
-                {i > 0 && <span style={{ color: BORDER, marginRight: "1.25rem", fontSize: "1.2rem", fontWeight: 200 }}>|</span>}
+                {i > 0 && <span className="context-sep" style={{ color: BORDER, marginRight: "1.25rem", fontSize: "1.2rem", fontWeight: 200 }}>|</span>}
                 <span
                   style={{
                     color: i === 2 ? "#3aad6e" : "#E84040",
@@ -360,7 +361,7 @@ export default function HomePage() {
         <SafetySection />
 
         {/* ── NASSAU LIFE VIDEOS ── */}
-        <section style={{ backgroundColor: BG, padding: "5rem 1.5rem" }}>
+        <section className="mob-pad-section" style={{ backgroundColor: BG, padding: "5rem 1.5rem" }}>
           <div style={{ maxWidth: 1200, margin: "0 auto" }}>
             <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
               <p style={{ color: ORANGE, fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", marginBottom: "0.5rem" }}>SEE NASSAU</p>
@@ -371,7 +372,7 @@ export default function HomePage() {
                 Plan your first ride to the right place.
               </p>
             </div>
-            <div style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 340px))", gap: "1rem", justifyContent: "center" }}>
+            <div className="nassau-video-grid" style={{ display: "grid", gridTemplateColumns: "repeat(3, minmax(0, 340px))", gap: "1rem", justifyContent: "center" }}>
               {NASSAU_VIDEOS.map((v) => (
                 <div
                   key={v.id}
@@ -414,7 +415,7 @@ export default function HomePage() {
         <HopMomentsSection />
 
         {/* ── BLOG PREVIEW ── */}
-        <section style={{ backgroundColor: CARD, padding: "5rem 1.5rem", borderTop: `1px solid ${BORDER}` }}>
+        <section className="mob-pad-section" style={{ backgroundColor: CARD, padding: "5rem 1.5rem", borderTop: `1px solid ${BORDER}` }}>
           <div style={{ maxWidth: 1100, margin: "0 auto" }}>
             {/* Header row */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", flexWrap: "wrap", gap: "1rem", marginBottom: "3rem" }}>
@@ -467,7 +468,7 @@ export default function HomePage() {
         {/* ── DOWNLOAD CTA ── */}
         <section
           id="download"
-          className="photo-hero"
+          className="photo-hero mob-cta-section"
           style={{ backgroundImage: `url('${PHOTOS.ctaBg}')`, padding: "7rem 1.5rem" }}
         >
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to bottom, rgba(12,10,6,0.45) 0%, rgba(12,10,6,0.82) 100%)" }} />
