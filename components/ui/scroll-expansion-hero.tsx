@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, ReactNode } from 'react';
+import { useEffect, useRef, useState, ReactNode } from 'react';
 import Image from 'next/image';
 
 interface ScrollExpandMediaProps {
@@ -25,6 +25,7 @@ const ScrollExpandMedia = ({
   textBlend,
   children,
 }: ScrollExpandMediaProps) => {
+  const [wrapperHeight, setWrapperHeight] = useState('300vh');
   const wrapperRef   = useRef<HTMLDivElement>(null);
   const frameRef     = useRef<HTMLDivElement>(null);
   const overlayRef   = useRef<HTMLDivElement>(null);
@@ -45,6 +46,11 @@ const ScrollExpandMedia = ({
       '?autoplay=1&mute=1&loop=1&controls=0&rel=0&modestbranding=1&playlist=' +
       mediaSrc.split('v=')[1]
     : mediaSrc;
+
+  useEffect(() => {
+    // Set wrapper height based on viewport — avoids CSS !important fighting inline style
+    setWrapperHeight(window.innerWidth < 768 ? '130vh' : '300vh');
+  }, []);
 
   useEffect(() => {
     const update = () => {
@@ -111,7 +117,7 @@ const ScrollExpandMedia = ({
   }, [embedSrc]);
 
   return (
-    <div ref={wrapperRef} className="scroll-expand-wrapper" style={{ height: 'clamp(200vh, 300vh, 300vh)' }}>
+    <div ref={wrapperRef} className="scroll-expand-wrapper" style={{ height: wrapperHeight }}>
       <div
         style={{
           position: 'sticky',

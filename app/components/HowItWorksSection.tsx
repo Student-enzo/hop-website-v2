@@ -3,7 +3,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 
-const CARD = "#1e1c14";
 const CARD2 = "#222018";
 const TEXT = "#f0ede8";
 const MUTED = "#8a8070";
@@ -75,6 +74,45 @@ const STEPS = [
   },
 ];
 
+const FEATURES = [
+  {
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M1 6s0-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 2 2"/><path d="M1 12s0-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 2 2"/><path d="M1 18s0-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 2 2"/>
+      </svg>
+    ),
+    title: "Low Data Mode",
+    desc: "Maps pause on weak signal — tracking, ETA, and chat keep running.",
+  },
+  {
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
+      </svg>
+    ),
+    title: "Fixed prices. No surprises.",
+    desc: "Fare locked before your driver moves. Never at destination.",
+  },
+  {
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" />
+      </svg>
+    ),
+    title: "Book now or schedule ahead",
+    desc: "Instant rides or plan days in advance. Airport pickup at 5 AM? Done.",
+  },
+  {
+    icon: (
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+      </svg>
+    ),
+    title: "SOS + Safety Desk",
+    desc: "One tap alerts emergency services, HOP Safety Desk, and trusted contacts.",
+  },
+];
+
 export default function HowItWorksSection() {
   const [active, setActive] = useState(0);
   const [flipping, setFlipping] = useState(false);
@@ -112,9 +150,7 @@ export default function HowItWorksSection() {
         setActive((prev) => {
           const next = (prev + 1) % STEPS.length;
           setFlipping(true);
-          setTimeout(() => {
-            setFlipping(false);
-          }, 280);
+          setTimeout(() => setFlipping(false), 280);
           startRef.current = now;
           return next;
         });
@@ -137,279 +173,379 @@ export default function HowItWorksSection() {
     setTilt({ x: dy * -12, y: dx * 14 });
   }, []);
 
-  const handleMouseLeave = useCallback(() => {
-    setTilt({ x: 0, y: 0 });
-  }, []);
+  const handleMouseLeave = useCallback(() => setTilt({ x: 0, y: 0 }), []);
 
   const step = STEPS[active];
 
   return (
-    <section style={{ backgroundColor: "#0e0c09", padding: "5rem 1.5rem", overflow: "hidden" }}>
-      <style>{`
-        @keyframes hiw-float {
-          0%,100% { transform: translateY(0px); }
-          50%      { transform: translateY(-10px); }
-        }
-        @keyframes hiw-chip-in-left {
-          from { opacity:0; transform: translateX(-18px) scale(0.92); }
-          to   { opacity:1; transform: translateX(0)    scale(1); }
-        }
-        @keyframes hiw-chip-in-right {
-          from { opacity:0; transform: translateX(18px) scale(0.92); }
-          to   { opacity:1; transform: translateX(0)    scale(1); }
-        }
-        @keyframes hiw-glow-pulse {
-          0%,100% { opacity:.7; transform:scale(1);   }
-          50%      { opacity:1;  transform:scale(1.08); }
-        }
-      `}</style>
+    <section style={{ backgroundColor: "#0e0c09", overflow: "hidden" }}>
 
-      <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+      {/* ── DESKTOP LAYOUT ── */}
+      <div className="hidden md:block" style={{ padding: "5rem 1.5rem" }}>
+        <div style={{ maxWidth: 1100, margin: "0 auto" }}>
+
+          {/* Header */}
+          <div style={{ marginBottom: "3.5rem" }}>
+            <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.6rem" }}>HOW IT WORKS</p>
+            <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
+              Type your destination.<br />Confirm. Done.
+            </h2>
+          </div>
+
+          <div style={{ display: "grid", gap: "4rem", alignItems: "center", gridTemplateColumns: "1fr 1fr" }}>
+
+            {/* LEFT: vertical timeline */}
+            <div style={{ position: "relative" }}>
+              <div style={{ position: "absolute", left: 19, top: 59, bottom: 59, width: 1, backgroundColor: BORDER, zIndex: 0 }}>
+                <div style={{
+                  position: "absolute", top: 0, left: 0, width: "100%",
+                  height: `${(active / Math.max(STEPS.length - 1, 1)) * 100}%`,
+                  backgroundColor: ORANGE, transition: "height 0.6s cubic-bezier(0.4,0,0.2,1)",
+                }} />
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
+                {STEPS.map((s, i) => {
+                  const isActive = active === i;
+                  const isPast = i < active;
+                  return (
+                    <button
+                      key={s.num}
+                      onClick={() => goTo(i)}
+                      onMouseEnter={() => { pausedRef.current = true; }}
+                      onMouseLeave={() => { pausedRef.current = false; }}
+                      style={{
+                        display: "flex", gap: "1.25rem", alignItems: "flex-start",
+                        padding: "1.25rem 1rem 1.25rem 0", textAlign: "left",
+                        background: "none", border: "none", cursor: "pointer",
+                        fontFamily: "inherit", position: "relative", zIndex: 1,
+                      }}
+                    >
+                      <div style={{
+                        width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
+                        position: "relative", zIndex: 2,
+                        backgroundColor: isActive ? ORANGE : CARD2,
+                        border: `2px solid ${isActive ? ORANGE : isPast ? "rgba(245,160,32,0.4)" : BORDER}`,
+                        display: "flex", alignItems: "center", justifyContent: "center",
+                        transition: "background-color 0.3s, border-color 0.3s",
+                      }}>
+                        {isPast
+                          ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
+                          : <span style={{ color: isActive ? "#161616" : MUTED, fontWeight: 800, fontSize: s.num === "✦" ? "0.9rem" : "0.72rem" }}>{s.num}</span>
+                        }
+                      </div>
+                      <div style={{ flex: 1, paddingTop: "0.35rem" }}>
+                        <p style={{ color: isActive ? TEXT : MUTED, fontWeight: isActive ? 700 : 500, fontSize: "1rem", letterSpacing: "-0.01em", marginBottom: isActive ? "0.5rem" : 0, transition: "color 0.2s" }}>
+                          {s.title}
+                        </p>
+                        <div style={{ overflow: "hidden", maxHeight: isActive ? "4rem" : 0, transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1)" }}>
+                          <p style={{ color: MUTED, fontSize: "0.875rem", lineHeight: 1.65, paddingBottom: "0.25rem" }}>{s.desc}</p>
+                        </div>
+                        {isActive && (
+                          <div style={{ height: 2, backgroundColor: "rgba(245,160,32,0.12)", borderRadius: 99, marginTop: "0.75rem", overflow: "hidden" }}>
+                            <div style={{ height: "100%", width: `${progress}%`, backgroundColor: ORANGE, transition: "width 0.1s linear", borderRadius: 99 }} />
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* RIGHT: 3D floating phone */}
+            <div
+              style={{ position: "relative", minHeight: 420, display: "flex", alignItems: "center", justifyContent: "center" }}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+            >
+              <div style={{
+                position: "absolute", inset: 0, borderRadius: 32,
+                background: `radial-gradient(ellipse 60% 55% at 50% 55%, ${step.glow}, transparent 70%)`,
+                transition: "background 0.8s ease",
+                animation: "hiw-glow-pulse 4s ease-in-out infinite",
+                pointerEvents: "none",
+              }} />
+
+              <div
+                ref={phoneRef}
+                style={{
+                  animation: "hiw-float 5s ease-in-out infinite",
+                  transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
+                  transition: "transform 0.15s ease-out",
+                  position: "relative",
+                  zIndex: 2,
+                }}
+              >
+                <div style={{
+                  display: "inline-block", borderRadius: 48, padding: 10,
+                  background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
+                  boxShadow: "0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.06)",
+                }}>
+                  <div style={{ position: "relative", borderRadius: 40, overflow: "hidden", width: 220, height: 476 }}>
+                    <div style={{ position: "absolute", top: 10, left: "50%", transform: "translateX(-50%)", width: 60, height: 20, backgroundColor: "#111", borderRadius: 10, zIndex: 5 }} />
+                    {STEPS.map((s, i) => (
+                      <div key={s.num} style={{
+                        position: "absolute", inset: 0,
+                        opacity: active === i && !flipping ? 1 : 0,
+                        transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
+                        transition: "opacity 0.35s ease, transform 0.35s ease",
+                      }}>
+                        <Image src={s.img} alt={s.imgAlt} width={220} height={476} style={{ objectFit: "cover", display: "block" }} unoptimized />
+                      </div>
+                    ))}
+                    <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
+                  </div>
+                </div>
+
+                {/* Floating chips — desktop only */}
+                {step.chips.map((chip, ci) => (
+                  <div
+                    key={`${active}-${ci}`}
+                    style={{
+                      position: "absolute",
+                      top: `${chip.y}%`,
+                      ...(chip.side === "left" ? { right: "calc(100% + 14px)" } : { left: "calc(100% + 14px)" }),
+                      backgroundColor: "rgba(18,16,10,0.92)",
+                      backdropFilter: "blur(20px)",
+                      WebkitBackdropFilter: "blur(20px)",
+                      border: "1px solid rgba(255,255,255,0.14)",
+                      borderRadius: 12,
+                      padding: "0.5rem 0.875rem",
+                      whiteSpace: "nowrap",
+                      boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+                      animation: `${chip.side === "left" ? "hiw-chip-in-left" : "hiw-chip-in-right"} 0.45s cubic-bezier(0.34,1.56,0.64,1) ${ci * 0.15}s both`,
+                      zIndex: 10,
+                      minWidth: 130,
+                    }}
+                  >
+                    <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.78rem", lineHeight: 1.2, marginBottom: "0.15rem" }}>{chip.label}</p>
+                    <p style={{ color: MUTED, fontSize: "0.65rem" }}>{chip.sub}</p>
+                    <div style={{
+                      position: "absolute", top: "50%", transform: "translateY(-50%)",
+                      ...(chip.side === "left" ? { right: -5 } : { left: -5 }),
+                      width: 8, height: 8,
+                      backgroundColor: "rgba(18,16,10,0.92)",
+                      border: "1px solid rgba(255,255,255,0.14)",
+                      borderRadius: 2,
+                      rotate: "45deg",
+                      ...(chip.side === "left" ? { borderLeft: "none", borderBottom: "none" } : { borderRight: "none", borderTop: "none" }),
+                    }} />
+                  </div>
+                ))}
+              </div>
+
+              {/* Step indicator dots */}
+              <div style={{
+                position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)",
+                display: "flex", gap: "0.4rem", alignItems: "center",
+                backgroundColor: "rgba(22,22,22,0.85)", backdropFilter: "blur(16px)",
+                border: `1px solid ${BORDER}`, borderRadius: 999,
+                padding: "0.45rem 1rem",
+              }}>
+                {STEPS.map((_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => goTo(i)}
+                    style={{
+                      width: active === i ? 22 : 6, height: 6, borderRadius: 999, border: "none", padding: 0,
+                      backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
+                      transition: "width 0.35s ease, background-color 0.35s ease",
+                      cursor: "pointer",
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* Feature highlights */}
+          <div style={{ marginTop: "3.5rem", display: "grid", gap: "1px", gridTemplateColumns: "repeat(4, 1fr)", backgroundColor: BORDER, borderRadius: 20, overflow: "hidden", border: `1px solid ${BORDER}` }}>
+            {FEATURES.map((f) => (
+              <div key={f.title} style={{ backgroundColor: CARD2, padding: "1.5rem" }}>
+                <div style={{ width: 38, height: 38, borderRadius: 10, backgroundColor: "rgba(245,160,32,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.875rem" }}>
+                  {f.icon}
+                </div>
+                <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.9rem", marginBottom: "0.35rem", lineHeight: 1.3 }}>{f.title}</p>
+                <p style={{ color: MUTED, fontSize: "0.8rem", lineHeight: 1.6 }}>{f.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── MOBILE LAYOUT ── */}
+      <div className="md:hidden" style={{ padding: "3rem 1.25rem 2.5rem" }}>
 
         {/* Header */}
-        <div style={{ marginBottom: "3.5rem" }}>
-          <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.6rem" }}>HOW IT WORKS</p>
-          <h2 style={{ fontSize: "clamp(1.75rem, 3vw, 2.5rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
+        <div style={{ marginBottom: "2rem" }}>
+          <p style={{ color: ORANGE, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.5rem" }}>HOW IT WORKS</p>
+          <h2 style={{ fontSize: "clamp(1.6rem, 6vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.03em", lineHeight: 1.1 }}>
             Type your destination.<br />Confirm. Done.
           </h2>
         </div>
 
-        <div style={{ display: "grid", gap: "4rem", alignItems: "center" }} className="grid grid-cols-1 md:grid-cols-2">
-
-          {/* ── LEFT: vertical timeline ── */}
+        {/* Phone mockup — compact, centered */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1.25rem" }}>
           <div style={{ position: "relative" }}>
-            {/* Animated vertical connector line — runs between circles, not through them */}
-            <div style={{ position: "absolute", left: 19, top: 59, bottom: 59, width: 1, backgroundColor: BORDER, zIndex: 0 }}>
-              <div style={{
-                position: "absolute", top: 0, left: 0, width: "100%",
-                height: `${(active / Math.max(STEPS.length - 1, 1)) * 100}%`,
-                backgroundColor: ORANGE, transition: "height 0.6s cubic-bezier(0.4,0,0.2,1)",
-              }} />
-            </div>
-
-            <div style={{ display: "flex", flexDirection: "column", gap: "0" }}>
-              {STEPS.map((s, i) => {
-                const isActive = active === i;
-                const isPast = i < active;
-                return (
-                  <button
-                    key={s.num}
-                    onClick={() => goTo(i)}
-                    onMouseEnter={() => { pausedRef.current = true; }}
-                    onMouseLeave={() => { pausedRef.current = false; }}
-                    style={{
-                      display: "flex", gap: "1.25rem", alignItems: "flex-start",
-                      padding: "1.25rem 1rem 1.25rem 0", textAlign: "left",
-                      background: "none", border: "none", cursor: "pointer",
-                      fontFamily: "inherit", position: "relative", zIndex: 1,
-                    }}
-                  >
-                    {/* Circle */}
-                    <div style={{
-                      width: 38, height: 38, borderRadius: "50%", flexShrink: 0,
-                      position: "relative", zIndex: 2,
-                      backgroundColor: isActive ? ORANGE : isPast ? CARD2 : CARD2,
-                      border: `2px solid ${isActive ? ORANGE : isPast ? "rgba(245,160,32,0.4)" : BORDER}`,
-                      display: "flex", alignItems: "center", justifyContent: "center",
-                      transition: "background-color 0.3s, border-color 0.3s",
-                    }}>
-                      {isPast
-                        ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="3"><path d="M20 6L9 17l-5-5" /></svg>
-                        : <span style={{ color: isActive ? "#161616" : MUTED, fontWeight: 800, fontSize: s.num === "✦" ? "0.9rem" : "0.72rem" }}>{s.num}</span>
-                      }
-                    </div>
-
-                    {/* Text */}
-                    <div style={{ flex: 1, paddingTop: "0.35rem" }}>
-                      <p style={{ color: isActive ? TEXT : MUTED, fontWeight: isActive ? 700 : 500, fontSize: "1rem", letterSpacing: "-0.01em", marginBottom: isActive ? "0.5rem" : 0, transition: "color 0.2s" }}>
-                        {s.title}
-                      </p>
-                      <div style={{ overflow: "hidden", maxHeight: isActive ? "4rem" : 0, transition: "max-height 0.4s cubic-bezier(0.4,0,0.2,1)" }}>
-                        <p style={{ color: MUTED, fontSize: "0.875rem", lineHeight: 1.65, paddingBottom: "0.25rem" }}>{s.desc}</p>
-                      </div>
-
-                      {/* Progress bar */}
-                      {isActive && (
-                        <div style={{ height: 2, backgroundColor: "rgba(245,160,32,0.12)", borderRadius: 99, marginTop: "0.75rem", overflow: "hidden" }}>
-                          <div style={{ height: "100%", width: `${progress}%`, backgroundColor: ORANGE, transition: "width 0.1s linear", borderRadius: 99 }} />
-                        </div>
-                      )}
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* ── RIGHT: 3D floating phone ── */}
-          <div
-            className="flex justify-center items-center"
-            style={{ position: "relative", minHeight: 420 }}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-          >
-            {/* Background radial glow — shifts color per step */}
+            {/* Glow */}
             <div style={{
-              position: "absolute", inset: 0, borderRadius: 32,
-              background: `radial-gradient(ellipse 60% 55% at 50% 55%, ${step.glow}, transparent 70%)`,
+              position: "absolute", inset: -20, borderRadius: 40,
+              background: `radial-gradient(ellipse 80% 70% at 50% 55%, ${step.glow}, transparent 70%)`,
               transition: "background 0.8s ease",
               animation: "hiw-glow-pulse 4s ease-in-out infinite",
               pointerEvents: "none",
             }} />
+            {/* Phone frame */}
+            <div style={{
+              display: "inline-block", borderRadius: 36, padding: 8,
+              background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
+              boxShadow: "0 24px 56px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.09)",
+              position: "relative", zIndex: 2,
+              animation: "hiw-float 5s ease-in-out infinite",
+            }}>
+              <div style={{ position: "relative", borderRadius: 30, overflow: "hidden", width: 165, height: 356 }}>
+                {/* Notch */}
+                <div style={{ position: "absolute", top: 8, left: "50%", transform: "translateX(-50%)", width: 44, height: 14, backgroundColor: "#111", borderRadius: 7, zIndex: 5 }} />
+                {/* Screenshots */}
+                {STEPS.map((s, i) => (
+                  <div key={s.num} style={{
+                    position: "absolute", inset: 0,
+                    opacity: active === i && !flipping ? 1 : 0,
+                    transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
+                    transition: "opacity 0.35s ease, transform 0.35s ease",
+                  }}>
+                    <Image src={s.img} alt={s.imgAlt} width={165} height={356} style={{ objectFit: "cover", display: "block" }} unoptimized />
+                  </div>
+                ))}
+                {/* Shine */}
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.06) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
+              </div>
+            </div>
+          </div>
 
-            {/* Phone with 3D tilt + float */}
-            <div
-              ref={phoneRef}
+          {/* Dot navigation */}
+          <div style={{ display: "flex", gap: "0.45rem", alignItems: "center" }}>
+            {STEPS.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => goTo(i)}
+                style={{
+                  width: active === i ? 20 : 6, height: 6, borderRadius: 999,
+                  border: "none", padding: 0, cursor: "pointer",
+                  backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.2)",
+                  transition: "width 0.3s ease, background-color 0.3s ease",
+                }}
+              />
+            ))}
+          </div>
+
+          {/* Step info card */}
+          <div style={{
+            width: "100%",
+            backgroundColor: "#1e1c14",
+            borderRadius: 20,
+            padding: "1.25rem",
+            border: `1px solid ${BORDER}`,
+          }}>
+            {/* Step badge + counter */}
+            <div style={{ display: "flex", alignItems: "center", gap: "0.75rem", marginBottom: "0.875rem" }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: "50%", flexShrink: 0,
+                backgroundColor: ORANGE,
+                display: "flex", alignItems: "center", justifyContent: "center",
+                transition: "opacity 0.28s ease",
+                opacity: flipping ? 0.4 : 1,
+              }}>
+                <span style={{ color: "#161616", fontWeight: 800, fontSize: step.num === "✦" ? "0.9rem" : "0.72rem" }}>{step.num}</span>
+              </div>
+              <span style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em" }}>
+                STEP {active + 1} OF {STEPS.length}
+              </span>
+            </div>
+
+            {/* Title */}
+            <h3 style={{
+              color: TEXT, fontWeight: 700,
+              fontSize: "1.05rem", letterSpacing: "-0.01em",
+              marginBottom: "0.45rem", lineHeight: 1.3,
+              opacity: flipping ? 0 : 1,
+              transition: "opacity 0.28s ease",
+            }}>
+              {step.title}
+            </h3>
+
+            {/* Description */}
+            <p style={{
+              color: MUTED, fontSize: "0.875rem", lineHeight: 1.65,
+              opacity: flipping ? 0 : 1,
+              transition: "opacity 0.28s ease 0.04s",
+            }}>
+              {step.desc}
+            </p>
+
+            {/* Progress bar */}
+            <div style={{ height: 2, backgroundColor: "rgba(245,160,32,0.12)", borderRadius: 99, marginTop: "1rem", overflow: "hidden" }}>
+              <div style={{ height: "100%", width: `${progress}%`, backgroundColor: ORANGE, transition: "width 0.1s linear", borderRadius: 99 }} />
+            </div>
+          </div>
+
+          {/* Prev / Next navigation */}
+          <div style={{ display: "flex", gap: "0.625rem", width: "100%" }}>
+            <button
+              onClick={() => goTo((active - 1 + STEPS.length) % STEPS.length)}
+              onTouchStart={() => { pausedRef.current = true; }}
+              onTouchEnd={() => { pausedRef.current = false; }}
               style={{
-                animation: "hiw-float 5s ease-in-out infinite",
-                transform: `perspective(900px) rotateX(${tilt.x}deg) rotateY(${tilt.y}deg)`,
-                transition: "transform 0.15s ease-out",
-                position: "relative",
-                zIndex: 2,
+                flex: 1, padding: "0.75rem 0", border: `1px solid ${BORDER}`,
+                borderRadius: 14, backgroundColor: "#1e1c14",
+                color: MUTED, fontWeight: 600, fontSize: "0.875rem",
+                cursor: "pointer", fontFamily: "inherit",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
+                transition: "border-color 0.2s, color 0.2s",
               }}
             >
-              {/* Phone frame */}
-              <div style={{
-                display: "inline-block",
-                borderRadius: 48,
-                padding: 10,
-                background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
-                boxShadow: "0 40px 80px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.09), inset 0 1px 0 rgba(255,255,255,0.06)",
-              }}>
-                {/* Notch */}
-                <div style={{ position: "relative", borderRadius: 40, overflow: "hidden", width: 220, height: 476 }}>
-                  <div style={{ position: "absolute", top: 10, left: "50%", transform: "translateX(-50%)", width: 60, height: 20, backgroundColor: "#111", borderRadius: 10, zIndex: 5 }} />
-                  {/* Crossfading screenshots */}
-                  {STEPS.map((s, i) => (
-                    <div key={s.num} style={{
-                      position: "absolute", inset: 0,
-                      opacity: active === i && !flipping ? 1 : 0,
-                      transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
-                      transition: "opacity 0.35s ease, transform 0.35s ease",
-                    }}>
-                      <Image src={s.img} alt={s.imgAlt} width={220} height={476} style={{ objectFit: "cover", display: "block" }} unoptimized />
-                    </div>
-                  ))}
-                  {/* Screen shine overlay */}
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
-                </div>
-              </div>
-
-              {/* Floating chips — hidden on mobile, they extend outside the viewport */}
-              <div className="hidden md:block">
-              {step.chips.map((chip, ci) => (
-                <div
-                  key={`${active}-${ci}`}
-                  style={{
-                    position: "absolute",
-                    top: `${chip.y}%`,
-                    ...(chip.side === "left" ? { right: "calc(100% + 14px)" } : { left: "calc(100% + 14px)" }),
-                    backgroundColor: "rgba(18,16,10,0.92)",
-                    backdropFilter: "blur(20px)",
-                    WebkitBackdropFilter: "blur(20px)",
-                    border: `1px solid rgba(255,255,255,0.14)`,
-                    borderRadius: 12,
-                    padding: "0.5rem 0.875rem",
-                    whiteSpace: "nowrap",
-                    boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
-                    animation: `${chip.side === "left" ? "hiw-chip-in-left" : "hiw-chip-in-right"} 0.45s cubic-bezier(0.34,1.56,0.64,1) ${ci * 0.15}s both`,
-                    zIndex: 10,
-                    minWidth: 130,
-                  }}
-                >
-                  <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.78rem", lineHeight: 1.2, marginBottom: "0.15rem" }}>{chip.label}</p>
-                  <p style={{ color: MUTED, fontSize: "0.65rem" }}>{chip.sub}</p>
-                  {/* Arrow pointer */}
-                  <div style={{
-                    position: "absolute", top: "50%", transform: "translateY(-50%)",
-                    ...(chip.side === "left" ? { right: -5 } : { left: -5 }),
-                    width: 8, height: 8,
-                    backgroundColor: "rgba(18,16,10,0.92)",
-                    border: `1px solid rgba(255,255,255,0.14)`,
-                    borderRadius: 2,
-                    rotate: "45deg",
-                    ...(chip.side === "left" ? { borderLeft: "none", borderBottom: "none" } : { borderRight: "none", borderTop: "none" }),
-                  }} />
-                </div>
-              ))}
-              </div>
-            </div>
-
-            {/* Bottom step indicator pill */}
-            <div style={{
-              position: "absolute", bottom: 16, left: "50%", transform: "translateX(-50%)",
-              display: "flex", gap: "0.4rem", alignItems: "center",
-              backgroundColor: "rgba(22,22,22,0.85)", backdropFilter: "blur(16px)",
-              border: `1px solid ${BORDER}`, borderRadius: 999,
-              padding: "0.45rem 1rem",
-            }}>
-              {STEPS.map((_, i) => (
-                <button
-                  key={i}
-                  onClick={() => goTo(i)}
-                  style={{
-                    width: active === i ? 22 : 6, height: 6, borderRadius: 999, border: "none", padding: 0,
-                    backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
-                    transition: "width 0.35s ease, background-color 0.35s ease",
-                    cursor: "pointer",
-                  }}
-                />
-              ))}
-            </div>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M19 12H5M12 19l-7-7 7-7" /></svg>
+              Prev
+            </button>
+            <button
+              onClick={() => goTo((active + 1) % STEPS.length)}
+              onTouchStart={() => { pausedRef.current = true; }}
+              onTouchEnd={() => { pausedRef.current = false; }}
+              style={{
+                flex: 1.6, padding: "0.75rem 0", border: "none",
+                borderRadius: 14, backgroundColor: ORANGE,
+                color: "#161616", fontWeight: 700, fontSize: "0.875rem",
+                cursor: "pointer", fontFamily: "inherit",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "0.4rem",
+              }}
+            >
+              Next step
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#161616" strokeWidth="2.5"><path d="M5 12h14M12 5l7 7-7 7" /></svg>
+            </button>
           </div>
         </div>
 
-        {/* ── Feature highlights (replaces standalone Features section) ── */}
-        <div style={{ marginTop: "3.5rem", display: "grid", gap: "1px", gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))", backgroundColor: BORDER, borderRadius: 20, overflow: "hidden", border: `1px solid ${BORDER}` }}>
-          {[
-            {
-              icon: (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M1 6s0-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 2 2"/><path d="M1 12s0-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 2 2"/><path d="M1 18s0-2 2-2 2 2 4 2 2-2 4-2 2 2 4 2 2-2 4-2 2 2 2 2"/>
-                </svg>
-              ),
-              title: "Low Data Mode",
-              desc: "Maps pause on weak signal — tracking, ETA, and chat keep running.",
-            },
-            {
-              icon: (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                </svg>
-              ),
-              title: "Fixed prices. No surprises.",
-              desc: "Fare locked before your driver moves. Never at destination.",
-            },
-            {
-              icon: (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" /><path d="M12 8v4l3 3" />
-                </svg>
-              ),
-              title: "Book now or schedule ahead",
-              desc: "Instant rides or plan days in advance. Airport pickup at 5 AM? Done.",
-            },
-            {
-              icon: (
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              ),
-              title: "SOS + Safety Desk",
-              desc: "One tap alerts emergency services, HOP Safety Desk, and trusted contacts.",
-            },
-          ].map((f) => (
-            <div key={f.title} style={{ backgroundColor: CARD2, padding: "1.5rem" }}>
-              <div style={{ width: 38, height: 38, borderRadius: 10, backgroundColor: "rgba(245,160,32,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.875rem" }}>
+        {/* Mobile feature grid — 2×2 */}
+        <div style={{
+          marginTop: "2.5rem",
+          display: "grid", gridTemplateColumns: "1fr 1fr",
+          gap: "1px", backgroundColor: BORDER,
+          borderRadius: 20, overflow: "hidden",
+          border: `1px solid ${BORDER}`,
+        }}>
+          {FEATURES.map((f) => (
+            <div key={f.title} style={{ backgroundColor: CARD2, padding: "1.125rem 1rem" }}>
+              <div style={{ width: 34, height: 34, borderRadius: 9, backgroundColor: "rgba(245,160,32,0.1)", display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "0.625rem" }}>
                 {f.icon}
               </div>
-              <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.9rem", marginBottom: "0.35rem", lineHeight: 1.3 }}>{f.title}</p>
-              <p style={{ color: MUTED, fontSize: "0.8rem", lineHeight: 1.6 }}>{f.desc}</p>
+              <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.8rem", marginBottom: "0.3rem", lineHeight: 1.3 }}>{f.title}</p>
+              <p style={{ color: MUTED, fontSize: "0.72rem", lineHeight: 1.5 }}>{f.desc}</p>
             </div>
           ))}
         </div>
-
       </div>
+
     </section>
   );
 }
