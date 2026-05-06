@@ -171,7 +171,7 @@ export default function BlogPage() {
                   <InteractiveTravelCard
                     key={post.slug}
                     imageUrl={getImage(post.slug, post.coverImage)}
-                    title={post.title.length > 40 ? post.title.slice(0, 38) + "…" : post.title}
+                    title={post.title}
                     subtitle={`${post.category} · ${post.readTime}`}
                     actionText="Read guide"
                     href={`/blog/${post.slug}`}

@@ -52,23 +52,23 @@ export const InteractiveTravelCard = React.forwardRef<
         onMouseLeave={handleMouseLeave}
         style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={cn(
-          "relative h-[26rem] w-80 rounded-2xl bg-transparent shadow-2xl border border-border/30",
+          "relative h-[26rem] w-80 rounded-3xl bg-black shadow-2xl overflow-hidden",
           className
         )}
       >
         <div
           style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }}
-          className="absolute inset-4 grid h-[calc(100%-2rem)] w-[calc(100%-2rem)] grid-rows-[1fr_auto] rounded-xl shadow-lg"
+          className="absolute inset-3 grid h-[calc(100%-1.5rem)] w-[calc(100%-1.5rem)] grid-rows-[1fr_auto] rounded-2xl shadow-lg overflow-hidden"
         >
           {/* Background Image */}
           <img
             src={imageUrl}
             alt={`${title}, ${subtitle}`}
-            className="absolute inset-0 h-full w-full rounded-xl object-cover"
+            className="absolute inset-0 h-full w-full object-cover"
           />
 
           {/* Darkening overlay */}
-          <div className="absolute inset-0 h-full w-full rounded-xl bg-gradient-to-b from-black/20 via-transparent to-black/60" />
+          <div className="absolute inset-0 h-full w-full bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 
           {/* Card Content */}
           <div className="relative flex flex-col justify-between rounded-xl p-4 text-white">
@@ -77,13 +77,13 @@ export const InteractiveTravelCard = React.forwardRef<
               <div>
                 <motion.h2
                   style={{ transform: "translateZ(50px)" }}
-                  className="text-2xl font-bold"
+                  className="text-xl font-bold leading-tight line-clamp-3"
                 >
                   {title}
                 </motion.h2>
                 <motion.p
                   style={{ transform: "translateZ(40px)" }}
-                  className="text-sm font-light text-white/80"
+                  className="text-xs font-light text-white/75 mt-0.5"
                 >
                   {subtitle}
                 </motion.p>
@@ -94,7 +94,7 @@ export const InteractiveTravelCard = React.forwardRef<
                 whileTap={{ scale: 0.9 }}
                 aria-label={`Read more about ${title}`}
                 style={{ transform: "translateZ(60px)" }}
-                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-1 ring-inset ring-white/30 transition-colors hover:bg-white/30"
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white/25 backdrop-blur-sm ring-1 ring-inset ring-white/40 transition-colors hover:bg-white/35"
               >
                 <ArrowUpRight className="h-5 w-5 text-white" />
               </motion.a>
