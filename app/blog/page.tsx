@@ -5,7 +5,7 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
-import { TravelCard, CATEGORY_ACCENT } from "@/components/ui/card-7";
+import { InteractiveTravelCard, CATEGORY_ACCENT } from "@/components/ui/card-7";
 import { FocusRail, type FocusRailItem } from "@/components/ui/focus-rail";
 
 const ORANGE = "#F5A020";
@@ -140,10 +140,15 @@ export default function BlogPage() {
           <FocusRail items={focusItems} />
         )}
 
-        {/* ── TravelCard grid ── */}
-        <section style={{ padding: activeCategory === "All" ? "1.5rem 1.5rem 5rem" : "3rem 1.5rem 5rem" }}>
-          <div style={{ maxWidth: 1200, margin: "0 auto" }}>
-            <div className="flex items-center gap-3 mb-6">
+        {/* ── InteractiveTravelCard grid ── */}
+        <section
+          style={{
+            padding: activeCategory === "All" ? "2rem 1.5rem 5rem" : "3rem 1.5rem 5rem",
+            backgroundColor: "#0a0908",
+          }}
+        >
+          <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+            <div className="flex items-center gap-3 mb-8">
               <p style={{ color: MUTED }} className="text-xs font-bold tracking-widest uppercase whitespace-nowrap">
                 {activeCategory === "All" ? "All Articles" : activeCategory}
               </p>
@@ -158,19 +163,19 @@ export default function BlogPage() {
                 <p style={{ color: MUTED }} className="text-sm">No articles in this category yet.</p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+              <div
+                className="flex flex-wrap justify-center gap-6"
+                style={{ perspective: 1000 }}
+              >
                 {gridPosts.map((post) => (
-                  <TravelCard
+                  <InteractiveTravelCard
                     key={post.slug}
                     imageUrl={getImage(post.slug, post.coverImage)}
-                    imageAlt={post.title}
-                    title={post.title}
-                    location={post.category}
-                    overview={post.excerpt}
-                    readTime={post.readTime}
-                    date={post.date}
+                    title={post.title.length > 40 ? post.title.slice(0, 38) + "…" : post.title}
+                    subtitle={`${post.category} · ${post.readTime}`}
+                    actionText="Read guide"
                     href={`/blog/${post.slug}`}
-                    accentColor={CATEGORY_ACCENT[post.category] || ORANGE}
+                    onActionClick={() => { window.location.href = `/blog/${post.slug}`; }}
                   />
                 ))}
               </div>

@@ -1,135 +1,124 @@
-import * as React from "react";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
-import { ArrowRight, MapPin, Clock } from "lucide-react";
+"use client";
 
-interface TravelCardProps extends React.HTMLAttributes<HTMLDivElement> {
-  imageUrl: string;
-  imageAlt: string;
-  logo?: React.ReactNode;
+import * as React from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export interface InteractiveTravelCardProps {
   title: string;
-  location: string;
-  overview: string;
-  readTime: string;
-  date: string;
+  subtitle: string;
+  imageUrl: string;
+  actionText: string;
   href: string;
-  accentColor?: string;
+  onActionClick: () => void;
+  className?: string;
 }
 
-const TravelCard = React.forwardRef<HTMLDivElement, TravelCardProps>(
+export const InteractiveTravelCard = React.forwardRef<
+  HTMLDivElement,
+  InteractiveTravelCardProps
+>(
   (
-    {
-      className,
-      imageUrl,
-      imageAlt,
-      logo,
-      title,
-      location,
-      overview,
-      readTime,
-      date,
-      href,
-      accentColor = "#F5A020",
-      ...props
-    },
+    { title, subtitle, imageUrl, actionText, href, onActionClick, className },
     ref
   ) => {
+    const mouseX = useMotionValue(0);
+    const mouseY = useMotionValue(0);
+
+    const springConfig = { damping: 15, stiffness: 150 };
+    const springX = useSpring(mouseX, springConfig);
+    const springY = useSpring(mouseY, springConfig);
+
+    const rotateX = useTransform(springY, [-0.5, 0.5], ["10.5deg", "-10.5deg"]);
+    const rotateY = useTransform(springX, [-0.5, 0.5], ["-10.5deg", "10.5deg"]);
+
+    const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const { width, height, left, top } = rect;
+      mouseX.set((e.clientX - left) / width - 0.5);
+      mouseY.set((e.clientY - top) / height - 0.5);
+    };
+
+    const handleMouseLeave = () => {
+      mouseX.set(0);
+      mouseY.set(0);
+    };
+
     return (
-      <div
+      <motion.div
         ref={ref}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
         className={cn(
-          "group relative w-full overflow-hidden rounded-xl border border-border bg-card shadow-lg",
-          "transition-all duration-300 ease-in-out hover:shadow-2xl hover:-translate-y-2",
+          "relative h-[26rem] w-80 rounded-2xl bg-transparent shadow-2xl border border-border/30",
           className
         )}
-        style={{ minHeight: 380 }}
-        {...props}
       >
-        {/* Background Image with Zoom Effect on Hover */}
-        <img
-          src={imageUrl}
-          alt={imageAlt}
-          className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-in-out group-hover:scale-110"
-        />
+        <div
+          style={{ transform: "translateZ(50px)", transformStyle: "preserve-3d" }}
+          className="absolute inset-4 grid h-[calc(100%-2rem)] w-[calc(100%-2rem)] grid-rows-[1fr_auto] rounded-xl shadow-lg"
+        >
+          {/* Background Image */}
+          <img
+            src={imageUrl}
+            alt={`${title}, ${subtitle}`}
+            className="absolute inset-0 h-full w-full rounded-xl object-cover"
+          />
 
-        {/* Gradient Overlay for Text Readability */}
-        <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/50 to-black/10" />
+          {/* Darkening overlay */}
+          <div className="absolute inset-0 h-full w-full rounded-xl bg-gradient-to-b from-black/20 via-transparent to-black/60" />
 
-        {/* Content Container */}
-        <div className="relative flex h-full flex-col justify-between p-5 text-card-foreground" style={{ minHeight: 380 }}>
-          {/* Top Section: Logo / Category Pill */}
-          <div className="flex items-start">
-            {logo ? (
-              <div className="flex h-12 w-12 items-center justify-center rounded-full border-2 border-white/50 bg-black/20 backdrop-blur-sm">
-                {logo}
+          {/* Card Content */}
+          <div className="relative flex flex-col justify-between rounded-xl p-4 text-white">
+            {/* Header */}
+            <div className="flex items-start justify-between">
+              <div>
+                <motion.h2
+                  style={{ transform: "translateZ(50px)" }}
+                  className="text-2xl font-bold"
+                >
+                  {title}
+                </motion.h2>
+                <motion.p
+                  style={{ transform: "translateZ(40px)" }}
+                  className="text-sm font-light text-white/80"
+                >
+                  {subtitle}
+                </motion.p>
               </div>
-            ) : (
-              <span
-                className="inline-flex items-center rounded-full px-3 py-1 text-xs font-bold tracking-wide backdrop-blur-sm"
-                style={{
-                  backgroundColor: `${accentColor}25`,
-                  border: `1px solid ${accentColor}50`,
-                  color: accentColor,
-                }}
+              <motion.a
+                href={href}
+                whileHover={{ scale: 1.1, rotate: "2.5deg" }}
+                whileTap={{ scale: 0.9 }}
+                aria-label={`Read more about ${title}`}
+                style={{ transform: "translateZ(60px)" }}
+                className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm ring-1 ring-inset ring-white/30 transition-colors hover:bg-white/30"
               >
-                {location}
-              </span>
-            )}
-          </div>
-
-          {/* Bottom Section */}
-          <div className="flex flex-col gap-3">
-            {/* Meta row */}
-            <div className="flex items-center gap-2 text-white/60 text-xs">
-              <Clock className="h-3 w-3" />
-              <span>{readTime}</span>
-              <span className="opacity-40">·</span>
-              <span>{date}</span>
+                <ArrowUpRight className="h-5 w-5 text-white" />
+              </motion.a>
             </div>
 
-            {/* Title */}
-            <h3 className="text-base font-bold leading-tight text-white line-clamp-2" style={{ letterSpacing: "-0.01em" }}>
-              {title}
-            </h3>
-
-            {/* Overview */}
-            <p className="text-sm leading-relaxed text-white/65 line-clamp-2">
-              {overview}
-            </p>
-
-            {/* Price row → "Read guide" CTA */}
-            <div className="flex items-center justify-between pt-1">
-              <div className="flex items-baseline gap-1">
-                <MapPin className="h-3.5 w-3.5 shrink-0" style={{ color: accentColor }} />
-                <span className="text-xs font-semibold" style={{ color: accentColor }}>
-                  Nassau, Bahamas
-                </span>
-              </div>
-              <Button
-                asChild
-                size="sm"
-                className="rounded-full text-xs font-bold px-4"
-                style={{ backgroundColor: accentColor, color: "#0e0c09" }}
-              >
-                <Link href={href}>
-                  Read guide
-                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
-                </Link>
-              </Button>
-            </div>
+            {/* Footer Button */}
+            <motion.button
+              onClick={onActionClick}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              style={{ transform: "translateZ(40px)" }}
+              className="w-full rounded-lg py-3 text-center font-semibold text-white transition-colors bg-white/10 backdrop-blur-md ring-1 ring-inset ring-white/20 hover:bg-white/20"
+            >
+              {actionText}
+            </motion.button>
           </div>
         </div>
-      </div>
+      </motion.div>
     );
   }
 );
+InteractiveTravelCard.displayName = "InteractiveTravelCard";
 
-TravelCard.displayName = "TravelCard";
-
-export { TravelCard };
-
-// ─── Category color map ────────────────────────────────────────────────────────
+// Category accent colors — used by blog page
 export const CATEGORY_ACCENT: Record<string, string> = {
   "Nassau Travel Guide": "#F5A020",
   Features: "#3aad6e",
