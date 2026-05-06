@@ -255,7 +255,7 @@ export default function HowItWorksSection() {
           </div>
         </div>
 
-        <div style={{ display: "grid", gap: "4rem", alignItems: "center" }} className="hidden md:grid grid-cols-1 md:grid-cols-2">
+        <div style={{ gap: "4rem", alignItems: "center" }} className="hidden md:grid grid-cols-1 md:grid-cols-2">
 
           {/* ── LEFT: vertical timeline ── */}
           <div style={{ position: "relative" }}>

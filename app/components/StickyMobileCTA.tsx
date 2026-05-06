@@ -14,50 +14,48 @@ export default function StickyMobileCTA() {
 
   return (
     <div
+      className="md:hidden"
       style={{
         position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        zIndex: 40,
-        padding: "0.5rem 1rem",
-        background: "rgba(12,10,6,0.95)",
-        backdropFilter: "blur(20px)",
-        WebkitBackdropFilter: "blur(20px)",
-        borderTop: "1px solid rgba(245,160,32,0.2)",
-        display: "flex",
-        alignItems: "center",
-        gap: "0.75rem",
-        transform: visible ? "translateY(0)" : "translateY(110%)",
-        transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        bottom: "1.5rem",
+        left: "50%",
+        transform: visible
+          ? "translateX(-50%) translateY(0) scale(1)"
+          : "translateX(-50%) translateY(calc(100% + 2rem)) scale(0.92)",
+        zIndex: 50,
+        transition: "transform 0.45s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        pointerEvents: visible ? "auto" : "none",
       }}
-      className="md:hidden"
     >
-      <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ color: "#f0ede8", fontWeight: 700, fontSize: "0.875rem", lineHeight: 1.2 }}>
-          Book a Ride
-        </p>
-        <p style={{ color: "#8a8070", fontSize: "0.72rem", marginTop: "0.1rem" }}>
-          Fixed price · Free cancellation
-        </p>
-      </div>
       <a
         href="https://app.hopbahamas.com"
         target="_blank"
         rel="noopener noreferrer"
         style={{
+          display: "inline-flex",
+          alignItems: "center",
+          gap: "0.6rem",
+          padding: "0.8rem 1.5rem",
           backgroundColor: "#F5A020",
-          color: "#161616",
-          fontWeight: 800,
-          fontSize: "0.875rem",
-          padding: "0.625rem 1.25rem",
           borderRadius: "999px",
           textDecoration: "none",
           whiteSpace: "nowrap",
-          flexShrink: 0,
+          boxShadow: "0 4px 24px rgba(245,160,32,0.45), 0 2px 8px rgba(0,0,0,0.4)",
+          border: "1px solid rgba(255,255,255,0.15)",
         }}
       >
-        Get My Ride →
+        {/* Car icon */}
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#161616" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M5 17H3a2 2 0 01-2-2V9a2 2 0 012-2h14l4 4v4a2 2 0 01-2 2h-2" />
+          <circle cx="7.5" cy="17.5" r="2.5" />
+          <circle cx="17.5" cy="17.5" r="2.5" />
+        </svg>
+        <span style={{ color: "#161616", fontWeight: 800, fontSize: "0.9rem", letterSpacing: "-0.01em" }}>
+          Book My Ride
+        </span>
+        <span style={{ color: "rgba(22,22,22,0.55)", fontSize: "0.75rem", fontWeight: 600 }}>
+          from $12
+        </span>
       </a>
     </div>
   );
