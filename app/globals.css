@@ -1,5 +1,27 @@
 @import "tailwindcss";
 
+/* shadcn/ui CSS variable tokens — mapped to HOP brand */
+:root {
+  --background: #0e0c09;
+  --foreground: #f0ede8;
+  --card: #1a1810;
+  --card-foreground: #f0ede8;
+  --primary: #F5A020;
+  --primary-foreground: #0e0c09;
+  --secondary: #2a2820;
+  --secondary-foreground: #f0ede8;
+  --muted: #2a2820;
+  --muted-foreground: #8a8070;
+  --accent: rgba(245,160,32,0.12);
+  --accent-foreground: #F5A020;
+  --border: rgba(255,255,255,0.08);
+  --input: rgba(255,255,255,0.08);
+  --ring: rgba(245,160,32,0.4);
+  --destructive: #E84040;
+  --destructive-foreground: #f0ede8;
+  --radius: 0.625rem;
+}
+
 @theme {
   /* HOP Brand Colors */
   --color-hop-bg: #161616;
