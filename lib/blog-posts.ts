@@ -399,6 +399,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Nassau Airport to Atlantis Transfer Guide | HOP",
     metaDescription: "How to get from Nassau Airport (LPIA) to Atlantis Paradise Island. Fixed fare transfers, taxis, and the official shuttle — compared with 2026 prices.",
     targetKeyword: "nassau airport atlantis",
+    coverImage: "/images/dest-atlantis.jpg",
     content: [
       { type: "p", text: "Lynden Pindling International Airport is 9.5 miles from Atlantis Paradise Island — about 25–35 minutes by road. It's the most common transfer in Nassau, and also the one where not knowing your options costs the most money." },
       { type: "p", text: "Three options worth knowing: the Atlantis official shuttle ($38/person), a licensed Nassau taxi ($45–$55 for 1–2 passengers), and a pre-booked HOP ride (from $28, fixed price, confirmed before your plane lands). The journey time is the same on all three." },
@@ -424,6 +425,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Pre-Schedule Your Nassau Airport Transfer | HOP",
     metaDescription: "Why scheduling your Nassau airport transfer in advance beats showing up and hoping. Fixed price, guaranteed pickup, no airport taxi queue stress.",
     targetKeyword: "nassau airport transfer pre-book",
+    coverImage: "/images/schedule-road.jpg",
     content: [
       { type: "p", text: "Nassau's Lynden Pindling International Airport processes flights from the US, Canada, Europe, and regional Caribbean connections. On any given morning, multiple international flights arrive within the same 45-minute window. Taxi availability at arrivals is not guaranteed — especially on long weekends and during peak season." },
       { type: "p", text: "Pre-scheduling your airport transfer with HOP means your driver is confirmed before your flight takes off, your fare is locked, and your first moments in the Bahamas aren't spent on a negotiation. That's the whole pitch. It's a good one." },
@@ -454,6 +456,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Group Transportation Nassau Bahamas | HOP Luxury Mini Bus",
     metaDescription: "Group transportation in Nassau Bahamas — HOP's Mini Bus holds up to 15 passengers at flat rates. Perfect for cruise groups, family trips, and resort transfers.",
     targetKeyword: "nassau group transportation",
+    coverImage: "/images/dest-airport.jpg",
     content: [
       { type: "p", text: "Groups in Nassau have a math problem. Two licensed taxis for 6 people costs $90–$110 from the airport to Atlantis. One HOP group vehicle costs $28 flat for the same trip — same road, same traffic, significantly different bill. Here's how to book it right." },
       { type: "h2", text: "HOP Group Vehicle Options" },
@@ -483,6 +486,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP Low Data Mode — Works on Nassau's Weak Signal | HOP",
     metaDescription: "HOP's Low Data Mode keeps the ride app functional on Nassau's sometimes-unreliable mobile data. How it works and why it matters for tourists on roaming.",
     targetKeyword: "hop low data mode nassau",
+    coverImage: "/images/dest-nassau.jpg",
     content: [
       { type: "p", text: "Nassau's mobile data coverage is uneven — noticeably so on parts of Paradise Island, eastern New Providence, and on roaming SIM cards that haven't fully connected to the local network. Most ride apps fail silently when signal drops. HOP doesn't — that's a deliberate design decision, not luck." },
       { type: "h2", text: "What Low Data Mode Actually Does" },
@@ -511,6 +515,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Nassau Luxury Car Service vs HOP — Which Is Better? | HOP",
     metaDescription: "Compare Nassau luxury car services to HOP Luxury. Transparent flat rates, in-app booking, and verified professional drivers — no phone calls, no negotiation.",
     targetKeyword: "nassau luxury car service",
+    coverImage: "/images/dest-luxury.jpg",
     content: [
       { type: "p", text: "Traditional luxury car services in Nassau do exist — black-car operators with premium vehicles and resort relationships. The experience: you find them through your hotel concierge or a Google search, call to arrange, negotiate a rate, and hope the car that shows up matches what you agreed to. HOP Luxury is the same class of vehicle with the negotiation replaced by a flat rate you see before you book." },
       { type: "price-table", headers: ["Feature", "Traditional Luxury Car", "HOP Luxury"], rows: [
@@ -540,6 +545,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP Moments Rewards Guide — Earn Points on Every Nassau Ride | HOP",
     metaDescription: "Complete guide to earning HOP Moments points in Nassau. Share photos and videos from your trip to earn ride credits and exclusive rewards.",
     targetKeyword: "hop moments rewards",
+    coverImage: "/images/hero-bahamas.jpg",
     content: [
       { type: "p", text: "HOP Moments is simple: share content from Nassau through the app, earn points, redeem for ride credits. It's the kind of feature that actually makes sense for a tourist destination — you're already taking photos. You might as well get something back for them." },
       { type: "price-table", headers: ["Content Type", "Points Earned"], rows: [
@@ -573,6 +579,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Nassau Cruise Terminal Transportation Guide | HOP",
     metaDescription: "Transportation from Nassau Cruise Port to Atlantis, Cable Beach, Blue Lagoon, and downtown. Prices, times, and how to pre-book before your ship docks.",
     targetKeyword: "nassau cruise terminal transportation",
+    coverImage: "/images/dest-cruise.jpg",
     content: [
       { type: "p", text: "Nassau's cruise terminal at Prince George Wharf puts you right in downtown Nassau. The Straw Market is at the exit. Bay Street is 2 minutes on foot. But Atlantis, Cable Beach, and Blue Lagoon — the places most passengers want to spend their day — are 10–25 minutes away by road." },
       { type: "p", text: "The fastest option: pre-book your transfer through HOP before your ship docks. Your driver is confirmed and waiting when you walk off the gangway. For everything else, see our complete cruise port transportation guide for pricing and timing on every option." },
@@ -594,6 +601,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP SOS Safety System — How It Works | HOP Nassau",
     metaDescription: "How HOP's SOS safety feature works on every Nassau ride. One tap contacts 919 emergency services, the HOP Safety Desk, and your trusted contacts simultaneously.",
     targetKeyword: "hop sos safety nassau",
+    coverImage: "/images/dest-nassau.jpg",
     content: [
       { type: "p", text: "Every HOP ride comes with an SOS button that's visible the entire trip. Tap it and a 3-second countdown starts — time to cancel if it was accidental. If not cancelled, three things happen at once: Nassau's 919 emergency services are called, HOP's internal Safety Desk is alerted, and up to two trusted contacts you chose before the ride receive a notification with your live GPS location." },
       { type: "p", text: "It's not an emergency-only feature in practice. Most solo travelers use the trusted contact system on every ride as a matter of habit — the people back home can see a live map of where you are the entire time. Not because Nassau is dangerous. Because having that option costs nothing and removes a specific kind of travel anxiety." },

@@ -102,7 +102,7 @@ export default function BlogGuideCarousel({ posts }: { posts: BlogPost[] }) {
         {/* Image fan */}
         <div
           ref={imageContainerRef}
-          style={{ position: "relative", width: "100%", height: "22rem", perspective: 1000 }}
+          style={{ position: "relative", width: "100%", height: "22rem", perspective: 1000, overflow: "hidden" }}
         >
           {posts.map((post, index) => (
             // eslint-disable-next-line @next/next/no-img-element

@@ -53,7 +53,7 @@ const PILLS = [
 export default function HopMomentsSection() {
   return (
     <section
-      className="photo-hero"
+      className="photo-hero mob-schedule-section"
       style={{ backgroundImage: "url('/images/hero-bahamas.jpg')", padding: "6rem 1.5rem", minHeight: 580 }}
     >
       {/* Overlay */}
