@@ -243,8 +243,8 @@ export default function HowItWorksSection() {
 
           {/* ── RIGHT: 3D floating phone ── */}
           <div
-            className="hidden md:flex"
-            style={{ justifyContent: "center", alignItems: "center", position: "relative", height: 560 }}
+            className="flex justify-center items-center"
+            style={{ position: "relative", minHeight: 420 }}
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
           >
@@ -295,7 +295,8 @@ export default function HowItWorksSection() {
                 </div>
               </div>
 
-              {/* Floating chips */}
+              {/* Floating chips — hidden on mobile, they extend outside the viewport */}
+              <div className="hidden md:block">
               {step.chips.map((chip, ci) => (
                 <div
                   key={`${active}-${ci}`}
@@ -331,6 +332,7 @@ export default function HowItWorksSection() {
                   }} />
                 </div>
               ))}
+              </div>
             </div>
 
             {/* Bottom step indicator pill */}

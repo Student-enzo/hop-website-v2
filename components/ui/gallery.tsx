@@ -221,8 +221,58 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
         Airport pickups, resort hops, cruise port runs — flat fares, no surprises.
       </p>
 
-      {/* Animated photo spread — exact structure from 21st.dev original */}
-      <div className="relative mb-8 h-[380px] w-full items-center justify-center lg:flex" style={{ marginTop: "3rem" }}>
+      {/* Mobile: simple horizontal scroll strip */}
+      <div
+        className="md:hidden flex gap-3 pb-4"
+        style={{
+          marginTop: "2rem",
+          overflowX: "auto",
+          scrollSnapType: "x mandatory",
+          scrollbarWidth: "none",
+          WebkitOverflowScrolling: "touch",
+          paddingLeft: "1rem",
+          paddingRight: "1rem",
+        }}
+      >
+        {NASSAU_PHOTOS.map((photo) => (
+          <div
+            key={photo.id}
+            style={{
+              flexShrink: 0,
+              width: 220,
+              height: 220,
+              borderRadius: 20,
+              overflow: "hidden",
+              scrollSnapAlign: "center",
+              boxShadow: "0 12px 32px rgba(0,0,0,0.5)",
+              position: "relative",
+            }}
+          >
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              width={220}
+              height={220}
+              style={{ objectFit: "cover", width: "100%", height: "100%" }}
+            />
+            {photo.label && (
+              <div style={{
+                position: "absolute", inset: 0,
+                background: "linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%)",
+                borderRadius: 20,
+                display: "flex", flexDirection: "column", justifyContent: "flex-end",
+                padding: "0.75rem",
+              }}>
+                <p style={{ color: "#f0ede8", fontWeight: 700, fontSize: "0.85rem" }}>{photo.label}</p>
+                <p style={{ color: "rgba(240,237,232,0.6)", fontSize: "0.7rem" }}>{photo.sub}</p>
+              </div>
+            )}
+          </div>
+        ))}
+      </div>
+
+      {/* Desktop: animated fan spread */}
+      <div className="hidden md:block relative mb-8 h-[380px] w-full" style={{ marginTop: "3rem", overflow: "hidden" }}>
         <motion.div
           className="relative mx-auto flex w-full max-w-7xl justify-center"
           initial={{ opacity: 0 }}
