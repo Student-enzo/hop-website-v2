@@ -278,7 +278,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "How to Get Around Nassau Bahamas 2026 — Complete Transport Guide | HOP",
     metaDescription: "Complete guide to getting around Nassau, Bahamas in 2026. Taxis, jitneys, rental cars, HOP app — every option explained with real prices for tourists and cruise passengers.",
     targetKeyword: "how to get around nassau bahamas",
-    coverImage: "/images/dest-nassau.jpg",
+    coverImage: "/images/routes-hero.jpg",
     content: [
       { type: "p", text: "Getting around Nassau is easy once you know the system. The problem is most tourists don't find out the system until after they've overpaid for a taxi or waited 40 minutes for something that never showed up. Here's the full picture before you land." },
       { type: "h2", text: "All Nassau Transportation Options at a Glance" },
@@ -486,7 +486,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP Low Data Mode — Works on Nassau's Weak Signal | HOP",
     metaDescription: "HOP's Low Data Mode keeps the ride app functional on Nassau's sometimes-unreliable mobile data. How it works and why it matters for tourists on roaming.",
     targetKeyword: "hop low data mode nassau",
-    coverImage: "/images/dest-nassau.jpg",
+    coverImage: "/images/cta-bahamas.jpg",
     content: [
       { type: "p", text: "Nassau's mobile data coverage is uneven — noticeably so on parts of Paradise Island, eastern New Providence, and on roaming SIM cards that haven't fully connected to the local network. Most ride apps fail silently when signal drops. HOP doesn't — that's a deliberate design decision, not luck." },
       { type: "h2", text: "What Low Data Mode Actually Does" },

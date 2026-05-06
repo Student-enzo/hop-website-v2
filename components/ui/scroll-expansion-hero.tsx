@@ -40,10 +40,9 @@ const ScrollExpandMedia = ({
   const firstHalf  = title ? title.split(' ').slice(0, 3).join(' ') : '';
   const secondHalf = title ? title.split(' ').slice(3).join(' ')    : '';
 
-  const embedSrc = mediaSrc.includes('watch?v=')
-    ? mediaSrc.replace('watch?v=', 'embed/') +
-      '?autoplay=1&mute=1&loop=1&controls=0&rel=0&modestbranding=1&playlist=' +
-      mediaSrc.split('v=')[1]
+  const videoId = mediaSrc.includes('watch?v=') ? mediaSrc.split('v=')[1]?.split('&')[0] : null;
+  const embedSrc = videoId
+    ? `https://www.youtube-nocookie.com/embed/${videoId}?autoplay=1&mute=1&muted=1&playsinline=1&loop=1&controls=0&rel=0&playlist=${videoId}`
     : mediaSrc;
 
   useEffect(() => {
@@ -167,7 +166,7 @@ const ScrollExpandMedia = ({
             <iframe
               src={embedSrc}
               title={title || 'Nassau video'}
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
               allowFullScreen
               style={{
                 position: 'absolute', inset: 0,

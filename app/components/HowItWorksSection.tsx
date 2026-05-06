@@ -176,67 +176,9 @@ export default function HowItWorksSection() {
 
         {/* ── Mobile layout — hidden on desktop ── */}
         <div className="md:hidden" style={{ marginBottom: "0" }}>
-          {/* Phone left + active step right */}
-          <div style={{ display: "flex", gap: "1.25rem", alignItems: "flex-start" }}>
-            {/* Phone */}
-            <div style={{ flexShrink: 0 }}>
-              <div style={{
-                borderRadius: 36, padding: 7,
-                background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
-                boxShadow: "0 16px 48px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.08)",
-              }}>
-                <div style={{ position: "relative", borderRadius: 30, overflow: "hidden", width: 148, height: 320 }}>
-                  <div style={{ position: "absolute", top: 7, left: "50%", transform: "translateX(-50%)", width: 44, height: 14, backgroundColor: "#111", borderRadius: 7, zIndex: 5 }} />
-                  {STEPS.map((s, i) => (
-                    <div key={s.num} style={{
-                      position: "absolute", inset: 0,
-                      opacity: active === i && !flipping ? 1 : 0,
-                      transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
-                      transition: "opacity 0.35s ease, transform 0.35s ease",
-                    }}>
-                      <Image src={s.img} alt={s.imgAlt} width={148} height={320} style={{ objectFit: "cover", display: "block" }} unoptimized />
-                    </div>
-                  ))}
-                  <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
-                </div>
-              </div>
-              {/* Dots */}
-              <div style={{ display: "flex", gap: "0.35rem", justifyContent: "center", marginTop: "0.75rem", alignItems: "center" }}>
-                {STEPS.map((_, i) => (
-                  <button key={i} onClick={() => goTo(i)} style={{
-                    width: active === i ? 18 : 5, height: 5, borderRadius: 999, border: "none", padding: 0,
-                    backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
-                    transition: "width 0.35s ease, background-color 0.35s ease",
-                    cursor: "pointer",
-                  }} />
-                ))}
-              </div>
-            </div>
 
-            {/* Active step info */}
-            <div style={{ flex: 1, paddingTop: "0.25rem" }}>
-              <div style={{
-                display: "inline-flex", alignItems: "center", justifyContent: "center",
-                width: 28, height: 28, borderRadius: "50%",
-                backgroundColor: "rgba(245,160,32,0.15)", marginBottom: "0.625rem",
-              }}>
-                <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.65rem" }}>
-                  {step.num === "✦" ? "✦" : step.num}
-                </span>
-              </div>
-              <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.975rem", lineHeight: 1.3, marginBottom: "0.5rem" }}>
-                {step.title}
-              </p>
-              <p style={{ color: MUTED, fontSize: "0.8rem", lineHeight: 1.65 }}>{step.desc}</p>
-              {/* Progress bar */}
-              <div style={{ height: 2, backgroundColor: "rgba(245,160,32,0.1)", borderRadius: 99, marginTop: "0.875rem", overflow: "hidden" }}>
-                <div style={{ height: "100%", width: `${progress}%`, backgroundColor: ORANGE, transition: "width 0.1s linear", borderRadius: 99 }} />
-              </div>
-            </div>
-          </div>
-
-          {/* Step tabs */}
-          <div style={{ display: "flex", gap: "0.4rem", marginTop: "1.25rem", overflowX: "auto", paddingBottom: "0.25rem" }}>
+          {/* Step pills */}
+          <div style={{ display: "flex", gap: "0.4rem", marginBottom: "1.5rem", overflowX: "auto", paddingBottom: "0.25rem", WebkitOverflowScrolling: "touch" as unknown as undefined }}>
             {STEPS.map((s, i) => (
               <button key={i} onClick={() => goTo(i)} style={{
                 flexShrink: 0, padding: "0.35rem 0.75rem",
@@ -250,6 +192,65 @@ export default function HowItWorksSection() {
               }}>
                 {s.num === "✦" ? "✦ Tip" : `${s.num} ${s.title.split(" ").slice(0, 2).join(" ")}`}
               </button>
+            ))}
+          </div>
+
+          {/* Full-size phone centered */}
+          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
+            <div style={{
+              borderRadius: 44, padding: 9,
+              background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
+              boxShadow: "0 20px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.09)",
+            }}>
+              <div style={{ position: "relative", borderRadius: 36, overflow: "hidden", width: 220, height: 476 }}>
+                <div style={{ position: "absolute", top: 10, left: "50%", transform: "translateX(-50%)", width: 60, height: 20, backgroundColor: "#111", borderRadius: 10, zIndex: 5 }} />
+                {STEPS.map((s, i) => (
+                  <div key={s.num} style={{
+                    position: "absolute", inset: 0,
+                    opacity: active === i && !flipping ? 1 : 0,
+                    transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
+                    transition: "opacity 0.35s ease, transform 0.35s ease",
+                  }}>
+                    <Image src={s.img} alt={s.imgAlt} width={220} height={476} style={{ objectFit: "cover", display: "block" }} unoptimized />
+                  </div>
+                ))}
+                <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
+              </div>
+            </div>
+          </div>
+
+          {/* Step info below phone */}
+          <div style={{ textAlign: "center" }}>
+            <div style={{
+              display: "inline-flex", alignItems: "center", justifyContent: "center",
+              width: 30, height: 30, borderRadius: "50%",
+              backgroundColor: "rgba(245,160,32,0.15)", marginBottom: "0.625rem",
+            }}>
+              <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.68rem" }}>
+                {step.num === "✦" ? "✦" : step.num}
+              </span>
+            </div>
+            <p style={{ color: TEXT, fontWeight: 700, fontSize: "1.05rem", lineHeight: 1.3, marginBottom: "0.5rem" }}>
+              {step.title}
+            </p>
+            <p style={{ color: MUTED, fontSize: "0.85rem", lineHeight: 1.65, maxWidth: 300, margin: "0 auto" }}>
+              {step.desc}
+            </p>
+            {/* Progress bar */}
+            <div style={{ height: 2, backgroundColor: "rgba(245,160,32,0.1)", borderRadius: 99, marginTop: "1rem", overflow: "hidden", maxWidth: 200, margin: "1rem auto 0" }}>
+              <div style={{ height: "100%", width: `${progress}%`, backgroundColor: ORANGE, transition: "width 0.1s linear", borderRadius: 99 }} />
+            </div>
+          </div>
+
+          {/* Dots */}
+          <div style={{ display: "flex", gap: "0.35rem", justifyContent: "center", marginTop: "1rem" }}>
+            {STEPS.map((_, i) => (
+              <button key={i} onClick={() => goTo(i)} style={{
+                width: active === i ? 18 : 5, height: 5, borderRadius: 999, border: "none", padding: 0,
+                backgroundColor: active === i ? ORANGE : "rgba(255,255,255,0.18)",
+                transition: "width 0.35s ease, background-color 0.35s ease",
+                cursor: "pointer",
+              }} />
             ))}
           </div>
         </div>
