@@ -162,7 +162,7 @@ export default function HomePage() {
                   <PhoneFrame src="/screenshots/home-map.png" alt="HOP app — Nassau map view" priority />
                 </div>
                 <div style={{ transform: "rotate(3deg)" }}>
-                  <PhoneFrame src="/screenshots/hero-ride.png" alt="HOP booking — fixed fare to Atlantis" priority />
+                  <PhoneFrame src="/screenshots/luxury-select.png" alt="HOP — Luxury ride selection" priority />
                 </div>
               </div>
               {/* App store buttons */}
