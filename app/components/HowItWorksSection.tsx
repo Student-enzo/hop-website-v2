@@ -195,14 +195,21 @@ export default function HowItWorksSection() {
             ))}
           </div>
 
-          {/* Full-size phone centered */}
-          <div style={{ display: "flex", justifyContent: "center", marginBottom: "1.5rem" }}>
+          {/* Full-size phone centered with step glow */}
+          <div style={{ position: "relative", display: "flex", justifyContent: "center", marginBottom: "1.25rem" }}>
             <div style={{
+              position: "absolute", inset: "-24px",
+              background: `radial-gradient(ellipse 80% 65% at 50% 55%, ${step.glow}, transparent 70%)`,
+              transition: "background 0.8s ease",
+              pointerEvents: "none",
+            }} />
+            <div style={{
+              position: "relative", zIndex: 2,
               borderRadius: 44, padding: 9,
               background: "linear-gradient(145deg, #2e2e2e 0%, #181818 100%)",
               boxShadow: "0 20px 60px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,255,255,0.09)",
             }}>
-              <div style={{ position: "relative", borderRadius: 36, overflow: "hidden", width: 220, height: 476 }}>
+              <div style={{ position: "relative", borderRadius: 36, overflow: "hidden", width: 240, height: 519 }}>
                 <div style={{ position: "absolute", top: 10, left: "50%", transform: "translateX(-50%)", width: 60, height: 20, backgroundColor: "#111", borderRadius: 10, zIndex: 5 }} />
                 {STEPS.map((s, i) => (
                   <div key={s.num} style={{
@@ -211,7 +218,7 @@ export default function HowItWorksSection() {
                     transform: active === i && !flipping ? "scale(1)" : "scale(1.04)",
                     transition: "opacity 0.35s ease, transform 0.35s ease",
                   }}>
-                    <Image src={s.img} alt={s.imgAlt} width={220} height={476} style={{ objectFit: "cover", display: "block" }} unoptimized />
+                    <Image src={s.img} alt={s.imgAlt} width={240} height={519} style={{ objectFit: "cover", display: "block" }} unoptimized />
                   </div>
                 ))}
                 <div style={{ position: "absolute", inset: 0, background: "linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%)", pointerEvents: "none", zIndex: 4 }} />
@@ -221,15 +228,6 @@ export default function HowItWorksSection() {
 
           {/* Step info below phone */}
           <div style={{ textAlign: "center" }}>
-            <div style={{
-              display: "inline-flex", alignItems: "center", justifyContent: "center",
-              width: 30, height: 30, borderRadius: "50%",
-              backgroundColor: "rgba(245,160,32,0.15)", marginBottom: "0.625rem",
-            }}>
-              <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.68rem" }}>
-                {step.num === "✦" ? "✦" : step.num}
-              </span>
-            </div>
             <p style={{ color: TEXT, fontWeight: 700, fontSize: "1.05rem", lineHeight: 1.3, marginBottom: "0.5rem" }}>
               {step.title}
             </p>
