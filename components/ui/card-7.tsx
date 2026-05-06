@@ -2,13 +2,26 @@
 
 import * as React from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Map, Zap, Lightbulb, Users, ShieldCheck, Compass } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/lib/utils";
 
+// Per-category icon
+function CategoryIcon({ category }: { category: string }) {
+  const cls = "h-5 w-5 text-white/80";
+  switch (category) {
+    case "Features":       return <Zap className={cls} />;
+    case "Tips":           return <Lightbulb className={cls} />;
+    case "Group Travel":   return <Users className={cls} />;
+    case "Safety":         return <ShieldCheck className={cls} />;
+    case "Nassau Travel Guide": return <Map className={cls} />;
+    default:               return <Compass className={cls} />;
+  }
+}
+
 export interface InteractiveTravelCardProps {
   title: string;
-  subtitle: string;
+  category: string;
   imageUrl: string;
   excerpt: string;
   href: string;
@@ -18,16 +31,15 @@ export interface InteractiveTravelCardProps {
 export const InteractiveTravelCard = React.forwardRef<
   HTMLDivElement,
   InteractiveTravelCardProps
->(({ title, subtitle, imageUrl, excerpt, href, className }, ref) => {
+>(({ title, category, imageUrl, excerpt, href, className }, ref) => {
   const [isHovered, setIsHovered] = React.useState(false);
 
-  // 3D tilt
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
-  const springX = useSpring(mouseX, { damping: 15, stiffness: 150 });
-  const springY = useSpring(mouseY, { damping: 15, stiffness: 150 });
-  const rotateX = useTransform(springY, [-0.5, 0.5], ["10.5deg", "-10.5deg"]);
-  const rotateY = useTransform(springX, [-0.5, 0.5], ["-10.5deg", "10.5deg"]);
+  const springX = useSpring(mouseX, { damping: 18, stiffness: 140 });
+  const springY = useSpring(mouseY, { damping: 18, stiffness: 140 });
+  const rotateX = useTransform(springY, [-0.5, 0.5], ["8deg", "-8deg"]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], ["-8deg", "8deg"]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const rect = e.currentTarget.getBoundingClientRect();
@@ -49,64 +61,52 @@ export const InteractiveTravelCard = React.forwardRef<
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
       style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
-      className={cn("w-72 cursor-pointer", className)}
+      className={cn("w-64 shrink-0 cursor-pointer", className)}
     >
-      {/* Card body */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
         whileHover={{
-          scale: 1.01,
-          boxShadow: "0 35px 60px -15px rgba(0,0,0,0.7)",
-          borderColor: "rgba(255,255,255,0.18)",
+          boxShadow: "0 32px 56px -12px rgba(0,0,0,0.75)",
+          borderColor: "rgba(255,255,255,0.15)",
         }}
-        className="flex flex-col gap-3 overflow-hidden rounded-3xl border border-white/8 bg-black/80 p-2.5 shadow-[0_35px_60px_-15px_rgba(0,0,0,0.5)] backdrop-blur-sm"
+        transition={{ duration: 0.25 }}
+        className="flex flex-col gap-3 overflow-hidden rounded-3xl border border-white/6 bg-black/85 p-3 shadow-[0_24px_48px_-12px_rgba(0,0,0,0.55)] backdrop-blur-sm"
         style={{ transformStyle: "preserve-3d" }}
       >
-        {/* Top row — icon + arrow link */}
-        <motion.div
-          className="flex items-center justify-between px-1.5 pt-1"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.4 }}
-          style={{ transform: "translateZ(20px)" }}
+        {/* Top row */}
+        <div
+          className="flex items-center justify-between px-1"
+          style={{ transform: "translateZ(18px)" }}
         >
-          {/* HOP location pin icon */}
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg" opacity={0.9}>
-            <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-          </svg>
-
-          {/* Arrow button */}
+          <CategoryIcon category={category} />
           <motion.div
-            whileHover={{ scale: 1.1, boxShadow: "0 0 15px rgba(245,160,32,0.6)" }}
-            whileTap={{ scale: 0.95 }}
-            style={{ transform: "translateZ(30px)" }}
+            whileHover={{ scale: 1.12, boxShadow: "0 0 14px rgba(245,160,32,0.55)" }}
+            whileTap={{ scale: 0.92 }}
+            style={{ transform: "translateZ(28px)" }}
           >
             <Link
               href={href}
-              className="flex h-10 w-10 items-center justify-center rounded-full"
+              className="flex h-9 w-9 items-center justify-center rounded-full"
               style={{ backgroundColor: "#F5A020" }}
               aria-label={`Read ${title}`}
             >
-              <ArrowUpRight className="h-5 w-5 text-black" strokeWidth={2.5} />
+              <ArrowUpRight className="h-4 w-4 text-black" strokeWidth={2.5} />
             </Link>
           </motion.div>
-        </motion.div>
+        </div>
 
         {/* Title */}
         <motion.h3
-          className="text-center text-3xl font-black uppercase leading-tight tracking-tight"
+          className="px-1 text-center text-[15px] font-bold leading-snug tracking-[-0.01em] line-clamp-3"
           style={{
-            background: "linear-gradient(135deg, #F5A020 0%, #f0c060 50%, #F5A020 100%)",
+            background: "linear-gradient(135deg, #F5C842 0%, #F5A020 60%, #e8902a 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
             backgroundClip: "text",
-            transform: "translateZ(25px)",
+            transform: "translateZ(22px)",
           }}
-          initial={{ opacity: 0, y: -8 }}
+          initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.35, duration: 0.5 }}
+          transition={{ delay: 0.2, duration: 0.45 }}
         >
           {title}
         </motion.h3>
@@ -114,37 +114,34 @@ export const InteractiveTravelCard = React.forwardRef<
         {/* Framed image */}
         <motion.div
           className="relative overflow-hidden rounded-2xl"
-          initial={{ opacity: 0, scale: 0.92 }}
+          style={{ height: 168, transform: "translateZ(14px)" }}
+          initial={{ opacity: 0, scale: 0.94 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.5, duration: 0.6 }}
-          style={{ transform: "translateZ(15px)" }}
+          transition={{ delay: 0.35, duration: 0.55 }}
         >
-          {/* Blurred background glow */}
-          <div className="absolute inset-0 z-0 overflow-hidden rounded-2xl opacity-20">
-            <img
-              src={imageUrl}
-              alt=""
-              className="h-full w-full scale-150 object-cover blur-md"
-            />
-          </div>
+          {/* Blurred glow behind */}
+          <img
+            src={imageUrl}
+            alt=""
+            className="absolute inset-0 h-full w-full scale-150 object-cover blur-lg opacity-25"
+          />
           {/* Main image */}
           <motion.img
             src={imageUrl}
             alt={title}
-            className="relative z-10 w-full rounded-2xl object-cover shadow-lg"
-            style={{ height: 200 }}
-            animate={{ scale: isHovered ? 1.04 : 1 }}
-            transition={{ duration: 0.6, ease: "easeInOut" }}
+            className="relative z-10 h-full w-full rounded-2xl object-cover"
+            animate={{ scale: isHovered ? 1.05 : 1 }}
+            transition={{ duration: 0.55, ease: "easeInOut" }}
           />
         </motion.div>
 
         {/* Excerpt */}
         <motion.p
-          className="px-1 pb-1 text-center text-xs font-light leading-relaxed text-neutral-400"
+          className="px-1 pb-1 text-center text-[11px] leading-relaxed text-neutral-500 line-clamp-3"
+          style={{ transform: "translateZ(10px)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 0.65, duration: 0.5 }}
-          style={{ transform: "translateZ(10px)" }}
+          transition={{ delay: 0.5, duration: 0.45 }}
         >
           {excerpt}
         </motion.p>

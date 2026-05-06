@@ -164,15 +164,15 @@ export default function BlogPage() {
               </div>
             ) : (
               <div
-                className="flex flex-wrap justify-center gap-6"
-                style={{ perspective: 1000 }}
+                className="flex flex-wrap justify-center gap-5"
+                style={{ perspective: 1200 }}
               >
                 {gridPosts.map((post) => (
                   <InteractiveTravelCard
                     key={post.slug}
                     imageUrl={getImage(post.slug, post.coverImage)}
                     title={post.title}
-                    subtitle={`${post.category} · ${post.readTime}`}
+                    category={post.category}
                     excerpt={post.excerpt}
                     href={`/blog/${post.slug}`}
                   />
