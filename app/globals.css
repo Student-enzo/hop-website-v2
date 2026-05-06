@@ -50,6 +50,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -59,6 +60,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  max-width: 100%;
 }
 
 .hop-card {
@@ -368,6 +370,11 @@ body {
 
 /* ── Mobile / Tablet responsive ─────────────────────────────────────── */
 @media (max-width: 767px) {
+  /* Reduce scroll-expand section height on mobile — 300vh creates a huge dead gap */
+  .scroll-expand-wrapper {
+    height: 150vh !important;
+  }
+
   /* Hero — stack phones below text on mobile */
   .photo-hero {
     background-position: center 30%;
