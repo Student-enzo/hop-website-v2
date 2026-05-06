@@ -37,7 +37,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "No Uber in Nassau Bahamas (2026) — What to Use Instead | HOP",
     metaDescription: "Uber and Lyft don't operate in Nassau, Bahamas. Discover HOP — the local ride app with fixed fares, pre-booking, and real-time safety. Book before you land.",
     targetKeyword: "uber nassau bahamas",
-    coverImage: "/images/dest-nassau.jpg",
+    coverImage: "https://images.pexels.com/photos/34167075/pexels-photo-34167075.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Uber doesn't operate in Nassau, Bahamas. Neither does Lyft. If you've already opened one of those apps on the island, you've discovered this the slightly annoying way. You're not alone — it's one of the most Googled transportation questions about the Bahamas, right up there with 'do they drive on the left?' (they do, by the way)." },
       { type: "h2", text: "Why Isn't Uber in Nassau?" },
@@ -107,7 +107,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Nassau Bahamas Taxi Fares 2026 — Official Cost Guide | HOP",
     metaDescription: "Official Nassau taxi fare guide 2026. Airport to Atlantis, cruise port to Cable Beach, all major routes with prices. Plus how to avoid being overcharged.",
     targetKeyword: "nassau bahamas taxi cost",
-    coverImage: "/images/dest-airport.jpg",
+    coverImage: "https://images.pexels.com/photos/2036548/pexels-photo-2036548.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Nassau taxi fares are set by the Bahamian government. The catch: they're not posted anywhere obvious, which means some drivers charge more than the official rate — not because they're bad people, but because tourists don't know what to expect. This guide gives you the full table so you do." },
       { type: "h2", text: "The Basics: How Nassau Taxi Pricing Works" },
@@ -345,7 +345,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Are Nassau Bahamas Taxis Safe? (2026 Honest Guide) | HOP",
     metaDescription: "Honest guide to taxi safety in Nassau, Bahamas. How to identify licensed taxis, what scams exist, and what HOP offers as the verified alternative. 2026.",
     targetKeyword: "nassau bahamas taxi safe",
-    coverImage: "/images/dest-nassau.jpg",
+    coverImage: "https://images.pexels.com/photos/1004409/pexels-photo-1004409.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Licensed taxis in Nassau are generally safe. The majority of Nassau taxi drivers are experienced professionals who've been serving tourists for years. That said, 'generally' is doing a lot of work in that sentence — so here's what specifically to look for, and what to skip entirely." },
       { type: "h2", text: "How to Spot a Licensed Nassau Taxi" },
@@ -456,7 +456,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "Group Transportation Nassau Bahamas | HOP Luxury Mini Bus",
     metaDescription: "Group transportation in Nassau Bahamas — HOP's Mini Bus holds up to 15 passengers at flat rates. Perfect for cruise groups, family trips, and resort transfers.",
     targetKeyword: "nassau group transportation",
-    coverImage: "/images/dest-airport.jpg",
+    coverImage: "https://images.pexels.com/photos/3806285/pexels-photo-3806285.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Groups in Nassau have a math problem. Two licensed taxis for 6 people costs $90–$110 from the airport to Atlantis. One HOP group vehicle costs $28 flat for the same trip — same road, same traffic, significantly different bill. Here's how to book it right." },
       { type: "h2", text: "HOP Group Vehicle Options" },
@@ -486,7 +486,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP Low Data Mode — Works on Nassau's Weak Signal | HOP",
     metaDescription: "HOP's Low Data Mode keeps the ride app functional on Nassau's sometimes-unreliable mobile data. How it works and why it matters for tourists on roaming.",
     targetKeyword: "hop low data mode nassau",
-    coverImage: "/images/cta-bahamas.jpg",
+    coverImage: "https://images.pexels.com/photos/1092644/pexels-photo-1092644.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Nassau's mobile data coverage is uneven — noticeably so on parts of Paradise Island, eastern New Providence, and on roaming SIM cards that haven't fully connected to the local network. Most ride apps fail silently when signal drops. HOP doesn't — that's a deliberate design decision, not luck." },
       { type: "h2", text: "What Low Data Mode Actually Does" },
@@ -545,7 +545,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP Moments Rewards Guide — Earn Points on Every Nassau Ride | HOP",
     metaDescription: "Complete guide to earning HOP Moments points in Nassau. Share photos and videos from your trip to earn ride credits and exclusive rewards.",
     targetKeyword: "hop moments rewards",
-    coverImage: "/images/hero-bahamas.jpg",
+    coverImage: "https://images.pexels.com/photos/3184292/pexels-photo-3184292.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "HOP Moments is simple: share content from Nassau through the app, earn points, redeem for ride credits. It's the kind of feature that actually makes sense for a tourist destination — you're already taking photos. You might as well get something back for them." },
       { type: "price-table", headers: ["Content Type", "Points Earned"], rows: [
@@ -601,7 +601,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "HOP SOS Safety System — How It Works | HOP Nassau",
     metaDescription: "How HOP's SOS safety feature works on every Nassau ride. One tap contacts 919 emergency services, the HOP Safety Desk, and your trusted contacts simultaneously.",
     targetKeyword: "hop sos safety nassau",
-    coverImage: "/images/dest-nassau.jpg",
+    coverImage: "https://images.pexels.com/photos/6647556/pexels-photo-6647556.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Every HOP ride comes with an SOS button that's visible the entire trip. Tap it and a 3-second countdown starts — time to cancel if it was accidental. If not cancelled, three things happen at once: Nassau's 919 emergency services are called, HOP's internal Safety Desk is alerted, and up to two trusted contacts you chose before the ride receive a notification with your live GPS location." },
       { type: "p", text: "It's not an emergency-only feature in practice. Most solo travelers use the trusted contact system on every ride as a matter of habit — the people back home can see a live map of where you are the entire time. Not because Nassau is dangerous. Because having that option costs nothing and removes a specific kind of travel anxiety." },

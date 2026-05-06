@@ -81,7 +81,7 @@ export default function BlogGuideCarousel({ posts }: { posts: BlogPost[] }) {
       transition: "all 0.8s cubic-bezier(.4,2,.3,1)",
     };
     // Mobile: crossfade only — side cards hidden to prevent viewport overflow
-    if (containerWidth < 520) return { zIndex: 1, opacity: 0, pointerEvents: "none", transition: "all 0.8s cubic-bezier(.4,2,.3,1)" };
+    if (containerWidth < 380) return { zIndex: 1, opacity: 0, pointerEvents: "none", transition: "all 0.8s cubic-bezier(.4,2,.3,1)" };
     if (isLeft) return {
       zIndex: 2, opacity: 1, pointerEvents: "auto",
       transform: `translateX(-${gap}px) translateY(-${stickUp}px) scale(0.84) rotateY(14deg)`,

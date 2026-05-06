@@ -449,7 +449,7 @@ export default function HomePage() {
                     excerpt: "Government-regulated fares, airport pricing tables, and how to avoid being overcharged on your first ride.",
                     category: "Nassau Travel Guide",
                     readTime: "5 min read",
-                    image: "/images/dest-airport.jpg",
+                    image: "https://images.pexels.com/photos/2036548/pexels-photo-2036548.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
                   },
                   {
                     slug: "nassau-airport-to-atlantis-transfer",
