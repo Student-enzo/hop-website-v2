@@ -5,7 +5,8 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { BLOG_POSTS } from "@/lib/blog-posts";
-import { InteractiveTravelCard, CATEGORY_ACCENT } from "@/components/ui/card-7";
+import { ArticleCard } from "@/components/ui/card-23";
+import { CATEGORY_ACCENT } from "@/components/ui/card-7";
 import { FocusRail, type FocusRailItem } from "@/components/ui/focus-rail";
 
 const ORANGE = "#F5A020";
@@ -38,6 +39,27 @@ const FALLBACK_IMAGES: Record<string, string> = {
 
 function getImage(slug: string, coverImage?: string) {
   return coverImage ?? FALLBACK_IMAGES[slug] ?? "/images/dest-nassau.jpg";
+}
+
+function parseDate(dateStr: string): { month: string; day: number } {
+  const parts = dateStr.split(" ");
+  return { month: (parts[0] ?? "JAN").slice(0, 3).toUpperCase(), day: parseInt(parts[1] ?? "1", 10) };
+}
+
+const SLUG_LOCATION: Record<string, { city: string; country: string }> = {
+  "no-uber-nassau-bahamas": { city: "Nassau", country: "Bahamas" },
+  "nassau-taxi-cost-guide-2026": { city: "Nassau", country: "Bahamas" },
+  "nassau-airport-to-atlantis-transfer": { city: "Nassau Airport", country: "Bahamas" },
+  "nassau-cruise-port-transportation-guide": { city: "Nassau Cruise Port", country: "Bahamas" },
+  "how-to-get-around-nassau-bahamas": { city: "Nassau", country: "Bahamas" },
+  "low-data-mode-explained": { city: "Nassau", country: "Bahamas" },
+  "group-travel-bahamas-mini-bus": { city: "Nassau", country: "Bahamas" },
+  "nassau-luxury-car-service-vs-hop": { city: "Nassau", country: "Bahamas" },
+  "hop-moments-rewards-guide": { city: "Nassau", country: "Bahamas" },
+};
+
+function getLocation(slug: string) {
+  return SLUG_LOCATION[slug] ?? { city: "Nassau", country: "Bahamas" };
 }
 
 export default function BlogPage() {
@@ -163,19 +185,19 @@ export default function BlogPage() {
                 <p style={{ color: MUTED }} className="text-sm">No articles in this category yet.</p>
               </div>
             ) : (
-              <div
-                className="flex flex-wrap justify-center gap-5"
-                style={{ perspective: 1200 }}
-              >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
                 {gridPosts.map((post) => (
-                  <InteractiveTravelCard
-                    key={post.slug}
-                    imageUrl={getImage(post.slug, post.coverImage)}
-                    title={post.title}
-                    category={post.category}
-                    excerpt={post.excerpt}
-                    href={`/blog/${post.slug}`}
-                  />
+                  <Link key={post.slug} href={`/blog/${post.slug}`} style={{ textDecoration: "none" }}>
+                    <ArticleCard
+                      tag={post.category}
+                      date={parseDate(post.date)}
+                      title={post.title}
+                      description={post.excerpt}
+                      imageUrl={getImage(post.slug, post.coverImage)}
+                      imageAlt={post.title}
+                      location={getLocation(post.slug)}
+                    />
+                  </Link>
                 ))}
               </div>
             )}

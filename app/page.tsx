@@ -12,7 +12,7 @@ import RideTiersSection from "./components/RideTiersSection";
 import HopMomentsSection from "./components/HopMomentsSection";
 import SafetySection from "./components/SafetySection";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
-import { ArticleCard } from "@/components/ui/card-23";
+import BlogGuideCarousel from "./components/BlogGuideCarousel";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -431,41 +431,36 @@ export default function HomePage() {
               </Link>
             </div>
 
-            {/* Article cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              <Link href="/blog/no-uber-nassau-bahamas" style={{ textDecoration: "none" }}>
-                <ArticleCard
-                  tag="Nassau Travel Guide"
-                  date={{ month: "MAY", day: 6 }}
-                  title="No Uber in Nassau — Here's What Actually Works"
-                  description="Uber and Lyft don't operate in Nassau. Here's the exact alternative tourists rely on — and why it's actually better."
-                  imageUrl="https://images.pexels.com/photos/34167075/pexels-photo-34167075.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop"
-                  imageAlt="Nassau street scene"
-                  location={{ city: "Nassau", country: "Bahamas" }}
-                />
-              </Link>
-              <Link href="/blog/nassau-taxi-cost-guide-2026" style={{ textDecoration: "none" }}>
-                <ArticleCard
-                  tag="Nassau Travel Guide"
-                  date={{ month: "APR", day: 14 }}
-                  title="How Much Does a Taxi Cost in Nassau in 2026?"
-                  description="Government-regulated fares, airport pricing tables, and how to avoid being overcharged on your first ride."
-                  imageUrl="/images/dest-airport.jpg"
-                  imageAlt="Nassau Airport (LPIA)"
-                  location={{ city: "Nassau Airport", country: "Bahamas" }}
-                />
-              </Link>
-              <Link href="/blog/nassau-airport-to-atlantis-transfer" style={{ textDecoration: "none" }}>
-                <ArticleCard
-                  tag="Nassau Travel Guide"
-                  date={{ month: "MAR", day: 28 }}
-                  title="Nassau Airport to Atlantis: All Your Options"
-                  description="Shuttle vs taxi vs HOP — with prices, wait times, and a clear recommendation for each type of traveler."
-                  imageUrl="https://images.pexels.com/photos/28443535/pexels-photo-28443535.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop"
-                  imageAlt="Atlantis Paradise Island"
-                  location={{ city: "Paradise Island", country: "Bahamas" }}
-                />
-              </Link>
+            {/* Carousel */}
+            <div style={{ display: "flex", justifyContent: "center" }}>
+              <BlogGuideCarousel
+                posts={[
+                  {
+                    slug: "no-uber-nassau-bahamas",
+                    title: "No Uber in Nassau — Here's What Actually Works",
+                    excerpt: "Uber and Lyft don't operate in Nassau. Here's the exact alternative tourists rely on — and why it's actually better.",
+                    category: "Nassau Travel Guide",
+                    readTime: "4 min read",
+                    image: "https://images.pexels.com/photos/34167075/pexels-photo-34167075.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
+                  },
+                  {
+                    slug: "nassau-taxi-cost-guide-2026",
+                    title: "How Much Does a Taxi Cost in Nassau in 2026?",
+                    excerpt: "Government-regulated fares, airport pricing tables, and how to avoid being overcharged on your first ride.",
+                    category: "Nassau Travel Guide",
+                    readTime: "5 min read",
+                    image: "/images/dest-airport.jpg",
+                  },
+                  {
+                    slug: "nassau-airport-to-atlantis-transfer",
+                    title: "Nassau Airport to Atlantis: All Your Options",
+                    excerpt: "Shuttle vs taxi vs HOP — with prices, wait times, and a clear recommendation for each type of traveler.",
+                    category: "Nassau Travel Guide",
+                    readTime: "6 min read",
+                    image: "https://images.pexels.com/photos/28443535/pexels-photo-28443535.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
+                  },
+                ]}
+              />
             </div>
           </div>
         </section>
