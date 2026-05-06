@@ -173,9 +173,8 @@ export default function BlogPage() {
                     imageUrl={getImage(post.slug, post.coverImage)}
                     title={post.title}
                     subtitle={`${post.category} · ${post.readTime}`}
-                    actionText="Read guide"
+                    excerpt={post.excerpt}
                     href={`/blog/${post.slug}`}
-                    onActionClick={() => { window.location.href = `/blog/${post.slug}`; }}
                   />
                 ))}
               </div>
