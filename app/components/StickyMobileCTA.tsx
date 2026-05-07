@@ -54,7 +54,7 @@ export default function StickyMobileCTA() {
           Book My Ride
         </span>
         <span style={{ color: "rgba(22,22,22,0.55)", fontSize: "0.75rem", fontWeight: 600 }}>
-          from $12
+          from $26
         </span>
       </a>
     </div>

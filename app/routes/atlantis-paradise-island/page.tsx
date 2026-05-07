@@ -18,8 +18,8 @@ const MUTED = "#8a8070";
 const BORDER = "rgba(255,255,255,0.06)";
 
 const FARES = [
-  { tier: "Economic", price: "$28+", time: "~12 min", note: "Best value for solo travel" },
-  { tier: "Standard", price: "$36+", time: "~12 min", note: "Most popular route", featured: true },
+  { tier: "Economic", price: "$26+", time: "~12 min", note: "Best value for solo travel" },
+  { tier: "Standard", price: "$32+", time: "~12 min", note: "Most popular route", featured: true },
   { tier: "Luxury Sedan", price: "$95", time: "~12 min", note: "Flat rate, up to 4 passengers" },
   { tier: "Luxury SUV", price: "$120", time: "~12 min", note: "Flat rate, up to 7 passengers" },
   { tier: "Mini Bus", price: "$190", time: "~15 min", note: "Flat rate, groups up to 15" },
@@ -28,7 +28,7 @@ const FARES = [
 const FAQS = [
   {
     q: "How much does it cost to get from Nassau Airport to Atlantis?",
-    a: "With HOP, Standard rides to Atlantis start from $36. The exact fare is shown before you confirm — no negotiating at the curb.",
+    a: "With HOP, Standard rides to Atlantis start from $32. The exact fare is shown before you confirm — no negotiating at the curb.",
   },
   {
     q: "Is there Uber to Atlantis Paradise Island?",

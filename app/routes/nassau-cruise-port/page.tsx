@@ -17,8 +17,8 @@ const MUTED = "#8a8070";
 const BORDER = "rgba(255,255,255,0.06)";
 
 const FARES = [
-  { tier: "Economic", price: "$15+", time: "~8 min", note: "Best value for short trips" },
-  { tier: "Standard", price: "$20+", time: "~8 min", note: "Most popular", featured: true },
+  { tier: "Economic", price: "$24+", time: "~8 min", note: "Best value for short trips" },
+  { tier: "Standard", price: "$30+", time: "~8 min", note: "Most popular", featured: true },
   { tier: "Luxury Sedan", price: "$95", time: "~8 min", note: "Flat rate anywhere in Nassau" },
   { tier: "Luxury SUV", price: "$120", time: "~8 min", note: "Flat rate, 7 passengers" },
   { tier: "Mini Bus", price: "$190", time: "~10 min", note: "Groups up to 15" },

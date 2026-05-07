@@ -16,7 +16,7 @@ const FEATURED = [
     image: "https://images.unsplash.com/photo-1548574505-5e239809ee19?w=680&h=420&fit=crop",
     name: "Nassau Airport (LPIA)",
     sub: "Airport Transfers",
-    from: "from $20",
+    from: "from $34",
     time: "~15 min",
     href: "/routes/nassau-airport",
   },
@@ -24,7 +24,7 @@ const FEATURED = [
     image: "https://images.unsplash.com/photo-1559128010-7c1ad6e1b6a5?w=680&h=420&fit=crop",
     name: "Atlantis Paradise Island",
     sub: "Paradise Island",
-    from: "from $28",
+    from: "from $26",
     time: "~12 min",
     href: "/routes/atlantis-paradise-island",
   },
@@ -32,7 +32,7 @@ const FEATURED = [
     image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=680&h=420&fit=crop",
     name: "Baha Mar & Cable Beach",
     sub: "Cable Beach Resort Strip",
-    from: "from $22",
+    from: "from $29",
     time: "~10 min",
     href: "/routes/baha-mar-cable-beach",
   },
@@ -40,10 +40,10 @@ const FEATURED = [
 
 // Top 4 routes for the compact list — numbers only, JSX adds "from $"
 const ALL_ROUTES = [
-  { name: "Nassau Airport (LPIA)", sub: "Airport Transfers", from: "20", time: "15 min", href: "/routes/nassau-airport" },
-  { name: "Atlantis Paradise Island", sub: "Paradise Island", from: "28", time: "12 min", href: "/routes/atlantis-paradise-island" },
-  { name: "Nassau Cruise Port", sub: "Prince George Wharf", from: "15", time: "8 min", href: "/routes/nassau-cruise-port" },
-  { name: "Baha Mar & Cable Beach", sub: "Cable Beach Resort Strip", from: "22", time: "10 min", href: "/routes/baha-mar-cable-beach" },
+  { name: "Nassau Airport (LPIA)", sub: "Airport Transfers", from: "34", time: "15 min", href: "/routes/nassau-airport" },
+  { name: "Atlantis Paradise Island", sub: "Paradise Island", from: "26", time: "12 min", href: "/routes/atlantis-paradise-island" },
+  { name: "Nassau Cruise Port", sub: "Prince George Wharf", from: "24", time: "8 min", href: "/routes/nassau-cruise-port" },
+  { name: "Baha Mar & Cable Beach", sub: "Cable Beach Resort Strip", from: "29", time: "10 min", href: "/routes/baha-mar-cable-beach" },
 ]
 
 export default function DestinationsSection() {

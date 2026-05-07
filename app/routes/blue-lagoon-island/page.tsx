@@ -17,8 +17,8 @@ const MUTED = "#8a8070";
 const BORDER = "rgba(255,255,255,0.06)";
 
 const FARES = [
-  { tier: "Economic", price: "$18+", time: "~10 min", note: "Best value" },
-  { tier: "Standard", price: "$25+", time: "~10 min", note: "Most popular", featured: true },
+  { tier: "Economic", price: "$24+", time: "~10 min", note: "Best value" },
+  { tier: "Standard", price: "$30+", time: "~10 min", note: "Most popular", featured: true },
   { tier: "Luxury Sedan", price: "$95", time: "~10 min", note: "Flat rate to ferry terminal" },
   { tier: "Luxury SUV", price: "$120", time: "~10 min", note: "Flat rate, 7 passengers" },
 ];

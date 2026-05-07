@@ -7,7 +7,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Ride to Nassau Airport (LPIA) — HOP Bahamas Fixed Price Transfer",
   description:
-    "Pre-book your Nassau airport transfer with HOP. Fixed price, no surprises. Economic from $20, Luxury Sedan from $95. Schedule before you land.",
+    "Pre-book your Nassau airport transfer with HOP. Fixed price, no surprises. Economic from $34, Luxury Sedan from $95. Schedule before you land.",
 };
 
 const ORANGE = "#F5A020";
@@ -19,8 +19,8 @@ const MUTED = "#8a8070";
 const BORDER = "rgba(255,255,255,0.06)";
 
 const FARES = [
-  { tier: "Economic", price: "$20+", time: "~15 min", note: "Best value for solo travel" },
-  { tier: "Standard", price: "$28+", time: "~15 min", note: "Most popular for airport runs", featured: true },
+  { tier: "Economic", price: "$34+", time: "~15 min", note: "Best value for solo travel" },
+  { tier: "Standard", price: "$41+", time: "~15 min", note: "Most popular for airport runs", featured: true },
   { tier: "Luxury Sedan", price: "$95", time: "~15 min", note: "Flat rate, 4 passengers max" },
   { tier: "Luxury SUV", price: "$120", time: "~15 min", note: "Flat rate, 7 passengers max" },
   { tier: "Mini Bus", price: "$190", time: "~20 min", note: "Flat rate, up to 15 passengers" },

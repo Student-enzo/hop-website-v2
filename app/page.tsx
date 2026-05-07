@@ -51,12 +51,12 @@ const NASSAU_MOMENTS = [
 ];
 
 const DESTINATIONS = [
-  { name: "Nassau Airport (LPIA)", sub: "Airport Transfers", from: "from $20", time: "~15 min", href: "/routes/nassau-airport", bg: "/images/dest-airport.jpg" },
-  { name: "Atlantis Paradise Island", sub: "Paradise Island", from: "from $28", time: "~12 min", href: "/routes/atlantis-paradise-island", bg: "/images/dest-atlantis.jpg" },
-  { name: "Nassau Cruise Port", sub: "Prince George Wharf", from: "from $15", time: "~8 min", href: "/routes/nassau-cruise-port", bg: "/images/dest-cruise.jpg" },
-  { name: "Baha Mar & Cable Beach", sub: "Cable Beach Resort Strip", from: "from $22", time: "~10 min", href: "/routes/baha-mar-cable-beach", bg: "/images/dest-nassau.jpg" },
-  { name: "Blue Lagoon Island", sub: "Blue Lagoon Ferry Terminal", from: "from $18", time: "~10 min", href: "/routes/blue-lagoon-island", bg: "/images/cta-bahamas.jpg" },
-  { name: "Sandals Royal Bahamian", sub: "Cable Beach", from: "from $24", time: "~12 min", href: "/routes/sandals-royal-bahamian", bg: "/images/dest-luxury.jpg" },
+  { name: "Nassau Airport (LPIA)", sub: "Airport Transfers", from: "from $34", time: "~15 min", href: "/routes/nassau-airport", bg: "/images/dest-airport.jpg" },
+  { name: "Atlantis Paradise Island", sub: "Paradise Island", from: "from $26", time: "~12 min", href: "/routes/atlantis-paradise-island", bg: "/images/dest-atlantis.jpg" },
+  { name: "Nassau Cruise Port", sub: "Prince George Wharf", from: "from $24", time: "~8 min", href: "/routes/nassau-cruise-port", bg: "/images/dest-cruise.jpg" },
+  { name: "Baha Mar & Cable Beach", sub: "Cable Beach Resort Strip", from: "from $29", time: "~10 min", href: "/routes/baha-mar-cable-beach", bg: "/images/dest-nassau.jpg" },
+  { name: "Blue Lagoon Island", sub: "Blue Lagoon Ferry Terminal", from: "from $24", time: "~10 min", href: "/routes/blue-lagoon-island", bg: "/images/cta-bahamas.jpg" },
+  { name: "Sandals Royal Bahamian", sub: "Cable Beach", from: "from $29", time: "~12 min", href: "/routes/sandals-royal-bahamian", bg: "/images/dest-luxury.jpg" },
 ];
 
 const NASSAU_VIDEOS = [

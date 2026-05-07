@@ -18,7 +18,7 @@ const BORDER = "rgba(255,255,255,0.06)";
 const GOLD = "#d4a855";
 
 const FARES = [
-  { tier: "Standard", price: "$30+", time: "~12 min", note: "Reliable and comfortable", featured: true },
+  { tier: "Standard", price: "$36+", time: "~12 min", note: "Reliable and comfortable", featured: true },
   { tier: "Luxury Sedan", price: "$95", time: "~12 min", note: "Flat rate, 4 passengers" },
   { tier: "Luxury SUV", price: "$120", time: "~12 min", note: "Flat rate, 7 passengers" },
 ];
