@@ -18,6 +18,7 @@ export interface BookingEmailData {
   price: number;
   pax: number;
   bags: number;
+  phone: string;
 }
 
 function fmt(d: string) {
