@@ -99,7 +99,9 @@ export default function Footer() {
             {[
               { label: "Blog", href: "/blog" },
               { label: "Support", href: "#" },
-              { label: "Legal", href: "#" },
+              { label: "Privacy Policy", href: "/privacy-policy" },
+              { label: "Terms of Service", href: "/terms-of-service" },
+              { label: "Cancellation Policy", href: "/cancellation-policy" },
               { label: "Driver App", href: "#" },
             ].map((l) => (
               <Link
