@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { supabase, supabaseAdmin } from "@/lib/supabase";
+import { getSupabase, getSupabaseAdmin } from "@/lib/supabase";
 import { sendBookingConfirmation } from "@/lib/email";
 
 function genId() {
@@ -28,14 +28,15 @@ export async function POST(request: NextRequest) {
       status: "pending",
     };
 
-    const { error } = await supabase.from("hop_bookings").insert(entry);
+    const db = getSupabase();
+    const { error } = await db.from("hop_bookings").insert(entry);
     if (error) throw error;
 
     // Fire confirmation emails (non-blocking — don't fail booking if email fails)
     sendBookingConfirmation({ ...entry, luxVehicle: entry.lux_vehicle ?? undefined }).catch(() => {});
 
     // Upsert subscriber from booking email
-    supabase.from("hop_email_subscribers").upsert({ email: body.email, name: body.name, source: "booking" }, { onConflict: "email" }).then(() => {});
+    db.from("hop_email_subscribers").upsert({ email: body.email, name: body.name, source: "booking" }, { onConflict: "email" }).then(() => {});
 
     return NextResponse.json({ success: true, id });
   } catch (e) {
@@ -49,7 +50,7 @@ export async function GET(request: NextRequest) {
   if (secret !== process.env.DASHBOARD_SECRET && secret !== "hop2026admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const db = supabaseAdmin ?? supabase;
+  const db = getSupabaseAdmin();
   const { data, error } = await db.from("hop_bookings").select("*").order("created_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
@@ -62,7 +63,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id, status } = await request.json();
-  const db = supabaseAdmin ?? supabase;
+  const db = getSupabaseAdmin();
   const { error } = await db.from("hop_bookings").update({ status }).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
