@@ -13,6 +13,7 @@ import HopMomentsSection from "./components/HopMomentsSection";
 import SafetySection from "./components/SafetySection";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
 import BlogGuideCarousel from "./components/BlogGuideCarousel";
+import NewsletterSignup from "./components/NewsletterSignup";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -71,13 +72,13 @@ function AppStoreButtons({ size = "lg" }: { size?: "sm" | "lg" }) {
   const fs = size === "lg" ? "1rem" : "0.875rem";
   return (
     <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-      <a href="#" className="btn-white" style={{ padding: pad, fontSize: fs }}>
+      <a href="https://apps.apple.com/us/app/hop-bahamas/id6756782428" target="_blank" rel="noopener noreferrer" className="btn-white" style={{ padding: pad, fontSize: fs }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill={BG}>
           <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
         </svg>
         App Store
       </a>
-      <a href="#" className="btn-secondary" style={{ padding: pad, fontSize: fs }}>
+      <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ padding: pad, fontSize: fs }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill={TEXT}>
           <path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z" />
         </svg>
@@ -166,7 +167,7 @@ export default function HomePage() {
               </div>
               {/* App store buttons */}
               <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", justifyContent: "center", marginTop: "1.5rem" }}>
-                <a href="#" className="app-store-btn">
+                <a href="https://apps.apple.com/us/app/hop-bahamas/id6756782428" target="_blank" rel="noopener noreferrer" className="app-store-btn">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill={TEXT} style={{ flexShrink: 0 }}>
                     <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
                   </svg>
@@ -175,7 +176,7 @@ export default function HomePage() {
                     <p style={{ color: TEXT, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.25, letterSpacing: "-0.01em" }}>App Store</p>
                   </div>
                 </a>
-                <a href="#" className="app-store-btn">
+                <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="app-store-btn">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill={TEXT} style={{ flexShrink: 0 }}>
                     <path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z" />
                   </svg>
@@ -510,6 +511,7 @@ export default function HomePage() {
         </section>
 
       </main>
+      <NewsletterSignup />
       <Footer />
       <StickyMobileCTA />
     </>

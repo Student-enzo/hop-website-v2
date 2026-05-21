@@ -29,7 +29,9 @@ export default function Footer() {
             {/* App store buttons */}
             <div className="flex gap-3 mt-4 flex-wrap">
               <a
-                href="#"
+                href="https://apps.apple.com/us/app/hop-bahamas/id6756782428"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -50,7 +52,9 @@ export default function Footer() {
                 App Store
               </a>
               <a
-                href="#"
+                href="https://app.hopbahamas.com"
+                target="_blank"
+                rel="noopener noreferrer"
                 style={{
                   display: "flex",
                   alignItems: "center",
