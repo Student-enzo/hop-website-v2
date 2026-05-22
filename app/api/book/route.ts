@@ -39,8 +39,9 @@ export async function POST(request: NextRequest) {
     db.from("hop_email_subscribers").upsert({ email: body.email, name: body.name, source: "booking" }, { onConflict: "email" }).then(() => {});
 
     return NextResponse.json({ success: true, id });
-  } catch (e) {
-    return NextResponse.json({ success: false, error: String(e) }, { status: 500 });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : (e as { message?: string })?.message ?? String(e);
+    return NextResponse.json({ success: false, error: msg }, { status: 500 });
   }
 }
 

@@ -20,7 +20,8 @@ export async function POST(request: NextRequest) {
     sendWelcomeEmail(email, name).catch(() => {});
 
     return NextResponse.json({ success: true });
-  } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
+  } catch (e: unknown) {
+    const msg = e instanceof Error ? e.message : (e as { message?: string })?.message ?? String(e);
+    return NextResponse.json({ error: msg }, { status: 500 });
   }
 }
