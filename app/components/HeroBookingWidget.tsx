@@ -1,7 +1,8 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useRef } from "react"
 import { motion, AnimatePresence } from "framer-motion"
+import { getSupabase } from "@/lib/supabase"
 
 const BG = "#161616"
 const TEXT = "#f0ede8"
@@ -191,6 +192,10 @@ export default function HeroBookingWidget() {
   const [name, setName] = useState("")
   const [phone, setPhone] = useState("")
   const [email, setEmail] = useState("")
+  const [photoUrl, setPhotoUrl] = useState("")
+  const [photoPreview, setPhotoPreview] = useState("")
+  const [photoUploading, setPhotoUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
   const [loading, setLoading] = useState(false)
   const [bookingId, setBookingId] = useState("")
   const [error, setError] = useState("")
@@ -219,7 +224,7 @@ export default function HeroBookingWidget() {
       const res = await fetch("/api/book", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pickup, dropoff, date, time, tier, luxVehicle: tier === "luxury" ? luxVehicle : undefined, price, pax, bags, name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim() }),
+        body: JSON.stringify({ pickup, dropoff, date, time, tier, luxVehicle: tier === "luxury" ? luxVehicle : undefined, price, pax, bags, name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim(), profilePhotoUrl: photoUrl || undefined }),
       })
       const data = await res.json()
       if (data.success) { setBookingId(data.id); goNext() }
@@ -232,6 +237,27 @@ export default function HeroBookingWidget() {
     setStepIdx(0); setDir(1); setPickup(""); setDropoff(""); setPax(2); setBags(0)
     setDate(""); setTime(""); setTier(null); setLuxVehicle("sedan")
     setName(""); setPhone(""); setEmail(""); setBookingId(""); setError("")
+    setPhotoUrl(""); setPhotoPreview(""); setPhotoUploading(false)
+  }
+
+  const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhotoPreview(URL.createObjectURL(file))
+    setPhotoUploading(true)
+    try {
+      const ext = file.name.split(".").pop() ?? "jpg"
+      const path = `bookings/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
+      const sb = getSupabase()
+      const { data, error: upErr } = await sb.storage.from("hop-avatars").upload(path, file, { contentType: file.type, upsert: false })
+      if (upErr) throw upErr
+      const { data: urlData } = sb.storage.from("hop-avatars").getPublicUrl(data.path)
+      setPhotoUrl(urlData.publicUrl)
+    } catch {
+      setPhotoPreview("")
+    } finally {
+      setPhotoUploading(false)
+    }
   }
 
   function fmt(d: string) {
@@ -379,11 +405,38 @@ export default function HeroBookingWidget() {
                   </div>
                 ))}
 
+                {/* Photo upload */}
+                <div style={{ ...card, cursor: "pointer" }} onClick={() => fileInputRef.current?.click()}>
+                  <div style={{ width: 42, height: 42, borderRadius: "50%", overflow: "hidden", flexShrink: 0, backgroundColor: "rgba(245,160,32,0.08)", border: "1px solid rgba(245,160,32,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {photoPreview ? (
+                      <img src={photoPreview} alt="profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                    ) : (
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><circle cx="12" cy="13" r="4"/><path d="M5 7h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/></svg>
+                    )}
+                  </div>
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <p style={{ color: ORANGE, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.25rem" }}>
+                      PROFILE PHOTO <span style={{ color: MUTED, fontWeight: 400, textTransform: "none" as const, letterSpacing: 0 }}>· optional</span>
+                    </p>
+                    {photoUploading ? (
+                      <p style={{ color: MUTED, fontSize: "0.8rem" }}>Uploading…</p>
+                    ) : photoUrl ? (
+                      <p style={{ color: GREEN, fontSize: "0.8rem", fontWeight: 600 }}>✓ Photo added</p>
+                    ) : (
+                      <p style={{ color: MUTED, fontSize: "0.8rem" }}>Tap to add a selfie for your profile</p>
+                    )}
+                  </div>
+                  {photoPreview && (
+                    <button onClick={(e) => { e.stopPropagation(); setPhotoUrl(""); setPhotoPreview(""); }} style={{ padding: "0.25rem 0.5rem", border: "none", background: "none", color: MUTED, fontSize: "0.9rem", cursor: "pointer", flexShrink: 0 }}>✕</button>
+                  )}
+                  <input ref={fileInputRef} type="file" accept="image/*" capture="user" style={{ display: "none" }} onChange={handlePhotoSelect} />
+                </div>
+
                 {error && <p style={{ color: "#E84040", fontSize: "0.78rem", paddingLeft: "0.25rem" }}>{error}</p>}
 
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <BackBtn onClick={goBack} />
-                  <NextBtn onClick={handleConfirm} disabled={loading} label={loading ? "Confirming…" : `Confirm · $${price} →`} />
+                  <NextBtn onClick={handleConfirm} disabled={loading || photoUploading} label={loading ? "Confirming…" : `Confirm · $${price} →`} />
                 </div>
                 <p style={{ color: MUTED, fontSize: "0.68rem", lineHeight: 1.5 }}>We&apos;ll send your HOP account + app download link to your email.</p>
               </div>

@@ -24,6 +24,7 @@ type Booking = {
   pickup: string; dropoff: string; date: string; time: string;
   tier: string; lux_vehicle?: string; price: number;
   pax?: number; bags?: number; status: string; created_at: string;
+  profile_photo_url?: string;
 };
 
 type Subscriber = {
@@ -76,6 +77,10 @@ export default function DashboardPage() {
   const [apiError, setApiError] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
+  const [welcomeModal, setWelcomeModal] = useState<Booking | null>(null);
+  const [welcomePass, setWelcomePass] = useState("");
+  const [welcomeSending, setWelcomeSending] = useState(false);
+  const [welcomeSent, setWelcomeSent] = useState<string | null>(null);
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
@@ -100,6 +105,22 @@ export default function DashboardPage() {
   }, []);
 
   useEffect(() => { if (authed) fetchAll(); }, [authed, fetchAll]);
+
+  const sendWelcome = async () => {
+    if (!welcomeModal || !welcomePass.trim()) return;
+    setWelcomeSending(true);
+    const res = await fetch(`/api/welcome?secret=${SECRET}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ email: welcomeModal.email, name: welcomeModal.name, appEmail: welcomeModal.email, appPassword: welcomePass }),
+    });
+    setWelcomeSending(false);
+    if (res.ok) {
+      setWelcomeSent(welcomeModal.email);
+      setWelcomeModal(null);
+      setWelcomePass("");
+    }
+  };
 
   const updateStatus = async (id: string, status: string) => {
     await fetch(`/api/book?secret=${SECRET}`, {
@@ -179,6 +200,7 @@ export default function DashboardPage() {
     .filter((b) => !search || b.name.toLowerCase().includes(search.toLowerCase()) || b.email.toLowerCase().includes(search.toLowerCase()) || b.id.toLowerCase().includes(search.toLowerCase()));
 
   return (
+    <>
     <div style={{ minHeight: "100vh", backgroundColor: BG, color: TEXT }}>
       {/* Header */}
       <div style={{ backgroundColor: CARD, borderBottom: `1px solid ${BORDER}`, padding: "1rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
@@ -267,10 +289,19 @@ export default function DashboardPage() {
                       <p style={{ color: MUTED, fontSize: "0.75rem" }}>→ {b.dropoff}</p>
                       <p style={{ color: MUTED, fontSize: "0.7rem", marginTop: "0.2rem" }}>{fmtDate(b.date + "T00:00")} {b.time ? `at ${fmtTime(b.time)}` : ""}</p>
                     </div>
-                    <div>
-                      <p style={{ color: TEXT, fontWeight: 700 }}>{b.name}</p>
-                      <p style={{ color: OCEAN, fontSize: "0.78rem" }}>{b.email}</p>
-                      <p style={{ color: MUTED, fontSize: "0.78rem" }}>{b.phone}</p>
+                    <div style={{ display: "flex", gap: "0.75rem", alignItems: "flex-start" }}>
+                      {b.profile_photo_url ? (
+                        <img src={b.profile_photo_url} alt={b.name} style={{ width: 44, height: 44, borderRadius: "50%", objectFit: "cover", border: `2px solid ${ORANGE}40`, flexShrink: 0 }} />
+                      ) : (
+                        <div style={{ width: 44, height: 44, borderRadius: "50%", backgroundColor: "rgba(245,160,32,0.08)", border: "1px solid rgba(245,160,32,0.15)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          <span style={{ color: MUTED, fontSize: "1rem" }}>👤</span>
+                        </div>
+                      )}
+                      <div>
+                        <p style={{ color: TEXT, fontWeight: 700 }}>{b.name}</p>
+                        <p style={{ color: OCEAN, fontSize: "0.78rem" }}>{b.email}</p>
+                        <p style={{ color: MUTED, fontSize: "0.78rem" }}>{b.phone}</p>
+                      </div>
                     </div>
                     <div>
                       <p style={{ color: ORANGE, fontWeight: 900, fontSize: "1.3rem" }}>${b.price}</p>
@@ -281,10 +312,9 @@ export default function DashboardPage() {
                       {b.status === "pending" && <button onClick={() => updateStatus(b.id, "confirmed")} style={{ padding: "0.4rem 0.75rem", background: "rgba(58,173,110,0.12)", border: "1px solid rgba(58,173,110,0.25)", borderRadius: 999, color: GREEN, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✓ Confirm</button>}
                       {b.status === "confirmed" && <button onClick={() => updateStatus(b.id, "completed")} style={{ padding: "0.4rem 0.75rem", background: "rgba(14,165,233,0.12)", border: "1px solid rgba(14,165,233,0.25)", borderRadius: 999, color: OCEAN, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✓ Complete</button>}
                       {b.status !== "cancelled" && <button onClick={() => updateStatus(b.id, "cancelled")} style={{ padding: "0.4rem 0.75rem", background: "rgba(232,64,64,0.08)", border: "1px solid rgba(232,64,64,0.2)", borderRadius: 999, color: RED, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✕ Cancel</button>}
-                      <a href={`mailto:${b.email}?subject=Your HOP Ride ${b.id}&body=Hi ${b.name},%0A%0AYour HOP ride is confirmed: ${b.pickup} → ${b.dropoff} on ${b.date}.%0A%0ADownload HOP: https://apps.apple.com/us/app/hop-bahamas/id6756782428`}
-                        style={{ padding: "0.4rem 0.75rem", background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 999, color: PURPLE, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textDecoration: "none", textAlign: "center" as const }}>
-                        ✉ Email
-                      </a>
+                      <button onClick={() => { setWelcomeModal(b); setWelcomePass(""); }} style={{ padding: "0.4rem 0.75rem", background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 999, color: PURPLE, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+                        {welcomeSent === b.email ? "✓ Sent" : "✉ Welcome"}
+                      </button>
                     </div>
                   </div>
                 ))}
@@ -391,5 +421,43 @@ export default function DashboardPage() {
         )}
       </div>
     </div>
+    {/* Welcome modal */}
+    {welcomeModal && (
+      <div style={{ position: "fixed", inset: 0, backgroundColor: "rgba(0,0,0,0.7)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 999, padding: "1rem" }}
+        onClick={(e) => e.target === e.currentTarget && setWelcomeModal(null)}>
+        <div style={{ backgroundColor: "#1e1c14", border: `1px solid ${BORDER}`, borderRadius: 20, padding: "2rem", width: "100%", maxWidth: 420 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+            {welcomeModal.profile_photo_url ? (
+              <img src={welcomeModal.profile_photo_url} alt={welcomeModal.name} style={{ width: 52, height: 52, borderRadius: "50%", objectFit: "cover", border: `2px solid ${ORANGE}50` }} />
+            ) : (
+              <div style={{ width: 52, height: 52, borderRadius: "50%", backgroundColor: "rgba(245,160,32,0.1)", border: `1px solid ${ORANGE}30`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.4rem" }}>👤</div>
+            )}
+            <div>
+              <p style={{ color: TEXT, fontWeight: 700, fontSize: "1rem" }}>{welcomeModal.name}</p>
+              <p style={{ color: OCEAN, fontSize: "0.8rem" }}>{welcomeModal.email}</p>
+            </div>
+          </div>
+
+          <p style={{ color: MUTED, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: "0.4rem" }}>APP PASSWORD</p>
+          <input
+            type="text" placeholder="Enter temp password (e.g. HOP@2026)"
+            value={welcomePass} onChange={(e) => setWelcomePass(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && sendWelcome()}
+            style={{ width: "100%", backgroundColor: "#222018", border: `1px solid ${BORDER}`, borderRadius: 12, padding: "0.875rem 1rem", color: TEXT, fontSize: "0.95rem", fontFamily: "monospace", outline: "none", marginBottom: "1.25rem", boxSizing: "border-box" as const }}
+          />
+          <p style={{ color: MUTED, fontSize: "0.72rem", marginBottom: "1.25rem", lineHeight: 1.5 }}>
+            This sends a branded email to <span style={{ color: TEXT }}>{welcomeModal.email}</span> with the app download links (App Store + Google Play) and the credentials above.
+          </p>
+
+          <div style={{ display: "flex", gap: "0.75rem" }}>
+            <button onClick={() => setWelcomeModal(null)} style={{ flex: 1, padding: "0.75rem", backgroundColor: "transparent", border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontWeight: 600, fontSize: "0.85rem", cursor: "pointer", fontFamily: "inherit" }}>Cancel</button>
+            <button onClick={sendWelcome} disabled={welcomeSending || !welcomePass.trim()} style={{ flex: 2, padding: "0.75rem", backgroundColor: welcomePass.trim() ? PURPLE : "rgba(168,85,247,0.25)", border: "none", borderRadius: 999, color: "#fff", fontWeight: 800, fontSize: "0.9rem", cursor: welcomePass.trim() ? "pointer" : "not-allowed", fontFamily: "inherit" }}>
+              {welcomeSending ? "Sending…" : "✉ Send Welcome Email"}
+            </button>
+          </div>
+        </div>
+      </div>
+    )}
+    </>
   );
 }

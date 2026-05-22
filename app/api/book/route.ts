@@ -25,6 +25,7 @@ export async function POST(request: NextRequest) {
       name: body.name,
       email: body.email,
       phone: body.phone,
+      profile_photo_url: body.profilePhotoUrl ?? null,
       status: "pending",
     };
 

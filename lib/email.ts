@@ -111,6 +111,71 @@ export async function sendBookingConfirmation(data: BookingEmailData) {
   ]);
 }
 
+export interface AppCredentialsEmailData {
+  email: string;
+  name: string;
+  appEmail: string;
+  appPassword: string;
+}
+
+export async function sendAppCredentialsEmail(data: AppCredentialsEmailData) {
+  if (!resend) return;
+  const firstName = data.name.split(" ")[0];
+  const html = `
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head>
+<body style="margin:0;padding:0;background:#161616;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+  <div style="max-width:540px;margin:0 auto;padding:2rem 1.5rem;">
+    <div style="margin-bottom:1.5rem;">
+      <span style="color:#F5A020;font-weight:900;font-size:1.4rem;letter-spacing:-0.02em;">HOP</span>
+      <span style="color:#8a8070;font-size:0.8rem;margin-left:0.5rem;">Bahamas</span>
+    </div>
+
+    <h1 style="color:#f0ede8;font-size:1.4rem;font-weight:800;margin:0 0 0.5rem;">Hey ${firstName}, your account is ready.</h1>
+    <p style="color:#8a8070;font-size:0.9rem;line-height:1.7;margin:0 0 1.75rem;">Download the HOP app and log in with the credentials below. You can change your password after your first login.</p>
+
+    <div style="background:#1e1c14;border:1px solid rgba(245,160,32,0.2);border-radius:16px;padding:1.5rem;margin-bottom:1.25rem;">
+      <p style="color:#F5A020;font-size:0.65rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 1rem;">Your Login Details</p>
+      <table style="width:100%;border-collapse:collapse;font-size:0.875rem;">
+        <tr style="border-bottom:1px solid rgba(255,255,255,0.06);">
+          <td style="padding:0.6rem 0;color:#8a8070;">Email</td>
+          <td style="padding:0.6rem 0;color:#f0ede8;font-weight:700;text-align:right;">${data.appEmail}</td>
+        </tr>
+        <tr>
+          <td style="padding:0.6rem 0;color:#8a8070;">Password</td>
+          <td style="padding:0.6rem 0;color:#f0ede8;font-weight:700;text-align:right;font-family:monospace;font-size:1rem;">${data.appPassword}</td>
+        </tr>
+      </table>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:0.75rem;margin-bottom:1.75rem;">
+      <a href="https://apps.apple.com/us/app/hop-bahamas/id6756782428"
+         style="display:block;background:#F5A020;color:#161616;font-weight:800;font-size:0.9rem;padding:0.875rem 1.5rem;border-radius:999px;text-decoration:none;text-align:center;">
+        Download on iPhone — App Store →
+      </a>
+      <a href="https://play.google.com/store/apps/details?id=com.hopbahamas.rider"
+         style="display:block;background:rgba(255,255,255,0.06);color:#f0ede8;font-weight:700;font-size:0.9rem;padding:0.875rem 1.5rem;border-radius:999px;text-decoration:none;text-align:center;border:1px solid rgba(255,255,255,0.1);">
+        Download on Android — Google Play →
+      </a>
+    </div>
+
+    <p style="color:#8a8070;font-size:0.78rem;line-height:1.6;">
+      Need help? Reply to this email or reach us at <a href="mailto:info@hopbahamas.com" style="color:#F5A020;">info@hopbahamas.com</a><br>
+      © 2026 Quicky Solutions LLC (dba HOP Bahamas)
+    </p>
+  </div>
+</body>
+</html>`;
+
+  await resend.emails.send({
+    from: FROM,
+    to: data.email,
+    subject: "Your HOP account is ready — download the app",
+    html,
+  });
+}
+
 export async function sendWelcomeEmail(email: string, name?: string) {
   if (!resend) return;
 
