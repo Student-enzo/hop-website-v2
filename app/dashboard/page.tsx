@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 
 const SECRET = "hop2026admin";
-
 const BG = "#161616";
 const CARD = "#1e1c14";
 const CARD2 = "#222018";
@@ -13,90 +12,137 @@ const ORANGE = "#F5A020";
 const GREEN = "#3aad6e";
 const RED = "#E84040";
 const OCEAN = "#0EA5E9";
+const PURPLE = "#A855F7";
 const BORDER = "rgba(255,255,255,0.06)";
 
 const STATUS_COLORS: Record<string, string> = {
-  pending: "#F5A020",
-  confirmed: "#3aad6e",
-  completed: "#0EA5E9",
-  cancelled: "#E84040",
+  pending: "#F5A020", confirmed: "#3aad6e", completed: "#0EA5E9", cancelled: "#E84040",
 };
 
 type Booking = {
-  id: string;
-  name: string;
-  email: string;
-  phone: string;
-  pickup: string;
-  dropoff: string;
-  date: string;
-  time: string;
-  tier: string;
-  luxVehicle?: string;
-  price: number;
-  pax?: number;
-  bags?: number;
-  status: string;
-  createdAt: string;
+  id: string; name: string; email: string; phone: string;
+  pickup: string; dropoff: string; date: string; time: string;
+  tier: string; lux_vehicle?: string; price: number;
+  pax?: number; bags?: number; status: string; created_at: string;
 };
 
-function formatDate(iso: string) {
+type Subscriber = {
+  id: string; email: string; name?: string;
+  source: string; subscribed_at: string;
+};
+
+type Lead = {
+  email: string; name?: string; source: string;
+  subscribedAt?: string; bookingCount: number;
+  totalSpend: number; lastActivity: string; stage: string;
+  latestBooking?: Booking;
+};
+
+function fmtDate(iso: string) {
+  if (!iso) return "—";
   return new Date(iso).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
 }
-function formatTime12(t: string) {
-  if (!t) return "—";
+function fmtTime(t: string) {
+  if (!t) return "";
   const [h, m] = t.split(":").map(Number);
   return `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`;
+}
+function exportCSV(rows: Record<string, unknown>[], filename: string) {
+  const keys = Object.keys(rows[0] || {});
+  const csv = [keys.join(","), ...rows.map((r) => keys.map((k) => `"${String(r[k] ?? "").replace(/"/g, '""')}"`).join(","))].join("\n");
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" }));
+  a.download = filename;
+  a.click();
+}
+
+function StatCard({ label, value, color, sub }: { label: string; value: string | number; color: string; sub?: string }) {
+  return (
+    <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: "1.25rem 1.5rem" }}>
+      <p style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: "0.35rem" }}>{label.toUpperCase()}</p>
+      <p style={{ color, fontWeight: 900, fontSize: "1.9rem", letterSpacing: "-0.03em", lineHeight: 1 }}>{value}</p>
+      {sub && <p style={{ color: MUTED, fontSize: "0.72rem", marginTop: "0.3rem" }}>{sub}</p>}
+    </div>
+  );
 }
 
 export default function DashboardPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
+  const [tab, setTab] = useState<"bookings" | "email" | "crm">("bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
+  const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(false);
   const [filter, setFilter] = useState("all");
+  const [search, setSearch] = useState("");
 
-  const fetchBookings = useCallback(async () => {
+  const fetchAll = useCallback(async () => {
     setLoading(true);
-    const res = await fetch(`/api/book?secret=${SECRET}`);
-    if (res.ok) setBookings(await res.json());
+    const [bRes, sRes] = await Promise.all([
+      fetch(`/api/book?secret=${SECRET}`),
+      fetch(`/api/subscribers?secret=${SECRET}`),
+    ]);
+    if (bRes.ok) setBookings(await bRes.json());
+    if (sRes.ok) setSubscribers(await sRes.json());
     setLoading(false);
   }, []);
 
-  useEffect(() => {
-    if (authed) fetchBookings();
-  }, [authed, fetchBookings]);
+  useEffect(() => { if (authed) fetchAll(); }, [authed, fetchAll]);
 
   const updateStatus = async (id: string, status: string) => {
     await fetch(`/api/book?secret=${SECRET}`, {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
+      method: "PATCH", headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ id, status }),
     });
     setBookings((prev) => prev.map((b) => (b.id === id ? { ...b, status } : b)));
   };
 
-  const sendEmail = (b: Booking) => {
-    const subject = encodeURIComponent(`Your HOP Ride — ${b.id}`);
-    const body = encodeURIComponent(
-      `Hi ${b.name},\n\nYour HOP ride has been confirmed!\n\nBooking: ${b.id}\nRoute: ${b.pickup} → ${b.dropoff}\nDate: ${b.date} at ${formatTime12(b.time)}\nTier: ${b.tier === "eco" ? "ECO" : "Standard"} · $${b.price}\n\nDownload HOP:\n• App Store: https://apps.apple.com/app/hop-bahamas\n• Google Play: https://play.google.com/store/apps/hop-bahamas\n\nYour account has been created. Check the app to see your ride details.\n\nHOP Team`
-    );
-    window.open(`mailto:${b.email}?subject=${subject}&body=${body}`);
+  // Build CRM leads by merging subscribers + bookings
+  const leads = useCallback((): Lead[] => {
+    const map = new Map<string, Lead>();
+    subscribers.forEach((s) => {
+      map.set(s.email, {
+        email: s.email, name: s.name, source: s.source,
+        subscribedAt: s.subscribed_at, bookingCount: 0,
+        totalSpend: 0, lastActivity: s.subscribed_at, stage: "subscriber",
+      });
+    });
+    bookings.forEach((b) => {
+      const existing = map.get(b.email);
+      const spend = b.status !== "cancelled" ? (b.price || 0) : 0;
+      if (existing) {
+        existing.bookingCount += 1;
+        existing.totalSpend += spend;
+        if (b.created_at > existing.lastActivity) {
+          existing.lastActivity = b.created_at;
+          existing.latestBooking = b;
+        }
+        existing.stage = existing.bookingCount >= 2 ? "repeat" : "booked";
+        if (!existing.name && b.name) existing.name = b.name;
+      } else {
+        map.set(b.email, {
+          email: b.email, name: b.name, source: "booking",
+          bookingCount: 1, totalSpend: spend,
+          lastActivity: b.created_at, stage: "booked", latestBooking: b,
+        });
+      }
+    });
+    return Array.from(map.values()).sort((a, b) => b.lastActivity.localeCompare(a.lastActivity));
+  }, [subscribers, bookings]);
+
+  const STAGE_COLOR: Record<string, string> = {
+    subscriber: MUTED, booked: GREEN, repeat: OCEAN,
   };
 
   if (!authed) {
     return (
       <div style={{ minHeight: "100vh", backgroundColor: BG, display: "flex", alignItems: "center", justifyContent: "center", padding: "1.5rem" }}>
-        <div style={{ backgroundColor: CARD, borderRadius: 20, border: `1px solid ${BORDER}`, padding: "2.5rem", width: "100%", maxWidth: 380, boxShadow: "0 24px 64px rgba(0,0,0,0.5)" }}>
-          <div style={{ marginBottom: "1.75rem" }}>
-            <p style={{ color: ORANGE, fontSize: "0.72rem", fontWeight: 700, letterSpacing: "0.1em", marginBottom: "0.5rem" }}>HOP BAHAMAS</p>
-            <h1 style={{ color: TEXT, fontWeight: 800, fontSize: "1.5rem", letterSpacing: "-0.02em" }}>Operator Dashboard</h1>
-            <p style={{ color: MUTED, fontSize: "0.85rem", marginTop: "0.4rem" }}>Enter your access key to view bookings.</p>
-          </div>
+        <div style={{ backgroundColor: CARD, borderRadius: 20, border: `1px solid ${BORDER}`, padding: "2.5rem", width: "100%", maxWidth: 380 }}>
+          <p style={{ color: ORANGE, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em", marginBottom: "0.4rem" }}>HOP BAHAMAS</p>
+          <h1 style={{ color: TEXT, fontWeight: 800, fontSize: "1.5rem", marginBottom: "0.4rem" }}>Operator Dashboard</h1>
+          <p style={{ color: MUTED, fontSize: "0.85rem", marginBottom: "1.5rem" }}>Enter your access key to continue.</p>
           <input
-            type="password"
-            placeholder="Access key"
-            value={password}
+            type="password" placeholder="Access key" value={password}
             onChange={(e) => setPassword(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && password === SECRET && setAuthed(true)}
             style={{ width: "100%", backgroundColor: CARD2, border: `1px solid ${BORDER}`, borderRadius: 12, padding: "0.875rem 1rem", color: TEXT, fontSize: "0.95rem", fontFamily: "inherit", outline: "none", marginBottom: "0.75rem", boxSizing: "border-box" }}
@@ -104,153 +150,225 @@ export default function DashboardPage() {
           <button
             onClick={() => password === SECRET ? setAuthed(true) : alert("Wrong key")}
             style={{ width: "100%", backgroundColor: ORANGE, border: "none", borderRadius: 999, padding: "0.875rem", color: BG, fontWeight: 800, fontSize: "0.95rem", cursor: "pointer", fontFamily: "inherit" }}
-          >
-            Enter →
-          </button>
+          >Enter →</button>
         </div>
       </div>
     );
   }
 
-  const filtered = filter === "all" ? bookings : bookings.filter((b) => b.status === filter);
-  const stats = {
+  const crmLeads = leads();
+  const bStats = {
     total: bookings.length,
     pending: bookings.filter((b) => b.status === "pending").length,
     confirmed: bookings.filter((b) => b.status === "confirmed").length,
     revenue: bookings.filter((b) => b.status !== "cancelled").reduce((s, b) => s + (b.price || 0), 0),
   };
+  const filtered = (filter === "all" ? bookings : bookings.filter((b) => b.status === filter))
+    .filter((b) => !search || b.name.toLowerCase().includes(search.toLowerCase()) || b.email.toLowerCase().includes(search.toLowerCase()) || b.id.toLowerCase().includes(search.toLowerCase()));
 
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: BG, color: TEXT, fontFamily: "inherit" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: BG, color: TEXT }}>
       {/* Header */}
-      <div style={{ backgroundColor: CARD, borderBottom: `1px solid ${BORDER}`, padding: "1.25rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
-        <div>
-          <p style={{ color: ORANGE, fontSize: "0.7rem", fontWeight: 700, letterSpacing: "0.1em" }}>HOP BAHAMAS</p>
-          <h1 style={{ color: TEXT, fontWeight: 800, fontSize: "1.25rem", letterSpacing: "-0.02em" }}>Operator Dashboard</h1>
+      <div style={{ backgroundColor: CARD, borderBottom: `1px solid ${BORDER}`, padding: "1rem 2rem", display: "flex", alignItems: "center", justifyContent: "space-between", flexWrap: "wrap", gap: "1rem" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "2rem" }}>
+          <div>
+            <p style={{ color: ORANGE, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.1em" }}>HOP BAHAMAS</p>
+            <p style={{ color: TEXT, fontWeight: 800, fontSize: "1.1rem" }}>Operator Dashboard</p>
+          </div>
+          <div style={{ display: "flex", gap: "0.25rem" }}>
+            {(["bookings", "email", "crm"] as const).map((t) => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                padding: "0.45rem 1rem", borderRadius: 999, border: "none",
+                backgroundColor: tab === t ? "rgba(245,160,32,0.15)" : "transparent",
+                color: tab === t ? ORANGE : MUTED,
+                fontWeight: tab === t ? 700 : 400, fontSize: "0.85rem",
+                cursor: "pointer", fontFamily: "inherit", textTransform: "capitalize",
+              }}>
+                {t === "bookings" ? `Bookings (${bStats.total})` : t === "email" ? `Email (${subscribers.length})` : `CRM (${crmLeads.length})`}
+              </button>
+            ))}
+          </div>
         </div>
-        <div style={{ display: "flex", gap: "0.75rem", alignItems: "center" }}>
-          <button onClick={fetchBookings} style={{ padding: "0.5rem 1rem", backgroundColor: CARD2, border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.8rem", cursor: "pointer", fontFamily: "inherit" }}>
-            {loading ? "Refreshing…" : "↻ Refresh"}
+        <div style={{ display: "flex", gap: "0.5rem" }}>
+          <button onClick={fetchAll} style={{ padding: "0.4rem 0.9rem", backgroundColor: CARD2, border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit" }}>
+            {loading ? "…" : "↻ Refresh"}
           </button>
-          <button onClick={() => setAuthed(false)} style={{ padding: "0.5rem 1rem", backgroundColor: "transparent", border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.8rem", cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={() => setAuthed(false)} style={{ padding: "0.4rem 0.9rem", backgroundColor: "transparent", border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit" }}>
             Sign out
           </button>
         </div>
       </div>
 
       <div style={{ maxWidth: 1300, margin: "0 auto", padding: "2rem 1.5rem" }}>
-        {/* Stats */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", marginBottom: "2rem" }}>
-          {[
-            { label: "Total Bookings", value: stats.total, color: TEXT },
-            { label: "Pending", value: stats.pending, color: ORANGE },
-            { label: "Confirmed", value: stats.confirmed, color: GREEN },
-            { label: "Total Revenue", value: `$${stats.revenue}`, color: OCEAN },
-          ].map((s) => (
-            <div key={s.label} style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: "1.25rem 1.5rem" }}>
-              <p style={{ color: MUTED, fontSize: "0.72rem", fontWeight: 600, letterSpacing: "0.06em", marginBottom: "0.4rem" }}>{s.label.toUpperCase()}</p>
-              <p style={{ color: s.color, fontWeight: 900, fontSize: "2rem", letterSpacing: "-0.04em" }}>{s.value}</p>
+
+        {/* ── BOOKINGS TAB ── */}
+        {tab === "bookings" && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
+              <StatCard label="Total Bookings" value={bStats.total} color={TEXT} />
+              <StatCard label="Pending" value={bStats.pending} color={ORANGE} sub="need confirmation" />
+              <StatCard label="Confirmed" value={bStats.confirmed} color={GREEN} />
+              <StatCard label="Total Revenue" value={`$${bStats.revenue}`} color={OCEAN} sub="excl. cancelled" />
             </div>
-          ))}
-        </div>
 
-        {/* Filter tabs */}
-        <div style={{ display: "flex", gap: "0.5rem", marginBottom: "1.25rem", flexWrap: "wrap" }}>
-          {["all", "pending", "confirmed", "completed", "cancelled"].map((f) => (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              style={{
-                padding: "0.4rem 1rem",
-                borderRadius: 999,
-                border: `1px solid ${filter === f ? ORANGE : BORDER}`,
-                backgroundColor: filter === f ? "rgba(245,160,32,0.12)" : "transparent",
-                color: filter === f ? ORANGE : MUTED,
-                fontSize: "0.8rem",
-                fontWeight: filter === f ? 700 : 400,
-                cursor: "pointer",
-                fontFamily: "inherit",
-                textTransform: "capitalize",
-              }}
-            >
-              {f === "all" ? `All (${bookings.length})` : `${f} (${bookings.filter((b) => b.status === f).length})`}
-            </button>
-          ))}
-        </div>
+            <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem", flexWrap: "wrap", alignItems: "center" }}>
+              <input
+                placeholder="Search name, email, ID…" value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                style={{ flex: "1 1 220px", backgroundColor: CARD2, border: `1px solid ${BORDER}`, borderRadius: 999, padding: "0.45rem 1rem", color: TEXT, fontSize: "0.82rem", fontFamily: "inherit", outline: "none" }}
+              />
+              {["all", "pending", "confirmed", "completed", "cancelled"].map((f) => (
+                <button key={f} onClick={() => setFilter(f)} style={{
+                  padding: "0.4rem 0.9rem", borderRadius: 999,
+                  border: `1px solid ${filter === f ? ORANGE : BORDER}`,
+                  backgroundColor: filter === f ? "rgba(245,160,32,0.1)" : "transparent",
+                  color: filter === f ? ORANGE : MUTED,
+                  fontWeight: filter === f ? 700 : 400, fontSize: "0.78rem",
+                  cursor: "pointer", fontFamily: "inherit", textTransform: "capitalize",
+                }}>{f === "all" ? `All (${bookings.length})` : `${f} (${bookings.filter((b) => b.status === f).length})`}</button>
+              ))}
+              <button onClick={() => exportCSV(bookings.map((b) => ({ id: b.id, name: b.name, email: b.email, phone: b.phone, route: `${b.pickup} → ${b.dropoff}`, date: b.date, time: b.time, tier: b.tier, price: b.price, pax: b.pax, status: b.status, booked: b.created_at })), "hop-bookings.csv")}
+                style={{ padding: "0.4rem 0.9rem", backgroundColor: "transparent", border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit" }}>
+                ↓ Export CSV
+              </button>
+            </div>
 
-        {/* Bookings table */}
-        {filtered.length === 0 ? (
-          <div style={{ textAlign: "center", padding: "4rem 2rem", color: MUTED }}>
-            {loading ? "Loading bookings…" : "No bookings yet."}
-          </div>
-        ) : (
-          <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-            {filtered.map((b) => (
-              <div
-                key={b.id}
-                style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: "1.25rem 1.5rem", display: "grid", gap: "1rem", alignItems: "start" }}
-                className="grid grid-cols-1 md:grid-cols-4"
-              >
-                {/* Col 1: ID + route */}
-                <div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "0.4rem" }}>
-                    <span style={{ backgroundColor: "rgba(245,160,32,0.12)", border: "1px solid rgba(245,160,32,0.2)", borderRadius: 999, padding: "0.15rem 0.6rem", color: ORANGE, fontSize: "0.72rem", fontWeight: 800 }}>{b.id}</span>
-                    <span style={{ backgroundColor: `${STATUS_COLORS[b.status] || MUTED}18`, border: `1px solid ${STATUS_COLORS[b.status] || MUTED}40`, borderRadius: 999, padding: "0.15rem 0.6rem", color: STATUS_COLORS[b.status] || MUTED, fontSize: "0.68rem", fontWeight: 700, textTransform: "capitalize" }}>{b.status}</span>
+            {filtered.length === 0 ? (
+              <div style={{ textAlign: "center", padding: "4rem", color: MUTED }}>{loading ? "Loading…" : "No bookings found."}</div>
+            ) : (
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                {filtered.map((b) => (
+                  <div key={b.id} style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: "1.25rem 1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr 1fr auto", gap: "1rem", alignItems: "center" }}>
+                    <div>
+                      <div style={{ display: "flex", gap: "0.4rem", marginBottom: "0.4rem", flexWrap: "wrap" }}>
+                        <span style={{ background: "rgba(245,160,32,0.12)", border: "1px solid rgba(245,160,32,0.2)", borderRadius: 999, padding: "0.1rem 0.55rem", color: ORANGE, fontSize: "0.68rem", fontWeight: 800 }}>{b.id}</span>
+                        <span style={{ background: `${STATUS_COLORS[b.status] || MUTED}18`, border: `1px solid ${STATUS_COLORS[b.status] || MUTED}35`, borderRadius: 999, padding: "0.1rem 0.55rem", color: STATUS_COLORS[b.status] || MUTED, fontSize: "0.65rem", fontWeight: 700, textTransform: "capitalize" }}>{b.status}</span>
+                      </div>
+                      <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.85rem" }}>{b.pickup}</p>
+                      <p style={{ color: MUTED, fontSize: "0.75rem" }}>→ {b.dropoff}</p>
+                      <p style={{ color: MUTED, fontSize: "0.7rem", marginTop: "0.2rem" }}>{fmtDate(b.date + "T00:00")} {b.time ? `at ${fmtTime(b.time)}` : ""}</p>
+                    </div>
+                    <div>
+                      <p style={{ color: TEXT, fontWeight: 700 }}>{b.name}</p>
+                      <p style={{ color: OCEAN, fontSize: "0.78rem" }}>{b.email}</p>
+                      <p style={{ color: MUTED, fontSize: "0.78rem" }}>{b.phone}</p>
+                    </div>
+                    <div>
+                      <p style={{ color: ORANGE, fontWeight: 900, fontSize: "1.3rem" }}>${b.price}</p>
+                      <p style={{ color: MUTED, fontSize: "0.73rem" }}>{b.tier === "eco" ? "Economic" : b.tier === "luxury" ? `Luxury · ${b.lux_vehicle ?? "Sedan"}` : "Standard"} · {b.pax ?? 1} pax</p>
+                      <p style={{ color: MUTED, fontSize: "0.68rem" }}>Booked {fmtDate(b.created_at)}</p>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "0.4rem", minWidth: 120 }}>
+                      {b.status === "pending" && <button onClick={() => updateStatus(b.id, "confirmed")} style={{ padding: "0.4rem 0.75rem", background: "rgba(58,173,110,0.12)", border: "1px solid rgba(58,173,110,0.25)", borderRadius: 999, color: GREEN, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✓ Confirm</button>}
+                      {b.status === "confirmed" && <button onClick={() => updateStatus(b.id, "completed")} style={{ padding: "0.4rem 0.75rem", background: "rgba(14,165,233,0.12)", border: "1px solid rgba(14,165,233,0.25)", borderRadius: 999, color: OCEAN, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✓ Complete</button>}
+                      {b.status !== "cancelled" && <button onClick={() => updateStatus(b.id, "cancelled")} style={{ padding: "0.4rem 0.75rem", background: "rgba(232,64,64,0.08)", border: "1px solid rgba(232,64,64,0.2)", borderRadius: 999, color: RED, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✕ Cancel</button>}
+                      <a href={`mailto:${b.email}?subject=Your HOP Ride ${b.id}&body=Hi ${b.name},%0A%0AYour HOP ride is confirmed: ${b.pickup} → ${b.dropoff} on ${b.date}.%0A%0ADownload HOP: https://apps.apple.com/us/app/hop-bahamas/id6756782428`}
+                        style={{ padding: "0.4rem 0.75rem", background: "rgba(168,85,247,0.08)", border: "1px solid rgba(168,85,247,0.2)", borderRadius: 999, color: PURPLE, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textDecoration: "none", textAlign: "center" as const }}>
+                        ✉ Email
+                      </a>
+                    </div>
                   </div>
-                  <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.85rem", lineHeight: 1.4 }}>{b.pickup}</p>
-                  <p style={{ color: MUTED, fontSize: "0.75rem" }}>→ {b.dropoff}</p>
-                  <p style={{ color: MUTED, fontSize: "0.72rem", marginTop: "0.25rem" }}>
-                    {b.date ? formatDate(b.date + "T00:00") : "No date"}{b.time ? ` at ${formatTime12(b.time)}` : ""}
-                  </p>
-                </div>
-
-                {/* Col 2: Passenger */}
-                <div>
-                  <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.9rem" }}>{b.name}</p>
-                  <p style={{ color: OCEAN, fontSize: "0.78rem" }}>{b.email}</p>
-                  <p style={{ color: MUTED, fontSize: "0.78rem" }}>{b.phone}</p>
-                </div>
-
-                {/* Col 3: Fare */}
-                <div>
-                  <p style={{ color: ORANGE, fontWeight: 800, fontSize: "1.25rem", letterSpacing: "-0.02em" }}>${b.price}</p>
-                  <p style={{ color: MUTED, fontSize: "0.75rem" }}>
-                    {b.tier === "eco" ? "ECO · Sedan" : b.tier === "luxury" ? `Luxury · ${b.luxVehicle ?? "Sedan"}` : "Standard · Premium"}
-                    {b.pax ? ` · ${b.pax} pax` : ""}
-                    {b.bags ? ` · ${b.bags} bag${b.bags > 1 ? "s" : ""}` : ""}
-                  </p>
-                  <p style={{ color: MUTED, fontSize: "0.68rem", marginTop: "0.25rem" }}>Booked {formatDate(b.createdAt)}</p>
-                </div>
-
-                {/* Col 4: Actions */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-                  <button
-                    onClick={() => sendEmail(b)}
-                    style={{ padding: "0.5rem 1rem", backgroundColor: "rgba(14,165,233,0.12)", border: "1px solid rgba(14,165,233,0.25)", borderRadius: 999, color: OCEAN, fontSize: "0.78rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit", textAlign: "center" }}
-                  >
-                    ✉ Send App Link
-                  </button>
-                  <div style={{ display: "flex", gap: "0.5rem" }}>
-                    {b.status === "pending" && (
-                      <button onClick={() => updateStatus(b.id, "confirmed")} style={{ flex: 1, padding: "0.4rem", backgroundColor: "rgba(58,173,110,0.12)", border: "1px solid rgba(58,173,110,0.25)", borderRadius: 999, color: GREEN, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        Confirm
-                      </button>
-                    )}
-                    {b.status === "confirmed" && (
-                      <button onClick={() => updateStatus(b.id, "completed")} style={{ flex: 1, padding: "0.4rem", backgroundColor: "rgba(14,165,233,0.12)", border: "1px solid rgba(14,165,233,0.25)", borderRadius: 999, color: OCEAN, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        Complete
-                      </button>
-                    )}
-                    {b.status !== "cancelled" && (
-                      <button onClick={() => updateStatus(b.id, "cancelled")} style={{ flex: 1, padding: "0.4rem", backgroundColor: "rgba(232,64,64,0.08)", border: "1px solid rgba(232,64,64,0.2)", borderRadius: 999, color: RED, fontSize: "0.72rem", fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-                        Cancel
-                      </button>
-                    )}
-                  </div>
-                </div>
+                ))}
               </div>
-            ))}
-          </div>
+            )}
+          </>
+        )}
+
+        {/* ── EMAIL MARKETING TAB ── */}
+        {tab === "email" && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
+              <StatCard label="Total Subscribers" value={subscribers.length} color={TEXT} />
+              <StatCard label="Newsletter" value={subscribers.filter((s) => s.source === "newsletter").length} color={ORANGE} sub="direct signups" />
+              <StatCard label="From Booking" value={subscribers.filter((s) => s.source === "booking").length} color={GREEN} sub="auto-enrolled" />
+              <StatCard label="Converted" value={crmLeads.filter((l) => l.bookingCount > 0).length} color={OCEAN} sub="subscriber → booked" />
+            </div>
+
+            <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem", alignItems: "center", flexWrap: "wrap" }}>
+              <p style={{ color: MUTED, fontSize: "0.82rem", flex: 1 }}>{subscribers.length} subscribers total</p>
+              <button onClick={() => exportCSV(subscribers.map((s) => ({ email: s.email, name: s.name ?? "", source: s.source, date: s.subscribed_at })), "hop-subscribers.csv")}
+                style={{ padding: "0.4rem 0.9rem", border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit", background: "transparent" }}>
+                ↓ Export CSV
+              </button>
+            </div>
+
+            <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", padding: "0.75rem 1.25rem", borderBottom: `1px solid ${BORDER}` }}>
+                {["Email", "Name", "Source", "Subscribed"].map((h) => (
+                  <p key={h} style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.06em" }}>{h.toUpperCase()}</p>
+                ))}
+              </div>
+              {subscribers.length === 0 ? (
+                <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>{loading ? "Loading…" : "No subscribers yet."}</p>
+              ) : subscribers.map((s, i) => (
+                <div key={s.id} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr", padding: "0.875rem 1.25rem", borderBottom: i < subscribers.length - 1 ? `1px solid ${BORDER}` : "none", alignItems: "center" }}>
+                  <p style={{ color: OCEAN, fontSize: "0.83rem" }}>{s.email}</p>
+                  <p style={{ color: TEXT, fontSize: "0.83rem" }}>{s.name || "—"}</p>
+                  <span style={{
+                    display: "inline-block", padding: "0.15rem 0.6rem", borderRadius: 999,
+                    background: s.source === "newsletter" ? "rgba(245,160,32,0.1)" : "rgba(58,173,110,0.1)",
+                    border: `1px solid ${s.source === "newsletter" ? "rgba(245,160,32,0.25)" : "rgba(58,173,110,0.25)"}`,
+                    color: s.source === "newsletter" ? ORANGE : GREEN,
+                    fontSize: "0.65rem", fontWeight: 700, textTransform: "capitalize" as const,
+                  }}>{s.source}</span>
+                  <p style={{ color: MUTED, fontSize: "0.78rem" }}>{fmtDate(s.subscribed_at)}</p>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* ── CRM TAB ── */}
+        {tab === "crm" && (
+          <>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
+              <StatCard label="Total Leads" value={crmLeads.length} color={TEXT} />
+              <StatCard label="Subscribers" value={crmLeads.filter((l) => l.stage === "subscriber").length} color={MUTED} sub="not yet booked" />
+              <StatCard label="Booked" value={crmLeads.filter((l) => l.stage === "booked").length} color={GREEN} sub="1 booking" />
+              <StatCard label="Repeat" value={crmLeads.filter((l) => l.stage === "repeat").length} color={OCEAN} sub="2+ bookings" />
+            </div>
+
+            <div style={{ marginBottom: "1rem", display: "flex", gap: "0.75rem", alignItems: "center", flexWrap: "wrap" }}>
+              <p style={{ color: MUTED, fontSize: "0.82rem", flex: 1 }}>All contacts — subscribers + bookers merged by email</p>
+              <button onClick={() => exportCSV(crmLeads.map((l) => ({ email: l.email, name: l.name ?? "", stage: l.stage, source: l.source, bookings: l.bookingCount, spend: l.totalSpend, lastActivity: l.lastActivity })), "hop-crm.csv")}
+                style={{ padding: "0.4rem 0.9rem", border: `1px solid ${BORDER}`, borderRadius: 999, color: MUTED, fontSize: "0.78rem", cursor: "pointer", fontFamily: "inherit", background: "transparent" }}>
+                ↓ Export CRM CSV
+              </button>
+            </div>
+
+            <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden" }}>
+              <div style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", padding: "0.75rem 1.25rem", borderBottom: `1px solid ${BORDER}` }}>
+                {["Contact", "Stage", "Bookings", "Total Spend", "Last Activity"].map((h) => (
+                  <p key={h} style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.06em" }}>{h.toUpperCase()}</p>
+                ))}
+              </div>
+              {crmLeads.length === 0 ? (
+                <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>{loading ? "Loading…" : "No leads yet."}</p>
+              ) : crmLeads.map((l, i) => (
+                <div key={l.email} style={{ display: "grid", gridTemplateColumns: "2fr 1fr 1fr 1fr 1fr", padding: "0.875rem 1.25rem", borderBottom: i < crmLeads.length - 1 ? `1px solid ${BORDER}` : "none", alignItems: "center" }}>
+                  <div>
+                    <p style={{ color: TEXT, fontWeight: 600, fontSize: "0.85rem" }}>{l.name || "—"}</p>
+                    <p style={{ color: OCEAN, fontSize: "0.75rem" }}>{l.email}</p>
+                    {l.latestBooking && <p style={{ color: MUTED, fontSize: "0.68rem" }}>{l.latestBooking.pickup} → {l.latestBooking.dropoff}</p>}
+                  </div>
+                  <span style={{
+                    display: "inline-block", padding: "0.15rem 0.65rem", borderRadius: 999,
+                    background: `${STAGE_COLOR[l.stage] || MUTED}18`,
+                    border: `1px solid ${STAGE_COLOR[l.stage] || MUTED}35`,
+                    color: STAGE_COLOR[l.stage] || MUTED,
+                    fontSize: "0.65rem", fontWeight: 700, textTransform: "capitalize" as const, width: "fit-content",
+                  }}>{l.stage}</span>
+                  <p style={{ color: l.bookingCount > 0 ? TEXT : MUTED, fontWeight: l.bookingCount > 0 ? 700 : 400, fontSize: "0.85rem" }}>
+                    {l.bookingCount > 0 ? `${l.bookingCount} ride${l.bookingCount > 1 ? "s" : ""}` : "—"}
+                  </p>
+                  <p style={{ color: l.totalSpend > 0 ? ORANGE : MUTED, fontWeight: 700, fontSize: "0.85rem" }}>
+                    {l.totalSpend > 0 ? `$${l.totalSpend}` : "—"}
+                  </p>
+                  <p style={{ color: MUTED, fontSize: "0.78rem" }}>{fmtDate(l.lastActivity)}</p>
+                </div>
+              ))}
+            </div>
+          </>
         )}
       </div>
     </div>
