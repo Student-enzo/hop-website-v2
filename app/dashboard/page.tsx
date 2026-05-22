@@ -73,17 +73,29 @@ export default function DashboardPage() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(false);
+  const [apiError, setApiError] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
 
   const fetchAll = useCallback(async () => {
     setLoading(true);
-    const [bRes, sRes] = await Promise.all([
-      fetch(`/api/book?secret=${SECRET}`),
-      fetch(`/api/subscribers?secret=${SECRET}`),
-    ]);
-    if (bRes.ok) setBookings(await bRes.json());
-    if (sRes.ok) setSubscribers(await sRes.json());
+    setApiError(null);
+    try {
+      const [bRes, sRes] = await Promise.all([
+        fetch(`/api/book?secret=${SECRET}`),
+        fetch(`/api/subscribers?secret=${SECRET}`),
+      ]);
+      const bData = await bRes.json();
+      const sData = await sRes.json();
+      if (!bRes.ok) {
+        setApiError(`Bookings API error (${bRes.status}): ${bData?.error ?? JSON.stringify(bData)}`);
+      } else {
+        setBookings(Array.isArray(bData) ? bData : []);
+      }
+      if (sRes.ok) setSubscribers(Array.isArray(sData) ? sData : []);
+    } catch (e) {
+      setApiError(e instanceof Error ? e.message : String(e));
+    }
     setLoading(false);
   }, []);
 
@@ -198,6 +210,13 @@ export default function DashboardPage() {
           </button>
         </div>
       </div>
+
+      {apiError && (
+        <div style={{ background: "rgba(232,64,64,0.12)", border: "1px solid rgba(232,64,64,0.3)", borderRadius: 12, margin: "1rem 2rem", padding: "0.875rem 1.25rem" }}>
+          <p style={{ color: RED, fontWeight: 700, fontSize: "0.82rem", marginBottom: "0.25rem" }}>API Error — data could not load</p>
+          <p style={{ color: "#f0ede8", fontSize: "0.78rem", fontFamily: "monospace", wordBreak: "break-all" }}>{apiError}</p>
+        </div>
+      )}
 
       <div style={{ maxWidth: 1300, margin: "0 auto", padding: "2rem 1.5rem" }}>
 
