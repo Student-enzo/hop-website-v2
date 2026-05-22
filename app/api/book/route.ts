@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getSupabase, getSupabaseAdmin } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { sendBookingConfirmation } from "@/lib/email";
 
 function genId() {
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
   if (secret !== process.env.DASHBOARD_SECRET && secret !== "hop2026admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  const db = getSupabaseAdmin();
+  const db = getSupabase();
   const { data, error } = await db.from("hop_bookings").select("*").order("created_at", { ascending: false });
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json(data);
@@ -64,7 +64,7 @@ export async function PATCH(request: NextRequest) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
   const { id, status } = await request.json();
-  const db = getSupabaseAdmin();
+  const db = getSupabase();
   const { error } = await db.from("hop_bookings").update({ status }).eq("id", id);
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
   return NextResponse.json({ success: true });
