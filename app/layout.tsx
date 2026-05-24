@@ -115,11 +115,11 @@ export default function RootLayout({
       >
         {children}
         <Script
-          src="https://www.googletagmanager.com/gtag/js?id=G-MX6HJ5EQ1N"
+          src="https://www.googletagmanager.com/gtag/js?id=G-BDLN5QH736"
           strategy="afterInteractive"
         />
         <Script id="google-analytics" strategy="afterInteractive">
-          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-MX6HJ5EQ1N');`}
+          {`window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-BDLN5QH736');`}
         </Script>
       </body>
     </html>
