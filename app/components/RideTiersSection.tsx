@@ -2,6 +2,7 @@
 
 import { useState, useRef, useEffect } from "react"
 import Link from "next/link"
+import { trackEvent } from "@/lib/analytics"
 
 const ORANGE = "#F5A020"
 const TEXT = "#f0ede8"
@@ -240,6 +241,7 @@ export default function RideTiersSection() {
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"
+            onClick={() => trackEvent("cta_click", { label: "book_ride", location: "ride_tiers_section" })}
             style={{ padding: "0.875rem 1.75rem", fontSize: "0.925rem", textDecoration: "none", gap: "0.5rem" }}
           >
             Book your ride

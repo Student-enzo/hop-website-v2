@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef } from "react"
+import { trackEvent } from "@/lib/analytics"
 import { motion, AnimatePresence } from "framer-motion"
 import { getSupabase } from "@/lib/supabase"
 
@@ -211,7 +212,10 @@ export default function HeroBookingWidget() {
 
   const price = tier === "luxury" ? luxPrice : tier === "eco" ? ecoPrice : stdPrice
 
-  function goNext() { setDir(1); setStepIdx((i) => i + 1); setError("") }
+  function goNext() {
+    if (stepIdx === 0 && pickup && dropoff) trackEvent("booking_started", { pickup, dropoff })
+    setDir(1); setStepIdx((i) => i + 1); setError("")
+  }
   function goBack() { setDir(-1); setStepIdx((i) => i - 1); setError("") }
 
   const handleConfirm = async () => {
@@ -227,9 +231,17 @@ export default function HeroBookingWidget() {
         body: JSON.stringify({ pickup, dropoff, date, time, tier, luxVehicle: tier === "luxury" ? luxVehicle : undefined, price, pax, bags, name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim(), profilePhotoUrl: photoUrl || undefined }),
       })
       const data = await res.json()
-      if (data.success) { setBookingId(data.id); goNext() }
-      else setError(data.error || "Something went wrong. Please try again.")
-    } catch { setError("Network error. Please try again.") }
+      if (data.success) {
+        trackEvent("booking_completed", { tier: tier ?? "unknown", price: price ?? 0, pickup, dropoff })
+        setBookingId(data.id); goNext()
+      } else {
+        trackEvent("booking_error", { reason: data.error ?? "unknown" })
+        setError(data.error || "Something went wrong. Please try again.")
+      }
+    } catch {
+      trackEvent("booking_error", { reason: "network_error" })
+      setError("Network error. Please try again.")
+    }
     finally { setLoading(false) }
   }
 
@@ -366,7 +378,7 @@ export default function HeroBookingWidget() {
                     { t: "luxury" as Tier, tag: "LUX", name: "Luxury", sub: "Sedan · SUV · Mini Bus", price: "from $95", color: GOLD, border: "rgba(212,168,85,0.22)", hoverBorder: "rgba(212,168,85,0.5)", hoverBg: "rgba(212,168,85,0.06)" },
                   ] as const
                 ).map((row) => (
-                  <TierBtn key={row.t} row={row} onClick={() => { setTier(row.t); goNext() }} />
+                  <TierBtn key={row.t} row={row} onClick={() => { trackEvent("booking_tier_selected", { tier: row.t }); setTier(row.t); goNext() }} />
                 ))}
                 <BackBtn onClick={goBack} />
               </div>

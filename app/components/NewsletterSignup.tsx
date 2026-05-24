@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 const ORANGE = "#F5A020";
 const BG = "#161616";
@@ -23,7 +24,7 @@ export default function NewsletterSignup() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
-      setStatus(res.ok ? "done" : "error");
+      if (res.ok) { trackEvent("newsletter_signup"); setStatus("done") } else setStatus("error");
     } catch {
       setStatus("error");
     }

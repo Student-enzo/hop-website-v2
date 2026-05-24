@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 export default function StickyMobileCTA() {
   const [visible, setVisible] = useState(false);
@@ -31,6 +32,7 @@ export default function StickyMobileCTA() {
         href="https://app.hopbahamas.com"
         target="_blank"
         rel="noopener noreferrer"
+        onClick={() => trackEvent("cta_click", { label: "sticky_book_ride", location: "sticky_mobile" })}
         style={{
           display: "inline-flex",
           alignItems: "center",

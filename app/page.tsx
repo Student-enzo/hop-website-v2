@@ -14,6 +14,7 @@ import SafetySection from "./components/SafetySection";
 import ScrollExpandMedia from "@/components/ui/scroll-expansion-hero";
 import BlogGuideCarousel from "./components/BlogGuideCarousel";
 import NewsletterSignup from "./components/NewsletterSignup";
+import TrackedLink from "./components/TrackedLink";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -72,18 +73,18 @@ function AppStoreButtons({ size = "lg" }: { size?: "sm" | "lg" }) {
   const fs = size === "lg" ? "1rem" : "0.875rem";
   return (
     <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
-      <a href="https://apps.apple.com/us/app/hop-bahamas/id6756782428" target="_blank" rel="noopener noreferrer" className="btn-white" style={{ padding: pad, fontSize: fs }}>
+      <TrackedLink href="https://apps.apple.com/us/app/hop-bahamas/id6756782428" target="_blank" rel="noopener noreferrer" eventLabel="app_store_download" eventLocation="app_store_buttons" className="btn-white" style={{ padding: pad, fontSize: fs }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill={BG}>
           <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z" />
         </svg>
         App Store
-      </a>
-      <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-secondary" style={{ padding: pad, fontSize: fs }}>
+      </TrackedLink>
+      <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" eventLabel="book_ride" eventLocation="app_store_buttons" className="btn-secondary" style={{ padding: pad, fontSize: fs }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill={TEXT}>
           <path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z" />
         </svg>
         Google Play
-      </a>
+      </TrackedLink>
     </div>
   );
 }
@@ -210,9 +211,9 @@ export default function HomePage() {
               Flying in, headed to Atlantis, or exploring Cable Beach — HOP is how Nassau moves. Fixed fares, reliable pickups, and a safety net built for the island.
             </p>
             <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" eventLabel="book_ride" eventLocation="hero_mid_section" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Get My Ride
-              </a>
+              </TrackedLink>
               <Link href="/routes" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
                 Explore Destinations
               </Link>
@@ -488,16 +489,18 @@ export default function HomePage() {
               Book your first ride in under a minute. Or use the web app — no download needed.
             </p>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
-              <a
+              <TrackedLink
                 href="https://app.hopbahamas.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                eventLabel="book_ride"
+                eventLocation="download_section"
                 className="btn-primary"
                 style={{ padding: "1.1rem 2.5rem", fontSize: "1.1rem", gap: "0.6rem", boxShadow: "0 0 40px rgba(245,160,32,0.3)" }}
               >
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={BG} strokeWidth="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>
                 Get My Ride
-              </a>
+              </TrackedLink>
               <p style={{ color: MUTED, fontSize: "0.78rem" }}>Free cancellation · No card required · Works in browser</p>
               <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
                 <div style={{ height: 1, width: 60, backgroundColor: "rgba(255,255,255,0.15)" }} />

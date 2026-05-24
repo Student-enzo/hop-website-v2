@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect, useRef } from "react";
+import { trackEvent } from "@/lib/analytics";
 
 const ORANGE = "#F5A020";
 const TEXT = "#f0ede8";
@@ -218,6 +219,7 @@ export default function Navbar() {
               href="https://app.hopbahamas.com"
               target="_blank"
               rel="noopener noreferrer"
+              onClick={() => trackEvent("cta_click", { label: "nav_book_ride", location: "navbar_desktop" })}
               style={{
                 backgroundColor: ORANGE, color: "#161616", fontWeight: 700,
                 fontSize: "0.875rem", padding: "0.5rem 1.25rem",
@@ -317,14 +319,14 @@ export default function Navbar() {
               href="https://app.hopbahamas.com"
               target="_blank"
               rel="noopener noreferrer"
-              onClick={() => setMobileOpen(false)}
+              onClick={() => { trackEvent("cta_click", { label: "nav_book_ride", location: "navbar_mobile" }); setMobileOpen(false) }}
               style={{ textAlign: "center", padding: "0.875rem", borderRadius: 999, backgroundColor: ORANGE, color: "#161616", fontWeight: 700, textDecoration: "none", fontSize: "0.95rem" }}
             >
               Book a Ride →
             </a>
             <Link
               href="/#download"
-              onClick={() => setMobileOpen(false)}
+              onClick={() => { trackEvent("cta_click", { label: "nav_download_app", location: "navbar_mobile" }); setMobileOpen(false) }}
               style={{ textAlign: "center", padding: "0.75rem", borderRadius: 999, border: "1px solid rgba(255,255,255,0.1)", color: TEXT, fontWeight: 600, textDecoration: "none", fontSize: "0.9rem" }}
             >
               Download the App

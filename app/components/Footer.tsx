@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 import Image from "next/image";
+import { trackEvent } from "@/lib/analytics";
 
 export default function Footer() {
   return (
@@ -32,6 +35,7 @@ export default function Footer() {
                 href="https://apps.apple.com/us/app/hop-bahamas/id6756782428"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("cta_click", { label: "app_store_download", location: "footer" })}
                 style={{
                   display: "flex",
                   alignItems: "center",
@@ -55,6 +59,7 @@ export default function Footer() {
                 href="https://app.hopbahamas.com"
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackEvent("cta_click", { label: "book_ride", location: "footer" })}
                 style={{
                   display: "flex",
                   alignItems: "center",
