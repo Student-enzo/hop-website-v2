@@ -7,7 +7,10 @@ set -euo pipefail
 REPO="/Users/enissongodoy/gsd-workspaces/hop-bahamas-website"
 LOG="$REPO/logs/automation.log"
 PROMPT="$REPO/scripts/blog-generation-prompt.md"
+RUNS_JSON="$REPO/public/blog-automation-runs.json"
 TIMESTAMP=$(date "+%Y-%m-%d %H:%M")
+TELEGRAM_TOKEN=$(cat "$HOME/.hop-telegram-token" 2>/dev/null || echo "")
+TELEGRAM_CHAT="7574614815"
 
 mkdir -p "$REPO/logs"
 cd "$REPO"
@@ -38,12 +41,44 @@ CLAUDE_EXIT=${PIPESTATUS[0]}
 
 if [ $CLAUDE_EXIT -ne 0 ]; then
   echo "[$TIMESTAMP] FAILED — claude exited with code $CLAUDE_EXIT" | tee -a "$LOG"
+  # Write failure to runs log
+  python3 -c "
+import json, datetime, os
+f = '$RUNS_JSON'
+runs = json.load(open(f)) if os.path.exists(f) else []
+runs.insert(0, {'timestamp': datetime.datetime.utcnow().isoformat()+'Z', 'status': 'failed', 'slug': None, 'title': None})
+open(f, 'w').write(json.dumps(runs[:50], indent=2))
+" 2>/dev/null || true
+  git add "$RUNS_JSON" && git commit -m "chore(blog): log failed automation run" && git push origin main 2>/dev/null || true
   osascript -e 'display notification "Blog automation failed — check logs/automation.log" with title "HOP Blog" subtitle "Generation error" sound name "Basso"' 2>/dev/null || true
   exit 1
 fi
 
-# Notify: extract slug from last auto-publish commit message
-LAST_SLUG=$(git log --format="%s" --grep="feat(blog): auto-publish" -1 2>/dev/null | sed 's/feat(blog): auto-publish — //' || echo "new post")
-osascript -e "display notification \"${LAST_SLUG}\" with title \"HOP Blog — Post Published\" subtitle \"Live on hopbahamas.com\" sound name \"Glass\"" 2>/dev/null || true
+# Extract slug + title from last auto-publish commit
+LAST_COMMIT_MSG=$(git log --format="%s" --grep="feat(blog): auto-publish" -1 2>/dev/null || echo "")
+LAST_TITLE=$(echo "$LAST_COMMIT_MSG" | sed 's/feat(blog): auto-publish — //')
+LAST_SLUG=$(git log --format="%b" --grep="feat(blog): auto-publish" -1 2>/dev/null | head -1 || echo "")
+if [ -z "$LAST_TITLE" ]; then LAST_TITLE="new post"; fi
 
-echo "[$TIMESTAMP] Run complete." | tee -a "$LOG"
+# Write success to runs log
+python3 -c "
+import json, datetime, os
+f = '$RUNS_JSON'
+runs = json.load(open(f)) if os.path.exists(f) else []
+runs.insert(0, {'timestamp': datetime.datetime.utcnow().isoformat()+'Z', 'status': 'success', 'title': '$LAST_TITLE'})
+open(f, 'w').write(json.dumps(runs[:50], indent=2))
+" 2>/dev/null || true
+git add "$RUNS_JSON" && git commit -m "chore(blog): update automation run log" && git push origin main 2>/dev/null || true
+
+# Telegram push notification (requires ~/.hop-telegram-token)
+if [ -n "$TELEGRAM_TOKEN" ]; then
+  MSG="HOP Blog published%0A%0A${LAST_TITLE}%0A%0Ahttps://hopbahamas.com/blog"
+  curl -s "https://api.telegram.org/bot${TELEGRAM_TOKEN}/sendMessage" \
+    -d "chat_id=${TELEGRAM_CHAT}" \
+    -d "text=${MSG}" >/dev/null 2>&1 || true
+fi
+
+# Mac notification
+osascript -e "display notification \"${LAST_TITLE}\" with title \"HOP Blog — Post Published\" subtitle \"Live on hopbahamas.com\" sound name \"Glass\"" 2>/dev/null || true
+
+echo "[$TIMESTAMP] Run complete. Published: $LAST_TITLE" | tee -a "$LOG"

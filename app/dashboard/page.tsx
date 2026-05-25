@@ -70,10 +70,12 @@ function StatCard({ label, value, color, sub }: { label: string; value: string |
 export default function DashboardPage() {
   const [authed, setAuthed] = useState(false);
   const [password, setPassword] = useState("");
-  const [tab, setTab] = useState<"bookings" | "email" | "crm">("bookings");
+  const [tab, setTab] = useState<"bookings" | "email" | "crm" | "blog">("bookings");
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [subscribers, setSubscribers] = useState<Subscriber[]>([]);
   const [loading, setLoading] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<{ slug: string; title: string; date: string; category: string; readTime: string; targetKeyword: string; featured: boolean; coverImage: string | null }[]>([]);
+  const [blogRuns, setBlogRuns] = useState<{ timestamp: string; status: string; title?: string | null }[]>([]);
   const [apiError, setApiError] = useState<string | null>(null);
   const [filter, setFilter] = useState("all");
   const [search, setSearch] = useState("");
@@ -86,9 +88,11 @@ export default function DashboardPage() {
     setLoading(true);
     setApiError(null);
     try {
-      const [bRes, sRes] = await Promise.all([
+      const [bRes, sRes, bpRes, brRes] = await Promise.all([
         fetch(`/api/book?secret=${SECRET}`),
         fetch(`/api/subscribers?secret=${SECRET}`),
+        fetch(`/api/blog-posts?secret=${SECRET}`),
+        fetch(`/api/blog-runs?secret=${SECRET}`),
       ]);
       const bData = await bRes.json();
       const sData = await sRes.json();
@@ -98,6 +102,8 @@ export default function DashboardPage() {
         setBookings(Array.isArray(bData) ? bData : []);
       }
       if (sRes.ok) setSubscribers(Array.isArray(sData) ? sData : []);
+      if (bpRes.ok) setBlogPosts(await bpRes.json());
+      if (brRes.ok) setBlogRuns(await brRes.json());
     } catch (e) {
       setApiError(e instanceof Error ? e.message : String(e));
     }
@@ -210,7 +216,7 @@ export default function DashboardPage() {
             <p style={{ color: TEXT, fontWeight: 800, fontSize: "1.1rem" }}>Operator Dashboard</p>
           </div>
           <div style={{ display: "flex", gap: "0.25rem" }}>
-            {(["bookings", "email", "crm"] as const).map((t) => (
+            {(["bookings", "email", "crm", "blog"] as const).map((t) => (
               <button key={t} onClick={() => setTab(t)} style={{
                 padding: "0.45rem 1rem", borderRadius: 999, border: "none",
                 backgroundColor: tab === t ? "rgba(245,160,32,0.15)" : "transparent",
@@ -218,7 +224,7 @@ export default function DashboardPage() {
                 fontWeight: tab === t ? 700 : 400, fontSize: "0.85rem",
                 cursor: "pointer", fontFamily: "inherit", textTransform: "capitalize",
               }}>
-                {t === "bookings" ? `Bookings (${bStats.total})` : t === "email" ? `Email (${subscribers.length})` : `CRM (${crmLeads.length})`}
+                {t === "bookings" ? `Bookings (${bStats.total})` : t === "email" ? `Email (${subscribers.length})` : t === "crm" ? `CRM (${crmLeads.length})` : `Blog (${blogPosts.length})`}
               </button>
             ))}
           </div>
@@ -419,6 +425,73 @@ export default function DashboardPage() {
             </div>
           </>
         )}
+        {/* ── BLOG TAB ── */}
+        {tab === "blog" && (() => {
+          const thisMonth = new Date().toLocaleString("en-US", { month: "long", year: "numeric" });
+          const postsThisMonth = blogPosts.filter((p) => p.date.includes(new Date().getFullYear().toString())).length;
+          const lastRun = blogRuns[0] ?? null;
+          const lastSuccess = blogRuns.find((r) => r.status === "success") ?? null;
+          return (
+            <>
+              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(160px,1fr))", gap: "1rem", marginBottom: "1.75rem" }}>
+                <StatCard label="Total Posts" value={blogPosts.length} color={TEXT} />
+                <StatCard label="Published 2026" value={postsThisMonth} color={ORANGE} sub={thisMonth} />
+                <StatCard label="Last Run" value={lastRun ? (lastRun.status === "success" ? "Success" : "Failed") : "—"} color={lastRun?.status === "success" ? GREEN : lastRun ? RED : MUTED} sub={lastRun ? new Date(lastRun.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) : "No runs yet"} />
+                <StatCard label="Last Post" value={lastSuccess?.title ? lastSuccess.title.split(" ").slice(0, 3).join(" ") + "…" : "—"} color={OCEAN} sub={lastSuccess ? new Date(lastSuccess.timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" }) : ""} />
+              </div>
+
+              {/* Posts list */}
+              <p style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: "0.75rem" }}>PUBLISHED POSTS</p>
+              <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden", marginBottom: "1.75rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "2.5fr 1fr 1fr 1.5fr", padding: "0.65rem 1.25rem", borderBottom: `1px solid ${BORDER}` }}>
+                  {["Title", "Date", "Read Time", "Target Keyword"].map((h) => (
+                    <p key={h} style={{ color: MUTED, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.06em" }}>{h.toUpperCase()}</p>
+                  ))}
+                </div>
+                {blogPosts.length === 0 ? (
+                  <p style={{ color: MUTED, padding: "2rem", textAlign: "center" }}>{loading ? "Loading…" : "No posts found."}</p>
+                ) : blogPosts.map((p, i) => (
+                  <div key={p.slug} style={{ display: "grid", gridTemplateColumns: "2.5fr 1fr 1fr 1.5fr", padding: "0.875rem 1.25rem", borderBottom: i < blogPosts.length - 1 ? `1px solid ${BORDER}` : "none", alignItems: "center" }}>
+                    <div>
+                      <a href={`/blog/${p.slug}`} target="_blank" rel="noopener noreferrer" style={{ color: TEXT, fontWeight: 600, fontSize: "0.83rem", textDecoration: "none" }}>{p.title}</a>
+                      <div style={{ display: "flex", gap: "0.4rem", marginTop: "0.2rem" }}>
+                        {p.featured && <span style={{ background: "rgba(245,160,32,0.12)", border: "1px solid rgba(245,160,32,0.25)", borderRadius: 999, padding: "0.05rem 0.5rem", color: ORANGE, fontSize: "0.6rem", fontWeight: 700 }}>FEATURED</span>}
+                        <span style={{ background: "rgba(255,255,255,0.04)", borderRadius: 999, padding: "0.05rem 0.5rem", color: MUTED, fontSize: "0.6rem" }}>{p.category}</span>
+                      </div>
+                    </div>
+                    <p style={{ color: MUTED, fontSize: "0.78rem" }}>{p.date}</p>
+                    <p style={{ color: MUTED, fontSize: "0.78rem" }}>{p.readTime}</p>
+                    <p style={{ color: OCEAN, fontSize: "0.75rem", fontStyle: "italic" }}>{p.targetKeyword}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Automation run log */}
+              <p style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.08em", marginBottom: "0.75rem" }}>AUTOMATION RUNS</p>
+              {blogRuns.length === 0 ? (
+                <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, padding: "2rem", textAlign: "center", color: MUTED, fontSize: "0.82rem" }}>
+                  No automation runs recorded yet. Runs every Monday + Thursday at 9am.
+                </div>
+              ) : (
+                <div style={{ backgroundColor: CARD, borderRadius: 16, border: `1px solid ${BORDER}`, overflow: "hidden" }}>
+                  <div style={{ display: "grid", gridTemplateColumns: "1fr 2fr 0.7fr", padding: "0.65rem 1.25rem", borderBottom: `1px solid ${BORDER}` }}>
+                    {["Timestamp", "Post Published", "Status"].map((h) => (
+                      <p key={h} style={{ color: MUTED, fontSize: "0.65rem", fontWeight: 700, letterSpacing: "0.06em" }}>{h.toUpperCase()}</p>
+                    ))}
+                  </div>
+                  {blogRuns.slice(0, 20).map((r, i) => (
+                    <div key={i} style={{ display: "grid", gridTemplateColumns: "1fr 2fr 0.7fr", padding: "0.8rem 1.25rem", borderBottom: i < Math.min(blogRuns.length, 20) - 1 ? `1px solid ${BORDER}` : "none", alignItems: "center" }}>
+                      <p style={{ color: MUTED, fontSize: "0.78rem" }}>{new Date(r.timestamp).toLocaleString("en-US", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}</p>
+                      <p style={{ color: r.status === "success" ? TEXT : MUTED, fontSize: "0.82rem" }}>{r.title ?? "—"}</p>
+                      <span style={{ display: "inline-block", padding: "0.1rem 0.6rem", borderRadius: 999, background: r.status === "success" ? "rgba(58,173,110,0.12)" : "rgba(232,64,64,0.12)", border: `1px solid ${r.status === "success" ? "rgba(58,173,110,0.3)" : "rgba(232,64,64,0.3)"}`, color: r.status === "success" ? GREEN : RED, fontSize: "0.65rem", fontWeight: 700, textTransform: "uppercase" as const }}>{r.status}</span>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </>
+          );
+        })()}
+
       </div>
     </div>
     {/* Welcome modal */}
