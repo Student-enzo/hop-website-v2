@@ -150,7 +150,7 @@ export default function HomePage() {
               </h1>
 
               <p style={{ fontSize: "1rem", color: "rgba(240,237,232,0.75)", lineHeight: 1.65, marginBottom: "1.75rem", maxWidth: 480 }}>
-                Flat rates. No haggling. Verified drivers. Airport, beach, hotel — HOP gets you there in minutes.
+                Airport → Atlantis from $47. Cable Beach from $32. Fixed prices, no haggling, verified drivers.
               </p>
 
               <HeroBookingWidget />

@@ -214,7 +214,21 @@ export default function HeroBookingWidget() {
 
   function goNext() {
     if (stepIdx === 0 && pickup && dropoff) trackEvent("booking_started", { pickup, dropoff })
+    trackEvent("booking_step_completed", { step: stepIdx })
     setDir(1); setStepIdx((i) => i + 1); setError("")
+  }
+
+  function goNextAsap() {
+    const now = new Date()
+    now.setMinutes(now.getMinutes() + 15)
+    const d = now.toISOString().split("T")[0]
+    const h = now.getHours().toString().padStart(2, "0")
+    const m = now.getMinutes().toString().padStart(2, "0")
+    setDate(d)
+    setTime(`${h}:${m}`)
+    trackEvent("booking_asap_click", { pickup, dropoff })
+    trackEvent("booking_step_completed", { step: 2 })
+    setDir(1); setStepIdx(3); setError("")
   }
   function goBack() { setDir(-1); setStepIdx((i) => i - 1); setError("") }
 
@@ -360,9 +374,17 @@ export default function HeroBookingWidget() {
                     <input type="time" value={time} onChange={(e) => setTime(e.target.value)} style={inputBase} />
                   </div>
                 </div>
+                <button
+                  onClick={goNextAsap}
+                  style={{ width: "100%", padding: "0.7rem", backgroundColor: "rgba(58,173,110,0.12)", border: "1px solid rgba(58,173,110,0.3)", borderRadius: 999, color: GREEN, fontWeight: 700, fontSize: "0.875rem", cursor: "pointer", fontFamily: "inherit", transition: "background-color 0.15s" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(58,173,110,0.2)" }}
+                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "rgba(58,173,110,0.12)" }}
+                >
+                  I need a ride now →
+                </button>
                 <div style={{ display: "flex", gap: "0.5rem" }}>
                   <BackBtn onClick={goBack} />
-                  <NextBtn onClick={goNext} disabled={!date || !time} />
+                  <NextBtn onClick={goNext} disabled={!date || !time} label="Schedule →" />
                 </div>
               </div>
             )}
@@ -491,8 +513,12 @@ export default function HeroBookingWidget() {
       </div>
 
       {stepIdx === 0 && (
-        <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap", marginTop: "1rem" }}>
-          {[{ dot: GREEN, label: "12,400+ rides" }, { dot: OCEAN, label: "Flat rates always" }, { dot: ORANGE, label: "Verified drivers" }].map((s) => (
+        <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap", marginTop: "1rem", alignItems: "center" }}>
+          <a href="#testimonials" style={{ display: "flex", alignItems: "center", gap: "0.3rem", textDecoration: "none" }}>
+            <span style={{ color: ORANGE, fontSize: "0.82rem", fontWeight: 800 }}>4.9 ★</span>
+            <span style={{ color: MUTED, fontSize: "0.78rem" }}>reviews</span>
+          </a>
+          {[{ dot: GREEN, label: "12,400+ rides" }, { dot: ORANGE, label: "Verified drivers" }].map((s) => (
             <div key={s.label} style={{ display: "flex", alignItems: "center", gap: "0.4rem" }}>
               <span style={{ width: 7, height: 7, borderRadius: "50%", backgroundColor: s.dot, display: "block", flexShrink: 0 }} />
               <span style={{ color: MUTED, fontSize: "0.78rem" }}>{s.label}</span>
