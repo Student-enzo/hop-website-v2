@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>com.hopbahamas.blog-automation</string>
+
+  <key>ProgramArguments</key>
+  <array>
+    <string>/bin/bash</string>
+    <string>/Users/enissongodoy/gsd-workspaces/hop-bahamas-website/scripts/generate-blog-post.sh</string>
+  </array>
+
+  <!-- Monday + Thursday at 9:00am local time = ~2x per week -->
+  <key>StartCalendarInterval</key>
+  <array>
+    <dict>
+      <key>Weekday</key><integer>1</integer>
+      <key>Hour</key><integer>9</integer>
+      <key>Minute</key><integer>0</integer>
+    </dict>
+    <dict>
+      <key>Weekday</key><integer>4</integer>
+      <key>Hour</key><integer>9</integer>
+      <key>Minute</key><integer>0</integer>
+    </dict>
+  </array>
+
+  <key>WorkingDirectory</key>
+  <string>/Users/enissongodoy/gsd-workspaces/hop-bahamas-website</string>
+
+  <key>StandardOutPath</key>
+  <string>/Users/enissongodoy/gsd-workspaces/hop-bahamas-website/logs/launchd-stdout.log</string>
+
+  <key>StandardErrorPath</key>
+  <string>/Users/enissongodoy/gsd-workspaces/hop-bahamas-website/logs/launchd-stderr.log</string>
+
+  <!-- Retry if system was asleep when scheduled time passed -->
+  <key>RunAtLoad</key>
+  <false/>
+</dict>
+</plist>
