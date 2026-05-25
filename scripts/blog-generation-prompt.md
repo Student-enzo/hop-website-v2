@@ -23,11 +23,11 @@ Also search for high-intent keyword gaps by running:
 - "nassau bahamas how to get to [popular destination]"
 
 Pick ONE keyword that is high-intent, uncovered, and relevant. Priority queue if nothing trending:
-1. nassau hotel transportation (between hotels — very searched, zero coverage)
-2. nassau car rental alternative (intercepts decision phase)
-3. bahamas family transportation minibus
-4. nassau airport to sandals royal bahamian transfer
-5. blue lagoon island nassau how to get there
+1. **uber coming to nassau bahamas** — URGENT: The Tribune and Nassau Guardian are actively reporting on Uber's rejected bid to enter Nassau (Jan/Feb 2026). Tourists are searching this in huge numbers. Write "Is Uber Coming to Nassau? Here's What's Actually Happening" — factual, explains the taxi union blocked it, positions HOP as the answer that's already here.
+2. nassau hotel transportation (between hotels — very searched, zero coverage)
+3. nassau car rental alternative (intercepts decision phase)
+4. bahamas family transportation minibus
+5. nassau airport to sandals royal bahamian transfer
 6. baha mar transfer from atlantis
 7. nassau new providence transportation guide
 
