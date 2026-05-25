@@ -38,7 +38,12 @@ CLAUDE_EXIT=${PIPESTATUS[0]}
 
 if [ $CLAUDE_EXIT -ne 0 ]; then
   echo "[$TIMESTAMP] FAILED — claude exited with code $CLAUDE_EXIT" | tee -a "$LOG"
+  osascript -e 'display notification "Blog automation failed — check logs/automation.log" with title "HOP Blog" subtitle "Generation error" sound name "Basso"' 2>/dev/null || true
   exit 1
 fi
+
+# Notify: extract slug from last auto-publish commit message
+LAST_SLUG=$(git log --format="%s" --grep="feat(blog): auto-publish" -1 2>/dev/null | sed 's/feat(blog): auto-publish — //' || echo "new post")
+osascript -e "display notification \"${LAST_SLUG}\" with title \"HOP Blog — Post Published\" subtitle \"Live on hopbahamas.com\" sound name \"Glass\"" 2>/dev/null || true
 
 echo "[$TIMESTAMP] Run complete." | tee -a "$LOG"

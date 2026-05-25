@@ -34,10 +34,24 @@ Pick ONE keyword that is high-intent, uncovered, and relevant. Priority queue if
 ## Step 3 — Write the Post
 
 ### Brand Voice
+This is a US tourist brand. The reader is a real American who has just landed in Nassau and is mildly stressed. Write like a knowledgeable friend giving advice — direct, a little funny, always useful. Never sound like a corporate brochure.
+
+Rules:
 - Direct and practical. No filler sentences.
 - Specific numbers always: "$47" not "affordable"
 - First-person plural where helpful: "HOP drivers know..."
 - Trust-building, never salesy
+- **Use dry humor when it fits.** Light jokes about Nassau quirks (no Uber, driving on the left, aggressive taxi negotiations) are on-brand. See examples below.
+- **Short punchy sentences land harder than long ones.** Vary rhythm — one-liner after a longer paragraph.
+- **One observation that only a local would know.** Slip in something specific that builds credibility.
+
+**Brand voice examples (match this tone):**
+> "Not 'surge pricing' nothing. Just nothing." (on Uber not working)
+> "they do, by the way" (aside about left-side driving)
+> "which is not a fun situation when your cruise ship leaves in 90 minutes" (dry stakes-setting)
+> "The math hasn't worked out for them, and they haven't tried." (blunt business take)
+
+The auto-generated post should feel like it was written by the same person who wrote the existing posts — not by a content farm.
 
 ### GEO / AI Citation Rules (critical)
 These rules make AI models (ChatGPT, Gemini, Perplexity, Claude) cite this post:
@@ -78,7 +92,7 @@ The post must be appended to the `BLOG_POSTS` array in `lib/blog-posts.ts`. Matc
   metaTitle: "Target Keyword — Context | HOP",  // under 60 chars
   metaDescription: "Description answering the core question. Include keyword. Under 155 chars.",
   targetKeyword: "exact target keyword phrase",
-  coverImage: "/images/blog-covers/[slug].jpg", // use this placeholder path
+  coverImage: "REPLACE_WITH_REAL_URL", // see cover image instructions below
   content: [
     // IMPORTANT: First block must answer the core question within 40 words (GEO rule)
     { type: "p", text: "Direct answer to the query in under 40 words. Then expand..." },
@@ -114,6 +128,27 @@ The post must be appended to the `BLOG_POSTS` array in `lib/blog-posts.ts`. Matc
 - 1 `cta` block
 - 1 `related` block linking to 2 existing posts (use real slugs from lib/blog-posts.ts)
 - No fabricated prices — use only the pricing reference above
+
+## Step 4b — Find a Real Cover Image
+
+Before writing the TypeScript, find a real Pexels image URL for the cover.
+
+Search Pexels for a photo that matches the post topic. Use one of these WebFetch calls to get a real photo ID:
+
+- For airport/transportation topics: `https://www.pexels.com/search/nassau+bahamas+airport/`
+- For island/beach topics: `https://www.pexels.com/search/bahamas+island+beach/`
+- For Nassau city/travel topics: `https://www.pexels.com/search/nassau+bahamas/`
+- For cruise topics: `https://www.pexels.com/search/nassau+cruise+port/`
+
+From the WebFetch HTML response, extract a real photo ID (a 7-8 digit number from `pexels.com/photo/[title]-[ID]/`).
+
+Then construct the coverImage URL in this exact format:
+`https://images.pexels.com/photos/[ID]/pexels-photo-[ID].jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop`
+
+**Example of correct format** (what the existing posts use):
+`https://images.pexels.com/photos/27639789/pexels-photo-27639789.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop`
+
+Use this real URL as the `coverImage` field. Do NOT use a `/images/blog-covers/` local path — those images don't exist on disk.
 
 ## Step 5 — Append to lib/blog-posts.ts
 

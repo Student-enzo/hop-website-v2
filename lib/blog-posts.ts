@@ -38,7 +38,7 @@ export const BLOG_POSTS: BlogPost[] = [
     metaTitle: "How to Get to Blue Lagoon Island Nassau 2026 | HOP",
     metaDescription: "Blue Lagoon Island from Nassau: taxi to the Paradise Island Ferry Terminal, then 25 minutes by ferry. HOP fares from $26. Pre-book before your ship docks.",
     targetKeyword: "how to get to blue lagoon island nassau",
-    coverImage: "/images/blog-covers/how-to-get-to-blue-lagoon-island-nassau.jpg",
+    coverImage: "https://images.pexels.com/photos/17797265/pexels-photo-17797265.jpeg?auto=compress&cs=tinysrgb&w=700&h=500&fit=crop",
     content: [
       { type: "p", text: "Blue Lagoon Island is ferry-only. Take a taxi or HOP to the Paradise Island Ferry Terminal — 10 minutes from Nassau Cruise Port, 25 minutes from the airport — then a 25-minute ferry ride. No road connects Nassau to the island." },
       { type: "h2", text: "Why Can't You Take a Taxi Directly to Blue Lagoon Island?" },
