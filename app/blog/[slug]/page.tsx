@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import TrackedLink from "../../components/TrackedLink";
 import type { Metadata } from "next";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -499,15 +500,17 @@ export default async function BlogPostPage({ params }: Props) {
               Pre-book your ride before you land. See the fare before you confirm.
             </p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "0.75rem" }}>
-              <a
+              <TrackedLink
                 href="https://app.hopbahamas.com"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
+                eventLabel="book_ride"
+                eventLocation="blog_post_cta"
                 style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}
               >
                 Book My Ride
-              </a>
+              </TrackedLink>
               <Link
                 href="/blog"
                 className="btn-secondary"

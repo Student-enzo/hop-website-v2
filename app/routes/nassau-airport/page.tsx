@@ -1,4 +1,5 @@
 import Image from "next/image";
+import TrackedLink from "../../components/TrackedLink";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
@@ -78,9 +79,9 @@ export default function NassauAirportPage() {
               Pre-book your LPIA airport transfer before you land. The price is locked in before your driver moves.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_airport_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Book Airport Transfer
-              </a>
+              </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
                 Download the App
               </Link>
@@ -194,9 +195,9 @@ export default function NassauAirportPage() {
             </h2>
             <p style={{ color: MUTED, fontSize: "0.95rem", marginBottom: "2rem" }}>Fixed price. No flagging. Schedule before you land.</p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_airport_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
                 Book via Web App
-              </a>
+              </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
                 Download the App
               </Link>

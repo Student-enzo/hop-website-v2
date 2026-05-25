@@ -5,6 +5,7 @@ import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/analytics";
 import { FeatureCarousel } from "@/components/ui/feature-carousel";
 
 const ORANGE = "#F5A020";
@@ -109,6 +110,7 @@ export default function ServicesPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary"
+                  onClick={() => trackEvent("cta_click", { label: "book_ride", location: "services_hero" })}
                   style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", textDecoration: "none", gap: "0.5rem" }}
                 >
                   Book a Ride
@@ -205,6 +207,7 @@ export default function ServicesPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary"
+                  onClick={() => trackEvent("cta_click", { label: "book_ride", location: "services_tiers" })}
                   style={{ padding: "0.875rem 1.75rem", fontSize: "0.925rem", textDecoration: "none", gap: "0.5rem" }}
                 >
                   Book your ride
@@ -311,6 +314,7 @@ export default function ServicesPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
+                onClick={() => trackEvent("cta_click", { label: "book_ride", location: "services_cta_bottom" })}
                 style={{ padding: "0.9rem 2rem", fontSize: "0.95rem", textDecoration: "none" }}
               >
                 Book via Web App

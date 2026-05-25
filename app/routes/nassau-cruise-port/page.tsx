@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import TrackedLink from "../../components/TrackedLink";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -56,7 +57,7 @@ export default function CruisePortPage() {
               HOP gets you from Prince George Wharf to the beach, Atlantis, Baha Mar, or anywhere in Nassau — fixed price, no haggling.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>Book from Cruise Port</a>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_cruiseport_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>Book from Cruise Port</TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>Download the App</Link>
             </div>
           </div>
@@ -110,7 +111,7 @@ export default function CruisePortPage() {
             <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.75rem" }}>Ready to explore Nassau?</h2>
             <p style={{ color: MUTED, fontSize: "0.95rem", marginBottom: "2rem" }}>Book your ride from the cruise port in seconds.</p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>Book via Web App</a>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_cruiseport_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>Book via Web App</TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>Download the App</Link>
             </div>
           </div>

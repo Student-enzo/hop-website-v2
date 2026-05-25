@@ -32,7 +32,7 @@ export default function Footer() {
             {/* Contact */}
             <div className="flex gap-3 mt-4 flex-wrap">
               <a
-                href="https://wa.me/12420000000"
+                href="https://wa.me/12424285167"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("cta_click", { label: "whatsapp", location: "footer" })}
@@ -46,10 +46,10 @@ export default function Footer() {
                 WhatsApp us
               </a>
               <a
-                href="mailto:support@hopbahamas.com"
+                href="tel:+13058505042"
                 style={{ color: "#8a8070", fontSize: "0.82rem", textDecoration: "none" }}
               >
-                support@hopbahamas.com
+                +1 (305) 850-5042
               </a>
             </div>
 

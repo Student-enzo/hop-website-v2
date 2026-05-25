@@ -52,7 +52,7 @@ const taxiServiceSchema = {
   availableChannel: {
     "@type": "ServiceChannel",
     serviceUrl: "https://app.hopbahamas.com",
-    servicePhone: "+1-242-000-0000",
+    servicePhone: "+1-242-428-5167",
   },
   offers: {
     "@type": "Offer",

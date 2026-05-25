@@ -202,7 +202,7 @@ export default function Navbar() {
           {/* Right CTAs */}
           <div className="hidden md:flex" style={{ alignItems: "center", gap: "0.5rem", flexShrink: 0 }}>
             <a
-              href="https://wa.me/12420000000"
+              href="https://wa.me/12424285167"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent("cta_click", { label: "whatsapp", location: "navbar_desktop" })}
@@ -351,7 +351,7 @@ export default function Navbar() {
               Download the App
             </Link>
             <a
-              href="https://wa.me/12420000000"
+              href="https://wa.me/12424285167"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => { trackEvent("cta_click", { label: "whatsapp", location: "navbar_mobile" }); setMobileOpen(false) }}

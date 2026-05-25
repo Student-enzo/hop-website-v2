@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../../components/Navbar";
 import Footer from "../../components/Footer";
+import TrackedLink from "../../components/TrackedLink";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -75,9 +76,9 @@ export default function AtlantisPage() {
               The most requested route in Nassau. From the airport, downtown, or anywhere on the island — HOP gets you to Atlantis with a fare you agreed to before you moved.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_atlantis_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Book Ride to Atlantis
-              </a>
+              </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
                 Download the App
               </Link>
@@ -167,9 +168,9 @@ export default function AtlantisPage() {
             </h2>
             <p style={{ color: MUTED, fontSize: "0.95rem", marginBottom: "2rem" }}>Fixed price. No flagging. Book now or schedule ahead.</p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_atlantis_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
                 Book via Web App
-              </a>
+              </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
                 Download the App
               </Link>
