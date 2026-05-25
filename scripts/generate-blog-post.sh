@@ -29,6 +29,7 @@ git pull origin main 2>/dev/null || echo "[$TIMESTAMP] Warning: could not pull (
 echo "[$TIMESTAMP] Running Claude generation agent..." | tee -a "$LOG"
 
 claude --print \
+  --dangerously-skip-permissions \
   --allowedTools "Bash,Read,Write,WebSearch,WebFetch" \
   --max-turns 35 \
   -p "$(cat "$PROMPT")" 2>&1 | tee -a "$LOG"
