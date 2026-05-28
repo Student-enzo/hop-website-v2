@@ -486,23 +486,34 @@ export default function HeroBookingWidget() {
                   <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.06em" }}>{bookingId}</span>
                 </div>
                 <h3 style={{ color: TEXT, fontWeight: 800, fontSize: "1.25rem", marginBottom: "0.4rem" }}>Ride confirmed!</h3>
-                <p style={{ color: MUTED, fontSize: "0.82rem", lineHeight: 1.6, marginBottom: "1.25rem" }}>
-                  Check <span style={{ color: TEXT }}>{email}</span> — your HOP account and app link are on the way.
+                <p style={{ color: MUTED, fontSize: "0.82rem", lineHeight: 1.6, marginBottom: "1.5rem" }}>
+                  A confirmation is on its way to <span style={{ color: TEXT }}>{email}</span>. Download the app to track your driver in real time.
                 </p>
-                <div style={{ textAlign: "left", backgroundColor: "rgba(255,255,255,0.03)", borderRadius: 12, padding: "0.875rem 1rem", marginBottom: "1.25rem", width: "100%" }}>
-                  {[
-                    { label: "Route", value: `${pickup} → ${dropoff}` },
-                    { label: "Date & Time", value: `${fmt(date)} · ${fmtT(time)}` },
-                    { label: "Passengers", value: `${pax} pax${bags > 0 ? ` · ${bags} bag${bags > 1 ? "s" : ""}` : ""}` },
-                    { label: "Tier & Fare", value: tier === "luxury" ? `Luxury ${LUX_VEHICLES.find((v) => v.id === luxVehicle)?.label ?? ""} · $${price}` : `${tier === "eco" ? "ECO" : "Standard"} · $${price}` },
-                  ].map((row) => (
-                    <div key={row.label} style={{ display: "flex", justifyContent: "space-between", gap: "0.75rem", padding: "0.3rem 0", borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                      <span style={{ color: MUTED, fontSize: "0.73rem" }}>{row.label}</span>
-                      <span style={{ color: TEXT, fontSize: "0.73rem", fontWeight: 600, textAlign: "right" }}>{row.value}</span>
-                    </div>
-                  ))}
-                </div>
-                <button onClick={reset} style={{ width: "100%", padding: "0.875rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", fontFamily: "inherit" }}>
+                <a
+                  href="https://apps.apple.com/us/app/hop-bahamas/id6756782428"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "block", width: "100%", padding: "0.875rem", backgroundColor: ORANGE, borderRadius: 999, color: BG, fontWeight: 800, fontSize: "0.9rem", textDecoration: "none", marginBottom: "0.65rem", boxSizing: "border-box" as const }}
+                >
+                  Download on App Store →
+                </a>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.hopbahamas.rider"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "block", width: "100%", padding: "0.875rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", marginBottom: "0.65rem", boxSizing: "border-box" as const }}
+                >
+                  Download on Google Play →
+                </a>
+                <a
+                  href="https://app.hopbahamas.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ display: "block", width: "100%", padding: "0.875rem", backgroundColor: "transparent", border: `1px solid ${OCEAN}40`, borderRadius: 999, color: OCEAN, fontWeight: 600, fontSize: "0.85rem", textDecoration: "none", marginBottom: "1.25rem", boxSizing: "border-box" as const }}
+                >
+                  Open web app →
+                </a>
+                <button onClick={reset} style={{ width: "100%", padding: "0.75rem", backgroundColor: "transparent", border: "none", borderRadius: 999, color: MUTED, fontWeight: 500, fontSize: "0.82rem", cursor: "pointer", fontFamily: "inherit" }}>
                   Book another ride
                 </button>
               </div>
