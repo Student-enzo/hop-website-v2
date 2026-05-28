@@ -1,9 +1,8 @@
 "use client"
 
-import { useState, useRef } from "react"
+import { useState } from "react"
 import { trackEvent } from "@/lib/analytics"
 import { motion, AnimatePresence } from "framer-motion"
-import { getSupabase } from "@/lib/supabase"
 
 const BG = "#161616"
 const TEXT = "#f0ede8"
@@ -11,7 +10,6 @@ const MUTED = "#8a8070"
 const ORANGE = "#F5A020"
 const GREEN = "#3aad6e"
 const OCEAN = "#0EA5E9"
-const GOLD = "#d4a855"
 
 const EXTRA_PAX = 6
 const EXTRA_BAG = 3
@@ -75,10 +73,6 @@ function calcPrice(base: number, pax: number, bags: number) {
 
 const LOCATIONS = Array.from(new Set(ROUTE_DATA.map((r) => r[0])))
 
-type Tier = "eco" | "standard" | "luxury"
-
-const today = new Date().toISOString().split("T")[0]
-
 const card: React.CSSProperties = {
   backgroundColor: "rgba(18,16,10,0.82)",
   backdropFilter: "blur(20px)",
@@ -99,64 +93,11 @@ const selectBase: React.CSSProperties = {
   appearance: "none", WebkitAppearance: "none",
 }
 
-const inputBase: React.CSSProperties = {
-  background: "none", border: "none", outline: "none",
-  color: TEXT, fontSize: "1.05rem", width: "100%",
-  fontFamily: "inherit", padding: 0,
-  colorScheme: "dark" as React.CSSProperties["colorScheme"],
-}
-
 function Circle({ color, children }: { color: string; children: React.ReactNode }) {
   return (
     <div style={{ width: 42, height: 42, borderRadius: "50%", backgroundColor: `${color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
       {children}
     </div>
-  )
-}
-
-const BAR = ["Route", "Group", "When", "Ride", "You"]
-
-function StepBar({ idx }: { idx: number }) {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: "0.2rem", marginBottom: "1.25rem" }}>
-      {BAR.map((label, i) => {
-        const done = i < idx
-        const active = i === idx
-        return (
-          <div key={label} style={{ display: "flex", alignItems: "center", gap: "0.2rem" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "0.3rem" }}>
-              <div style={{ width: 22, height: 22, borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: active || done ? ORANGE : "rgba(255,255,255,0.07)", fontSize: "0.6rem", fontWeight: 800, color: active || done ? BG : MUTED, flexShrink: 0, transition: "background-color 0.2s" }}>
-                {done ? "✓" : i + 1}
-              </div>
-              <span style={{ fontSize: "0.7rem", color: active ? TEXT : done ? ORANGE : MUTED, fontWeight: active ? 700 : 400, whiteSpace: "nowrap" }}>{label}</span>
-            </div>
-            {i < BAR.length - 1 && <div style={{ width: 12, height: 1, backgroundColor: i < idx ? ORANGE : "rgba(255,255,255,0.1)", flexShrink: 0 }} />}
-          </div>
-        )
-      })}
-    </div>
-  )
-}
-
-const slideVariants = {
-  enter: (dir: number) => ({ x: dir > 0 ? "110%" : "-110%", opacity: 0 }),
-  center: { x: 0, opacity: 1, transition: { duration: 0.4, ease: [0.32, 0.72, 0, 1] as [number, number, number, number] } },
-  exit: (dir: number) => ({ x: dir > 0 ? "-110%" : "110%", opacity: 0, transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] as [number, number, number, number] } }),
-}
-
-function NextBtn({ onClick, disabled = false, label = "Next →" }: { onClick: () => void; disabled?: boolean; label?: string }) {
-  return (
-    <button onClick={onClick} disabled={disabled} style={{ flex: 1, padding: "0.95rem", backgroundColor: disabled ? "rgba(245,160,32,0.28)" : ORANGE, border: "none", borderRadius: 999, color: BG, fontWeight: 800, fontSize: "0.975rem", cursor: disabled ? "not-allowed" : "pointer", fontFamily: "inherit", boxShadow: disabled ? "none" : "0 4px 20px rgba(245,160,32,0.28)" }}>
-      {label}
-    </button>
-  )
-}
-
-function BackBtn({ onClick }: { onClick: () => void }) {
-  return (
-    <button onClick={onClick} style={{ padding: "0.95rem 1.25rem", backgroundColor: "rgba(255,255,255,0.05)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: MUTED, fontWeight: 600, fontSize: "0.9rem", cursor: "pointer", fontFamily: "inherit" }}>
-      ← Back
-    </button>
   )
 }
 
@@ -179,27 +120,23 @@ function Counter({ label, sub, value, min, max, onDec, onInc, accent }: {
   )
 }
 
+const slideVariants = {
+  enter: (dir: number) => ({ x: dir > 0 ? "110%" : "-110%", opacity: 0 }),
+  center: { x: 0, opacity: 1, transition: { duration: 0.4, ease: [0.32, 0.72, 0, 1] as [number, number, number, number] } },
+  exit: (dir: number) => ({ x: dir > 0 ? "-110%" : "110%", opacity: 0, transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] as [number, number, number, number] } }),
+}
+
+const APP_URL = "https://app.hopbahamas.com"
+const APP_STORE_URL = "https://apps.apple.com/us/app/hop-bahamas/id6756782428"
+const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.hopbahamas.rider"
+
 export default function HeroBookingWidget() {
-  const [stepIdx, setStepIdx] = useState(0)
+  const [step, setStep] = useState<"route" | "fares">("route")
   const [dir, setDir] = useState(1)
   const [pickup, setPickup] = useState("")
   const [dropoff, setDropoff] = useState("")
   const [pax, setPax] = useState(2)
   const [bags, setBags] = useState(0)
-  const [date, setDate] = useState("")
-  const [time, setTime] = useState("")
-  const [tier, setTier] = useState<Tier | null>(null)
-  const [luxVehicle, setLuxVehicle] = useState("sedan")
-  const [name, setName] = useState("")
-  const [phone, setPhone] = useState("")
-  const [email, setEmail] = useState("")
-  const [photoUrl, setPhotoUrl] = useState("")
-  const [photoPreview, setPhotoPreview] = useState("")
-  const [photoUploading, setPhotoUploading] = useState(false)
-  const fileInputRef = useRef<HTMLInputElement>(null)
-  const [loading, setLoading] = useState(false)
-  const [bookingId, setBookingId] = useState("")
-  const [error, setError] = useState("")
 
   const dropoffOptions = pickup
     ? ROUTE_DATA.filter((r) => r[0] === pickup).map((r) => r[1])
@@ -208,322 +145,146 @@ export default function HeroBookingWidget() {
   const match = ROUTE_DATA.find((r) => r[0] === pickup && r[1] === dropoff)
   const ecoPrice = match ? calcPrice(match[2], pax, bags) : null
   const stdPrice = match ? calcPrice(match[3], pax, bags) : null
-  const luxPrice = LUX_VEHICLES.find((v) => v.id === luxVehicle)?.price ?? 95
 
-  const price = tier === "luxury" ? luxPrice : tier === "eco" ? ecoPrice : stdPrice
-
-  function goNext() {
-    if (stepIdx === 0 && pickup && dropoff) trackEvent("booking_started", { pickup, dropoff })
-    trackEvent("booking_step_completed", { step: stepIdx })
-    setDir(1); setStepIdx((i) => i + 1); setError("")
+  function showFares() {
+    trackEvent("fare_check", { pickup, dropoff, pax })
+    setDir(1)
+    setStep("fares")
   }
 
-  function goNextAsap() {
-    const now = new Date()
-    now.setMinutes(now.getMinutes() + 15)
-    const d = now.toISOString().split("T")[0]
-    const h = now.getHours().toString().padStart(2, "0")
-    const m = now.getMinutes().toString().padStart(2, "0")
-    setDate(d)
-    setTime(`${h}:${m}`)
-    trackEvent("booking_asap_click", { pickup, dropoff })
-    trackEvent("booking_step_completed", { step: 2 })
-    setDir(1); setStepIdx(3); setError("")
-  }
-  function goBack() { setDir(-1); setStepIdx((i) => i - 1); setError("") }
-
-  const handleConfirm = async () => {
-    setError("")
-    if (!name.trim() || name.trim().length < 2) { setError("Please enter your full name."); return }
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { setError("Please enter a valid email."); return }
-    if (phone.replace(/\D/g, "").length < 7) { setError("Please enter a valid phone number."); return }
-    setLoading(true)
-    try {
-      const res = await fetch("/api/book", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pickup, dropoff, date, time, tier, luxVehicle: tier === "luxury" ? luxVehicle : undefined, price, pax, bags, name: name.trim(), email: email.trim().toLowerCase(), phone: phone.trim(), profilePhotoUrl: photoUrl || undefined }),
-      })
-      const data = await res.json()
-      if (data.success) {
-        trackEvent("booking_completed", { tier: tier ?? "unknown", price: price ?? 0, pickup, dropoff })
-        setBookingId(data.id); goNext()
-      } else {
-        trackEvent("booking_error", { reason: data.error ?? "unknown" })
-        setError(data.error || "Something went wrong. Please try again.")
-      }
-    } catch {
-      trackEvent("booking_error", { reason: "network_error" })
-      setError("Network error. Please try again.")
-    }
-    finally { setLoading(false) }
+  function reset() {
+    setDir(-1)
+    setStep("route")
+    setPickup("")
+    setDropoff("")
+    setPax(2)
+    setBags(0)
   }
 
-  const reset = () => {
-    setStepIdx(0); setDir(1); setPickup(""); setDropoff(""); setPax(2); setBags(0)
-    setDate(""); setTime(""); setTier(null); setLuxVehicle("sedan")
-    setName(""); setPhone(""); setEmail(""); setBookingId(""); setError("")
-    setPhotoUrl(""); setPhotoPreview(""); setPhotoUploading(false)
+  function bookNow(tier: string, price: number) {
+    trackEvent("book_now_click", { tier, price, pickup, dropoff })
+    window.open(APP_URL, "_blank", "noopener,noreferrer")
   }
 
-  const handlePhotoSelect = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) return
-    setPhotoPreview(URL.createObjectURL(file))
-    setPhotoUploading(true)
-    try {
-      const ext = file.name.split(".").pop() ?? "jpg"
-      const path = `bookings/${Date.now()}-${Math.random().toString(36).slice(2)}.${ext}`
-      const sb = getSupabase()
-      const { data, error: upErr } = await sb.storage.from("hop-avatars").upload(path, file, { contentType: file.type, upsert: false })
-      if (upErr) throw upErr
-      const { data: urlData } = sb.storage.from("hop-avatars").getPublicUrl(data.path)
-      setPhotoUrl(urlData.publicUrl)
-    } catch {
-      setPhotoPreview("")
-    } finally {
-      setPhotoUploading(false)
-    }
-  }
-
-  function fmt(d: string) {
-    if (!d) return ""
-    return new Date(d + "T00:00").toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })
-  }
-  function fmtT(t: string) {
-    if (!t) return ""
-    const [h, m] = t.split(":").map(Number)
-    return `${h % 12 || 12}:${m.toString().padStart(2, "0")} ${h >= 12 ? "PM" : "AM"}`
-  }
+  const tiers = [
+    {
+      tag: "ECO", name: "Economic", sub: "Solo trips & short hops",
+      price: ecoPrice ? `$${ecoPrice}` : "—",
+      color: GREEN, tier: "eco",
+      numPrice: ecoPrice ?? 0,
+    },
+    {
+      tag: "STD", name: "Standard", sub: "Most popular · daily comfort",
+      price: stdPrice ? `$${stdPrice}` : "—",
+      color: ORANGE, tier: "standard",
+      numPrice: stdPrice ?? 0,
+    },
+    ...LUX_VEHICLES.map((v) => ({
+      tag: "LUX", name: `Luxury ${v.label}`, sub: v.pax,
+      price: `$${v.price}`,
+      color: "#d4a855", tier: "luxury",
+      numPrice: v.price,
+    })),
+  ]
 
   return (
-    <div style={{ maxWidth: 520, width: "100%" }}>
-      {stepIdx < 5 && <StepBar idx={Math.min(stepIdx, 4)} />}
+    <div style={{ width: "100%", maxWidth: 460 }}>
+      <div style={{ overflow: "hidden", position: "relative" }}>
+        <AnimatePresence mode="wait" custom={dir} initial={false}>
+          {step === "route" && (
+            <motion.div key="route" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                <p style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em", marginBottom: "0.25rem" }}>GET YOUR FARE ESTIMATE</p>
 
-      <div style={{ overflow: "hidden" }}>
-        <AnimatePresence mode="wait" custom={dir}>
-          <motion.div key={stepIdx} custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit">
-
-            {/* ── 0: Route ── */}
-            {stepIdx === 0 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
+                {/* Pickup */}
                 <div style={card}>
-                  <Circle color={OCEAN}>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={OCEAN} strokeWidth="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z" /><circle cx="12" cy="9" r="2.5" /></svg>
-                  </Circle>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: OCEAN, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.3rem" }}>PICKUP</p>
-                    <select value={pickup} onChange={(e) => { setPickup(e.target.value); setDropoff("") }} style={{ ...selectBase, color: pickup ? TEXT : MUTED }}>
-                      <option value="" style={{ backgroundColor: "#1e1c14" }}>Where are you coming from?</option>
-                      {LOCATIONS.map((l) => <option key={l} value={l} style={{ backgroundColor: "#1e1c14" }}>{l}</option>)}
-                    </select>
-                  </div>
-                </div>
-
-                <div style={{ ...card, opacity: pickup ? 1 : 0.55, transition: "opacity 0.2s" }}>
                   <Circle color={ORANGE}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2.5"><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></svg>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2.5"><circle cx="12" cy="12" r="4" /><path d="M12 2v2M12 20v2M2 12h2M20 12h2" /></svg>
                   </Circle>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: ORANGE, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.3rem" }}>DROP-OFF</p>
-                    <select value={dropoff} onChange={(e) => setDropoff(e.target.value)} disabled={!pickup} style={{ ...selectBase, color: dropoff ? TEXT : MUTED }}>
-                      <option value="" style={{ backgroundColor: "#1e1c14" }}>Where are you headed?</option>
-                      {dropoffOptions.map((l) => <option key={l} value={l} style={{ backgroundColor: "#1e1c14" }}>{l}</option>)}
+                    <p style={{ color: ORANGE, fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.2rem" }}>FROM</p>
+                    <select value={pickup} onChange={(e) => { setPickup(e.target.value); setDropoff("") }} style={selectBase}>
+                      <option value="" disabled style={{ background: BG }}>Select pickup location</option>
+                      {LOCATIONS.map((l) => <option key={l} value={l} style={{ background: BG }}>{l}</option>)}
                     </select>
                   </div>
                 </div>
 
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <NextBtn onClick={goNext} disabled={!pickup || !dropoff} />
-                </div>
-              </div>
-            )}
-
-            {/* ── 1: Group ── */}
-            {stepIdx === 1 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                <p style={{ color: TEXT, fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.02em", marginBottom: "0.1rem" }}>Who&apos;s coming?</p>
-                <Counter label="PASSENGERS" sub="+$6 per person above 2" value={pax} min={1} max={15} onDec={() => setPax((p) => Math.max(1, p - 1))} onInc={() => setPax((p) => Math.min(15, p + 1))} accent={OCEAN} />
-                <Counter label="CHECKED / BIG BAGS" sub="+$3 per oversize bag" value={bags} min={0} max={8} onDec={() => setBags((b) => Math.max(0, b - 1))} onInc={() => setBags((b) => Math.min(8, b + 1))} accent={MUTED} />
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <BackBtn onClick={goBack} />
-                  <NextBtn onClick={goNext} />
-                </div>
-              </div>
-            )}
-
-            {/* ── 2: When ── */}
-            {stepIdx === 2 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                <p style={{ color: TEXT, fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.02em", marginBottom: "0.1rem" }}>When do you need the ride?</p>
-                <div style={card}>
-                  <Circle color={MUTED}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><rect x="3" y="4" width="18" height="18" rx="2" /><line x1="16" y1="2" x2="16" y2="6" /><line x1="8" y1="2" x2="8" y2="6" /><line x1="3" y1="10" x2="21" y2="10" /></svg>
+                {/* Dropoff */}
+                <div style={{ ...card, opacity: pickup ? 1 : 0.5 }}>
+                  <Circle color={GREEN}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2.5"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" fill={GREEN} stroke="none" /></svg>
                   </Circle>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: ORANGE, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.3rem" }}>DATE</p>
-                    <input type="date" min={today} value={date} onChange={(e) => setDate(e.target.value)} style={inputBase} />
+                    <p style={{ color: GREEN, fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.2rem" }}>TO</p>
+                    <select value={dropoff} onChange={(e) => setDropoff(e.target.value)} disabled={!pickup} style={{ ...selectBase, opacity: pickup ? 1 : 0.5 }}>
+                      <option value="" disabled style={{ background: BG }}>Select destination</option>
+                      {dropoffOptions.map((l) => <option key={l} value={l} style={{ background: BG }}>{l}</option>)}
+                    </select>
                   </div>
                 </div>
-                <div style={card}>
-                  <Circle color={MUTED}>
-                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><circle cx="12" cy="12" r="10" /><polyline points="12 6 12 12 16 14" /></svg>
-                  </Circle>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: ORANGE, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.3rem" }}>TIME</p>
-                    <input type="time" value={time} onChange={(e) => setTime(e.target.value)} style={inputBase} />
-                  </div>
-                </div>
+
+                {/* Pax + Bags */}
+                <Counter label="PASSENGERS" sub="How many people?" value={pax} min={1} max={15} onDec={() => setPax((p) => p - 1)} onInc={() => setPax((p) => p + 1)} accent={OCEAN} />
+                <Counter label="BAGS" sub="Checked luggage pieces" value={bags} min={0} max={10} onDec={() => setBags((b) => b - 1)} onInc={() => setBags((b) => b + 1)} accent={MUTED} />
+
                 <button
-                  onClick={goNextAsap}
-                  style={{ width: "100%", padding: "0.7rem", backgroundColor: "rgba(58,173,110,0.12)", border: "1px solid rgba(58,173,110,0.3)", borderRadius: 999, color: GREEN, fontWeight: 700, fontSize: "0.875rem", cursor: "pointer", fontFamily: "inherit", transition: "background-color 0.15s" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "rgba(58,173,110,0.2)" }}
-                  onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "rgba(58,173,110,0.12)" }}
+                  onClick={showFares}
+                  disabled={!pickup || !dropoff}
+                  style={{ width: "100%", padding: "1rem", backgroundColor: pickup && dropoff ? ORANGE : "rgba(245,160,32,0.28)", border: "none", borderRadius: 999, color: BG, fontWeight: 800, fontSize: "1rem", cursor: pickup && dropoff ? "pointer" : "not-allowed", fontFamily: "inherit", boxShadow: pickup && dropoff ? "0 4px 20px rgba(245,160,32,0.28)" : "none", marginTop: "0.25rem" }}
                 >
-                  I need a ride now →
-                </button>
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <BackBtn onClick={goBack} />
-                  <NextBtn onClick={goNext} disabled={!date || !time} label="Schedule →" />
-                </div>
-              </div>
-            )}
-
-            {/* ── 3: Tier ── */}
-            {stepIdx === 3 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                <p style={{ color: TEXT, fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.02em", marginBottom: "0.1rem" }}>Pick your ride</p>
-                {(
-                  [
-                    { t: "eco" as Tier, tag: "ECO", name: "Economic", sub: "Sedan · ~5 min longer pickup", price: ecoPrice ? `$${ecoPrice}` : "—", color: OCEAN, border: "rgba(14,165,233,0.22)", hoverBorder: "rgba(14,165,233,0.5)", hoverBg: "rgba(14,165,233,0.06)" },
-                    { t: "standard" as Tier, tag: "STD", name: "Standard", sub: "Premium sedan · fastest pickup", price: stdPrice ? `$${stdPrice}` : "—", color: ORANGE, border: "rgba(245,160,32,0.22)", hoverBorder: "rgba(245,160,32,0.5)", hoverBg: "rgba(245,160,32,0.06)" },
-                    { t: "luxury" as Tier, tag: "LUX", name: "Luxury", sub: "Sedan · SUV · Mini Bus", price: "from $95", color: GOLD, border: "rgba(212,168,85,0.22)", hoverBorder: "rgba(212,168,85,0.5)", hoverBg: "rgba(212,168,85,0.06)" },
-                  ] as const
-                ).map((row) => (
-                  <TierBtn key={row.t} row={row} onClick={() => { trackEvent("booking_tier_selected", { tier: row.t }); setTier(row.t); goNext() }} />
-                ))}
-                <BackBtn onClick={goBack} />
-              </div>
-            )}
-
-            {/* ── 4: Contact ── */}
-            {stepIdx === 4 && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "0.625rem" }}>
-                <p style={{ color: TEXT, fontWeight: 800, fontSize: "1.2rem", letterSpacing: "-0.02em", marginBottom: "0.1rem" }}>Your contact info</p>
-
-                {tier === "luxury" && (
-                  <div style={{ ...card, flexDirection: "column", alignItems: "stretch", gap: "0.5rem" }}>
-                    <p style={{ color: GOLD, fontSize: "0.6rem", fontWeight: 700, letterSpacing: "0.1em" }}>CHOOSE VEHICLE</p>
-                    <div style={{ display: "flex", gap: "0.4rem" }}>
-                      {LUX_VEHICLES.map((v) => (
-                        <button key={v.id} onClick={() => setLuxVehicle(v.id)} style={{ flex: 1, padding: "0.625rem 0.4rem", borderRadius: 10, border: luxVehicle === v.id ? "1px solid rgba(212,168,85,0.55)" : "1px solid rgba(255,255,255,0.07)", backgroundColor: luxVehicle === v.id ? "rgba(212,168,85,0.1)" : "rgba(255,255,255,0.03)", cursor: "pointer", fontFamily: "inherit", textAlign: "center" as const }}>
-                          <p style={{ color: luxVehicle === v.id ? GOLD : TEXT, fontSize: "0.78rem", fontWeight: 700 }}>{v.label}</p>
-                          <p style={{ color: luxVehicle === v.id ? GOLD : MUTED, fontWeight: 700, fontSize: "0.85rem", marginTop: "0.15rem" }}>${v.price}</p>
-                        </button>
-                      ))}
-                    </div>
-                  </div>
-                )}
-
-                {[
-                  { icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" /><circle cx="12" cy="7" r="4" /></svg>, label: "FULL NAME", type: "text", placeholder: "Your full name", value: name, set: setName },
-                  { icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.2 2 2 0 0 1 3.6 1h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.6a16 16 0 0 0 6 6l.96-.96a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.49 16l.43.92z" /></svg>, label: "PHONE / WHATSAPP", type: "tel", placeholder: "+1 (242) 000-0000", value: phone, set: setPhone },
-                  { icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" /><polyline points="22,6 12,13 2,6" /></svg>, label: "EMAIL", type: "email", placeholder: "you@email.com", value: email, set: setEmail },
-                ].map((f) => (
-                  <div key={f.label} style={card}>
-                    <Circle color={MUTED}>{f.icon}</Circle>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <p style={{ color: ORANGE, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.3rem" }}>{f.label}</p>
-                      <input type={f.type} placeholder={f.placeholder} value={f.value} onChange={(e) => f.set(e.target.value)} style={inputBase} />
-                    </div>
-                  </div>
-                ))}
-
-                {/* Photo upload */}
-                <div style={{ ...card, cursor: "pointer" }} onClick={() => fileInputRef.current?.click()}>
-                  <div style={{ width: 42, height: 42, borderRadius: "50%", overflow: "hidden", flexShrink: 0, backgroundColor: "rgba(245,160,32,0.08)", border: "1px solid rgba(245,160,32,0.15)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    {photoPreview ? (
-                      <img src={photoPreview} alt="profile" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-                    ) : (
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke={MUTED} strokeWidth="2"><circle cx="12" cy="13" r="4"/><path d="M5 7h2l2-3h6l2 3h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2z"/></svg>
-                    )}
-                  </div>
-                  <div style={{ flex: 1, minWidth: 0 }}>
-                    <p style={{ color: ORANGE, fontSize: "0.58rem", fontWeight: 700, letterSpacing: "0.12em", marginBottom: "0.25rem" }}>
-                      PROFILE PHOTO <span style={{ color: MUTED, fontWeight: 400, textTransform: "none" as const, letterSpacing: 0 }}>· optional</span>
-                    </p>
-                    {photoUploading ? (
-                      <p style={{ color: MUTED, fontSize: "0.8rem" }}>Uploading…</p>
-                    ) : photoUrl ? (
-                      <p style={{ color: GREEN, fontSize: "0.8rem", fontWeight: 600 }}>✓ Photo added</p>
-                    ) : (
-                      <p style={{ color: MUTED, fontSize: "0.8rem" }}>Tap to add a selfie for your profile</p>
-                    )}
-                  </div>
-                  {photoPreview && (
-                    <button onClick={(e) => { e.stopPropagation(); setPhotoUrl(""); setPhotoPreview(""); }} style={{ padding: "0.25rem 0.5rem", border: "none", background: "none", color: MUTED, fontSize: "0.9rem", cursor: "pointer", flexShrink: 0 }}>✕</button>
-                  )}
-                  <input ref={fileInputRef} type="file" accept="image/*" capture="user" style={{ display: "none" }} onChange={handlePhotoSelect} />
-                </div>
-
-                {error && <p style={{ color: "#E84040", fontSize: "0.78rem", paddingLeft: "0.25rem" }}>{error}</p>}
-
-                <div style={{ display: "flex", gap: "0.5rem" }}>
-                  <BackBtn onClick={goBack} />
-                  <NextBtn onClick={handleConfirm} disabled={loading || photoUploading} label={loading ? "Confirming…" : `Confirm · $${price} →`} />
-                </div>
-                <p style={{ color: MUTED, fontSize: "0.68rem", lineHeight: 1.5 }}>We&apos;ll send your HOP account + app download link to your email.</p>
-              </div>
-            )}
-
-            {/* ── 5: Done ── */}
-            {stepIdx === 5 && (
-              <div style={{ ...card, flexDirection: "column", textAlign: "center", gap: "0", padding: "2rem 1.5rem" }}>
-                <div style={{ width: 52, height: 52, borderRadius: "50%", backgroundColor: "rgba(58,173,110,0.12)", border: "2px solid rgba(58,173,110,0.3)", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 1rem" }}>
-                  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={GREEN} strokeWidth="2.5"><path d="M20 6L9 17l-5-5" /></svg>
-                </div>
-                <div style={{ display: "inline-block", padding: "0.2rem 1rem", backgroundColor: "rgba(245,160,32,0.1)", border: "1px solid rgba(245,160,32,0.2)", borderRadius: 999, marginBottom: "0.875rem" }}>
-                  <span style={{ color: ORANGE, fontWeight: 800, fontSize: "0.85rem", letterSpacing: "0.06em" }}>{bookingId}</span>
-                </div>
-                <h3 style={{ color: TEXT, fontWeight: 800, fontSize: "1.25rem", marginBottom: "0.4rem" }}>Ride confirmed!</h3>
-                <p style={{ color: MUTED, fontSize: "0.82rem", lineHeight: 1.6, marginBottom: "1.5rem" }}>
-                  A confirmation is on its way to <span style={{ color: TEXT }}>{email}</span>. Download the app to track your driver in real time.
-                </p>
-                <a
-                  href="https://apps.apple.com/us/app/hop-bahamas/id6756782428"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: "block", width: "100%", padding: "0.875rem", backgroundColor: ORANGE, borderRadius: 999, color: BG, fontWeight: 800, fontSize: "0.9rem", textDecoration: "none", marginBottom: "0.65rem", boxSizing: "border-box" as const }}
-                >
-                  Download on App Store →
-                </a>
-                <a
-                  href="https://play.google.com/store/apps/details?id=com.hopbahamas.rider"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: "block", width: "100%", padding: "0.875rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 700, fontSize: "0.9rem", textDecoration: "none", marginBottom: "0.65rem", boxSizing: "border-box" as const }}
-                >
-                  Download on Google Play →
-                </a>
-                <a
-                  href="https://app.hopbahamas.com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ display: "block", width: "100%", padding: "0.875rem", backgroundColor: "transparent", border: `1px solid ${OCEAN}40`, borderRadius: 999, color: OCEAN, fontWeight: 600, fontSize: "0.85rem", textDecoration: "none", marginBottom: "1.25rem", boxSizing: "border-box" as const }}
-                >
-                  Open web app →
-                </a>
-                <button onClick={reset} style={{ width: "100%", padding: "0.75rem", backgroundColor: "transparent", border: "none", borderRadius: 999, color: MUTED, fontWeight: 500, fontSize: "0.82rem", cursor: "pointer", fontFamily: "inherit" }}>
-                  Book another ride
+                  See fares →
                 </button>
               </div>
-            )}
+            </motion.div>
+          )}
 
-          </motion.div>
+          {step === "fares" && (
+            <motion.div key="fares" custom={dir} variants={slideVariants} initial="enter" animate="center" exit="exit">
+              <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
+                <div style={{ marginBottom: "0.25rem" }}>
+                  <p style={{ color: MUTED, fontSize: "0.68rem", fontWeight: 700, letterSpacing: "0.1em", marginBottom: "0.3rem" }}>FARE ESTIMATE</p>
+                  <p style={{ color: TEXT, fontWeight: 800, fontSize: "1rem" }}>{pickup} → {dropoff}</p>
+                  <p style={{ color: MUTED, fontSize: "0.78rem" }}>{pax} passenger{pax > 1 ? "s" : ""}{bags > 0 ? ` · ${bags} bag${bags > 1 ? "s" : ""}` : ""} · fixed price, no surge</p>
+                </div>
+
+                {tiers.map((t) => (
+                  <FareCard key={t.name} tag={t.tag} name={t.name} sub={t.sub} price={t.price} color={t.color} onBook={() => bookNow(t.tier, t.numPrice)} />
+                ))}
+
+                <div style={{ backgroundColor: "rgba(255,255,255,0.03)", borderRadius: 14, padding: "1rem 1.25rem", marginTop: "0.25rem" }}>
+                  <p style={{ color: MUTED, fontSize: "0.72rem", lineHeight: 1.6, marginBottom: "1rem" }}>
+                    Ready to book? Create your account on the HOP app and complete your booking in under 2 minutes.
+                  </p>
+                  <a
+                    href={APP_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => trackEvent("book_now_click", { pickup, dropoff, source: "widget_cta" })}
+                    style={{ display: "block", width: "100%", padding: "0.95rem", backgroundColor: ORANGE, borderRadius: 999, color: BG, fontWeight: 800, fontSize: "1rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const, marginBottom: "0.5rem", boxShadow: "0 4px 20px rgba(245,160,32,0.28)" }}
+                  >
+                    Book now at app.hopbahamas.com →
+                  </a>
+                  <div style={{ display: "flex", gap: "0.5rem" }}>
+                    <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: "block", padding: "0.65rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 600, fontSize: "0.78rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const }}>
+                      App Store
+                    </a>
+                    <a href={GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: "block", padding: "0.65rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 600, fontSize: "0.78rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const }}>
+                      Google Play
+                    </a>
+                  </div>
+                </div>
+
+                <button onClick={reset} style={{ padding: "0.6rem", backgroundColor: "transparent", border: "none", borderRadius: 999, color: MUTED, fontWeight: 500, fontSize: "0.82rem", cursor: "pointer", fontFamily: "inherit" }}>
+                  ← Check another route
+                </button>
+              </div>
+            </motion.div>
+          )}
         </AnimatePresence>
       </div>
 
-      {stepIdx === 0 && (
+      {step === "route" && (
         <div style={{ display: "flex", gap: "1.25rem", flexWrap: "wrap", marginTop: "1rem", alignItems: "center" }}>
           <a href="#testimonials" style={{ display: "flex", alignItems: "center", gap: "0.3rem", textDecoration: "none" }}>
             <span style={{ color: ORANGE, fontSize: "0.82rem", fontWeight: 800 }}>4.9 ★</span>
@@ -541,39 +302,37 @@ export default function HeroBookingWidget() {
   )
 }
 
-type TierRow = { t: Tier; tag: string; name: string; sub: string; price: string; color: string; border: string; hoverBorder: string; hoverBg: string }
-
-function TierBtn({ row, onClick }: { row: TierRow; onClick: () => void }) {
+function FareCard({ tag, name, sub, price, color, onBook }: {
+  tag: string; name: string; sub: string; price: string; color: string; onBook: () => void
+}) {
   const [hover, setHover] = useState(false)
-  const card2: React.CSSProperties = {
-    backgroundColor: hover ? row.hoverBg : "rgba(18,16,10,0.82)",
-    backdropFilter: "blur(20px)",
-    WebkitBackdropFilter: "blur(20px)",
-    border: `1px solid ${hover ? row.hoverBorder : row.border}`,
-    borderRadius: 16,
-    padding: "1.1rem 1.25rem",
-    display: "flex",
-    alignItems: "center",
-    gap: "1rem",
-    boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
-    cursor: "pointer",
-    fontFamily: "inherit",
-    textAlign: "left" as const,
-    width: "100%",
-    transition: "border-color 0.15s, background-color 0.15s",
-  }
-  const MUTED2 = "#8a8070"
-  const TEXT2 = "#f0ede8"
   return (
-    <button onClick={onClick} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={card2}>
-      <div style={{ width: 42, height: 42, borderRadius: "50%", backgroundColor: `${row.color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-        <span style={{ fontSize: "0.6rem", fontWeight: 800, color: row.color }}>{row.tag}</span>
+    <button
+      onClick={onBook}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        width: "100%", display: "flex", alignItems: "center", gap: "1rem",
+        backgroundColor: hover ? `${color}12` : "rgba(18,16,10,0.82)",
+        backdropFilter: "blur(20px)", WebkitBackdropFilter: "blur(20px)",
+        border: `1px solid ${hover ? color + "50" : "rgba(255,255,255,0.1)"}`,
+        borderRadius: 16, padding: "1rem 1.25rem",
+        cursor: "pointer", fontFamily: "inherit", textAlign: "left",
+        transition: "border-color 0.15s, background-color 0.15s",
+        boxShadow: "0 4px 16px rgba(0,0,0,0.3)",
+      }}
+    >
+      <div style={{ width: 42, height: 42, borderRadius: "50%", backgroundColor: `${color}18`, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+        <span style={{ fontSize: "0.6rem", fontWeight: 800, color }}>{tag}</span>
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ color: TEXT2, fontWeight: 700, fontSize: "1rem" }}>{row.name}</p>
-        <p style={{ color: MUTED2, fontSize: "0.78rem", marginTop: "0.15rem" }}>{row.sub}</p>
+        <p style={{ color: TEXT, fontWeight: 700, fontSize: "0.95rem" }}>{name}</p>
+        <p style={{ color: MUTED, fontSize: "0.75rem", marginTop: "0.1rem" }}>{sub}</p>
       </div>
-      <p style={{ color: row.color, fontWeight: 900, fontSize: "1.55rem", letterSpacing: "-0.03em", flexShrink: 0, fontVariantNumeric: "tabular-nums" }}>{row.price}</p>
+      <div style={{ textAlign: "right", flexShrink: 0 }}>
+        <p style={{ color, fontWeight: 900, fontSize: "1.5rem", letterSpacing: "-0.03em", fontVariantNumeric: "tabular-nums" }}>{price}</p>
+        <p style={{ color: MUTED, fontSize: "0.65rem", marginTop: "0.1rem" }}>Book on app →</p>
+      </div>
     </button>
   )
 }
