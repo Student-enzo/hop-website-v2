@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>HOP Bahamas — one continuous ride</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #14130f; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+  #world {
+    --sw-bg: #14130f; --sw-ink: #e7e2da; --sw-ink-soft: #a8a196; --sw-accent: #F5A020;
+    --sw-font-display: "Georgia", serif; --sw-font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #14130f; min-height: 100vh;
+  }
+
+  /* ---- Trip-status HUD: feels like you're inside the HOP app ---- */
+  #trip-hud {
+    position: fixed; left: 50%; top: 14px; transform: translateX(-50%);
+    z-index: 80; display: none; align-items: center; gap: 12px;
+    padding: 9px 16px; border-radius: 999px;
+    background: rgba(20,19,15,.62); backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,.12); color: #e7e2da;
+    box-shadow: 0 8px 30px rgba(0,0,0,.35); font-size: 13px; max-width: 92vw;
+  }
+  #trip-hud .dot { width: 8px; height: 8px; border-radius: 50%; background: #F5A020; box-shadow: 0 0 10px #F5A020; flex: none; animation: hud-pulse 1.8s ease-in-out infinite; }
+  @keyframes hud-pulse { 0%,100%{opacity:1} 50%{opacity:.35} }
+  #trip-hud .label { font-weight: 700; letter-spacing:.04em; white-space: nowrap; }
+  #trip-hud .status { color:#F5A020; font-weight:700; white-space: nowrap; }
+  #trip-hud .sep { width:1px; height:14px; background:rgba(255,255,255,.18); }
+  #trip-bar { position: fixed; left:0; top:0; height:3px; width:0%; z-index:81; background: linear-gradient(90deg,#F5A020,#ffd089); box-shadow:0 0 12px rgba(245,160,32,.6); transition: width .15s linear; }
+
+  /* ---- Ambient opener: order a HOP ride in a REAL place (not a flat screen) ---- */
+  #order-gate { position: fixed; inset: 0; z-index: 1000; overflow: hidden; cursor: pointer;
+    display:flex; align-items:center; justify-content:center; }
+  #order-gate .bg { position:absolute; inset:0; background:#14130f url('opener-ambient.jpg') center/cover no-repeat;
+    transform: scale(1.06); filter: saturate(1.05); }
+  #order-gate .scrim { position:absolute; inset:0; background: radial-gradient(120% 90% at 50% 40%, rgba(20,19,15,.15), rgba(20,19,15,.72) 75%); }
+  #order-gate .stage { position:relative; display:flex; flex-direction:column; align-items:center; gap:18px; text-align:center; }
+  /* crisp real HOP phone in front of the real ambient */
+  .phone { position:relative; border-radius:40px; padding:8px; background:linear-gradient(145deg,#2a2a2a,#161616);
+    box-shadow:0 40px 90px rgba(0,0,0,.6), 0 0 0 1px rgba(255,255,255,.08); animation: phone-in .6s cubic-bezier(.22,1,.36,1) both; }
+  @keyframes phone-in { from{opacity:0; transform:translateY(18px) scale(.96)} to{opacity:1; transform:none} }
+  .phone .screen { position:relative; width:min(64vw,230px); aspect-ratio:1290/2796; border-radius:34px; overflow:hidden; background:#000; }
+  .phone .screen img { width:100%; height:100%; object-fit:cover; display:block; }
+  .phone .ripple { position:absolute; left:25%; top:62%; width:44px; height:44px; margin:-22px 0 0 -22px; border-radius:50%; border:2px solid #F5A020; opacity:0; animation: ripple 1.5s ease-out .6s infinite; }
+  @keyframes ripple { 0%{opacity:.9; transform:scale(.35)} 100%{opacity:0; transform:scale(2.6)} }
+  .order-cta { display:inline-flex; align-items:center; gap:8px; padding:14px 30px; border-radius:999px; background:#F5A020; color:#14130f; font-weight:800; font-size:1.02rem; box-shadow:0 10px 30px rgba(245,160,32,.4); }
+  .order-cap { color:#e7e2da; font-size:.9rem; opacity:.9; }
+  .order-eyebrow { color:#F5A020; letter-spacing:.22em; text-transform:uppercase; font-size:.72rem; font-weight:700; }
+  #order-gate.closing { opacity:0; transition:opacity .55s ease; pointer-events:none; }
+  .bloom { position:absolute; left:25%; top:62%; width:14px; height:14px; border-radius:50%;
+    background: radial-gradient(circle, rgba(245,160,32,.95), rgba(245,160,32,0) 70%); transform:translate(-50%,-50%) scale(0); }
+  .bloom.go { animation: bloom 1s cubic-bezier(.22,1,.36,1) forwards; }
+  @keyframes bloom { 0%{transform:translate(-50%,-50%) scale(0); opacity:.95} 100%{transform:translate(-50%,-50%) scale(240); opacity:0} }
+  @media (max-width:600px){ #trip-hud .label{display:none} }
+</style>
+</head>
+<body>
+  <div id="trip-bar"></div>
+  <div id="trip-hud">
+    <span class="dot"></span>
+    <span class="label">HOP · your Bahamas ride</span>
+    <span class="sep"></span>
+    <span class="status" id="trip-status">Arriving</span>
+  </div>
+
+  <div id="world">
+    <div data-sw-seo style="display:none"><h1>HOP Bahamas — one continuous ride</h1></div>
+  </div>
+
+  <!-- Order the ride: real HOP app over a REAL ambient (airport curb), then tap -> the ride begins -->
+  <div id="order-gate">
+    <div class="bg"></div>
+    <div class="scrim"></div>
+    <div class="stage">
+      <div class="order-eyebrow">HOP · Nassau, Bahamas</div>
+      <div class="phone">
+        <div class="screen">
+          <img src="app-booking.png" alt="HOP app — confirm your ride" />
+          <span class="ripple"></span>
+        </div>
+        <span class="bloom" id="bloom"></span>
+      </div>
+      <div class="order-cta">Tap to confirm your ride ▸</div>
+      <div class="order-cap">then scroll — one continuous ride across the islands</div>
+    </div>
+  </div>
+
+  <script src="scrub-engine.js"></script>
+  <script>
+    var ACCENT = "#F5A020";
+    var SECTIONS = [
+      { id:"airport",  label:"Airport",  clip:"vid/1_airport_v3.mp4", clipMobile:"vid/1_airport_v3-m.mp4", poster:"posters/1_airport_v3.jpg", still:"stills/1_airport_v3.png",
+        accent:ACCENT, eyebrow:"FROM THE SECOND YOU LAND", title:"Your ride is already here.", body:"One tap in the HOP app and you're moving — rides, tours, and a concierge, no extra cost.", tags:["Rides","Tours","Concierge"], scroll:1.6, linger:0.4, status:"Arriving" },
+      { id:"nassau",   label:"Nassau",   clip:"vid/leg2_nassau.mp4", clipMobile:"vid/leg2_nassau-m.mp4", poster:"posters/leg2_nassau.jpg", still:"stills/2_cruise.png",
+        accent:ACCENT, eyebrow:"THROUGH NASSAU", title:"The island, moving with you.", body:"Past the harbor to the marina — HOP knows the way.", scroll:1.5, status:"En route" },
+      { id:"boat",     label:"Crossing", clip:"vid/leg3_boat.mp4", clipMobile:"vid/leg3_boat-m.mp4", poster:"posters/leg3_boat.jpg", still:"stills/3_boat.png",
+        accent:ACCENT, eyebrow:"BY LAND OR BY SEA", title:"Cross to paradise.", body:"Your concierge booked the boat too. Atlantis, dead ahead.", scroll:1.5, linger:0.35, status:"Crossing" },
+      { id:"atlantis", label:"Atlantis", clip:"vid/leg4_atlantis.mp4", clipMobile:"vid/leg4_atlantis-m.mp4", poster:"posters/leg4_atlantis.jpg", still:"stills/4_atlantis.png",
+        accent:ACCENT, eyebrow:"CONCIERGE-PICKED", title:"Marina Village.", body:"Walk it like you belong — because today, you do.", scroll:1.4, status:"Arrived · Atlantis" },
+      { id:"lunch",    label:"Lunch",    clip:"vid/leg5_lunch.mp4", clipMobile:"vid/leg5_lunch-m.mp4", poster:"posters/leg5_lunch.jpg", still:"stills/4b_food.png",
+        accent:ACCENT, eyebrow:"NO EXTRA COST", title:"Your table was waiting.", body:"Fresh Bahamian lobster, the yachts behind it. Arranged before you asked.", scroll:1.4, linger:0.45, status:"Reserved" },
+      { id:"beach",    label:"Beach",    clip:"vid/leg6_beach.mp4", clipMobile:"vid/leg6_beach-m.mp4", poster:"posters/leg6_beach.jpg", still:"stills/5_beach.png",
+        accent:ACCENT, eyebrow:"THE BAHAMAS ONLY LOCALS KNOW", title:"Sunset, all to yourself.", body:"Beyond the resorts there's a beach with your name on it. HOP takes you there.", tags:["Guided tours included"], scroll:1.7, linger:0.5, status:"Guided tour" },
+      { id:"night",    label:"Night",    clip:"vid/leg7_night.mp4", clipMobile:"vid/leg7_night-m.mp4", poster:"posters/leg7_night.jpg", still:"stills/6_entrance.png",
+        accent:ACCENT, eyebrow:"THE NIGHT IS YOURS", title:"Arrive like you mean it.", body:"Dinner, show, the night — on your schedule, not a timetable.", scroll:1.4, status:"Night out" },
+      { id:"rooftop",  label:"Rooftop",  clip:"vid/leg8_rooftop.mp4", clipMobile:"vid/leg8_rooftop-m.mp4", poster:"posters/leg8_rooftop.jpg", still:"stills/7_rooftop.png",
+        accent:ACCENT, eyebrow:"ANY HOUR", title:"And home again — whenever you say.", body:"From the second you land to the last toast of the night: one app, 24/7.", scroll:1.8, linger:0.5, status:"24/7",
+        cta:{ primary:{ label:"Book a HOP", href:"https://app.hopbahamas.com" } } }
+    ];
+
+    mountScrollWorld(document.getElementById("world"), {
+      brand:{ name:"HOP", href:"#" }, hint:"scroll — one continuous ride", nav:true, atmosphere:true,
+      crossfade:0.08, connectors:[], sections:SECTIONS
+    });
+
+    // ---- Trip-status HUD updates as you scroll (approx active section) ----
+    var hud = document.getElementById("trip-hud"), bar = document.getElementById("trip-bar"), statusEl = document.getElementById("trip-status");
+    function onScroll(){
+      var max = document.documentElement.scrollHeight - window.innerHeight;
+      var f = max > 0 ? Math.min(1, Math.max(0, window.scrollY / max)) : 0;
+      bar.style.width = (f*100).toFixed(1) + "%";
+      var idx = Math.min(SECTIONS.length-1, Math.floor(f * SECTIONS.length));
+      statusEl.textContent = SECTIONS[idx].status;
+    }
+    window.addEventListener("scroll", onScroll, { passive:true });
+
+    // ---- Order gate: prime videos in the tap gesture, bloom, then reveal ----
+    (function(){
+      var gate = document.getElementById("order-gate"), bloom = document.getElementById("bloom");
+      gate.addEventListener("click", function(){
+        document.querySelectorAll("video").forEach(function(v){ try{ v.play().then(function(){v.pause();}).catch(function(){}); }catch(e){} });
+        bloom.classList.add("go");
+        setTimeout(function(){ gate.classList.add("closing"); hud.style.display="flex"; onScroll(); }, 520);
+        setTimeout(function(){ gate.remove(); }, 1100);
+      }, { once:true });
+    })();
+  </script>
+</body>
+</html>

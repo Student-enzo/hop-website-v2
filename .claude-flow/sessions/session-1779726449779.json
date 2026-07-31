@@ -1,0 +1,14 @@
+{
+  "id": "session-1779726449779",
+  "startedAt": "2026-05-25T16:27:29.779Z",
+  "cwd": "/Users/enissongodoy/gsd-workspaces/hop-bahamas-website",
+  "context": {},
+  "metrics": {
+    "edits": 21,
+    "commands": 0,
+    "tasks": 0,
+    "errors": 0
+  },
+  "endedAt": "2026-05-28T20:18:31.141Z",
+  "duration": 273061363
+}

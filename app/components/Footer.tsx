@@ -3,6 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { trackEvent } from "@/lib/analytics";
+import { ScannerCardStream } from "@/components/ui/scanner-card-stream";
 
 export default function Footer() {
   return (
@@ -10,10 +11,10 @@ export default function Footer() {
       style={{
         backgroundColor: "#1e1c14",
         borderTop: "1px solid rgba(255,255,255,0.06)",
-        padding: "3rem 1.5rem 2rem",
       }}
     >
-      <div className="max-w-7xl mx-auto">
+      <ScannerCardStream initialSpeed={120} repeat={5} />
+      <div className="max-w-7xl mx-auto" style={{ padding: "3rem 1.5rem 2rem" }}>
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-10">
           {/* Brand */}
           <div className="md:col-span-2">

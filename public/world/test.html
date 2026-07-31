@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>HOP — continuity test (airport → marina)</title>
+<style>
+  html, body { margin: 0; padding: 0; background: #14130f; }
+  #world {
+    --sw-bg: #14130f;
+    --sw-ink: #e7e2da;
+    --sw-ink-soft: #a8a196;
+    --sw-accent: #F5A020;
+    --sw-font-display: "Georgia", cursive;
+    --sw-font-body: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: #14130f;
+    min-height: 100vh;
+  }
+</style>
+</head>
+<body>
+  <div id="world">
+    <div data-sw-seo style="display:none"><h1>HOP continuity test</h1></div>
+  </div>
+
+  <!-- tap-to-start: satisfies the browser's autoplay gesture gate (production's
+       BookingOpener does this on the real /world page) so the first frame is never blank -->
+  <div id="start-gate" style="position:fixed;inset:0;z-index:1000;display:flex;
+       flex-direction:column;align-items:center;justify-content:center;gap:18px;
+       background:#14130f url('posters/1_airport_v3.jpg') center/cover no-repeat;
+       cursor:pointer;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;">
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(20,19,15,.55),rgba(20,19,15,.75));"></div>
+    <div style="position:relative;text-align:center;color:#e7e2da;">
+      <div style="font-size:0.8rem;letter-spacing:.22em;text-transform:uppercase;color:#F5A020;margin-bottom:10px;">HOP · your Bahamas ride</div>
+      <div style="font-size:1.6rem;font-weight:700;margin-bottom:16px;">Tap to start the ride</div>
+      <div style="display:inline-flex;align-items:center;gap:8px;padding:13px 26px;border-radius:999px;
+           background:#F5A020;color:#14130f;font-weight:700;">Begin ▸</div>
+      <div style="margin-top:14px;font-size:0.82rem;color:#a8a196;">then scroll — airport → marina, one continuous glide</div>
+    </div>
+  </div>
+
+  <script src="scrub-engine.js"></script>
+  <script>
+    var ACCENT = "#F5A020";
+    mountScrollWorld(document.getElementById("world"), {
+      brand: { name: "HOP", href: "#" },
+      hint: "scroll — one continuous ride",
+      nav: true,
+      atmosphere: true,
+      crossfade: 0.08,
+      connectors: [],
+      sections: [
+        {
+          id: "airport",
+          label: "Airport",
+          clip: "vid/1_airport_v3.mp4",
+          poster: "posters/1_airport_v3.jpg",
+          still: "stills/1_airport_v3.png",
+          accent: ACCENT,
+          eyebrow: "FROM THE SECOND YOU LAND",
+          title: "Your ride is already here.",
+          body: "One tap in the HOP app and you're moving.",
+          scroll: 1.6,
+          linger: 0.4
+        },
+        {
+          id: "nassau",
+          label: "Nassau",
+          clip: "vid/leg2_nassau.mp4",
+          poster: "posters/leg2_nassau.jpg",
+          still: "stills/2_cruise.png",
+          accent: ACCENT,
+          eyebrow: "THROUGH NASSAU",
+          title: "The island, moving with you.",
+          body: "Forward past the harbor, all the way to the marina — one continuous ride.",
+          scroll: 2.0,
+          linger: 0.35
+        }
+      ]
+    });
+
+    // Prime videos inside the tap gesture, then reveal the world.
+    (function () {
+      var gate = document.getElementById("start-gate");
+      if (!gate) return;
+      gate.addEventListener("click", function () {
+        document.querySelectorAll("video").forEach(function (v) {
+          try { v.play().then(function(){ v.pause(); }).catch(function(){}); } catch (e) {}
+        });
+        gate.style.transition = "opacity .5s ease";
+        gate.style.opacity = "0";
+        setTimeout(function () { gate.remove(); }, 520);
+      }, { once: true });
+    })();
+  </script>
+</body>
+</html>
