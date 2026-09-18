@@ -81,7 +81,7 @@ export default function Footer() {
                 App Store
               </a>
               <a
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => trackEvent("cta_click", { label: "book_ride", location: "footer" })}

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { GET_THE_APP_URL, GOOGLE_PLAY_URL } from "@/lib/app-links";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import HowItWorksSection from "./components/HowItWorksSection";
@@ -79,11 +80,11 @@ function AppStoreButtons({ size = "lg" }: { size?: "sm" | "lg" }) {
         </svg>
         App Store
       </TrackedLink>
-      <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" eventLabel="book_ride" eventLocation="app_store_buttons" className="btn-secondary" style={{ padding: pad, fontSize: fs }}>
+      <TrackedLink href={GOOGLE_PLAY_URL ?? GET_THE_APP_URL} target="_blank" rel="noopener noreferrer" eventLabel="android_download" eventLocation="app_store_buttons" className="btn-secondary" style={{ padding: pad, fontSize: fs }}>
         <svg width="18" height="18" viewBox="0 0 24 24" fill={TEXT}>
           <path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z" />
         </svg>
-        Google Play
+        {GOOGLE_PLAY_URL ? "Google Play" : "Android"}
       </TrackedLink>
     </div>
   );
@@ -177,12 +178,12 @@ export default function HomePage() {
                     <p style={{ color: TEXT, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.25, letterSpacing: "-0.01em" }}>App Store</p>
                   </div>
                 </a>
-                <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="app-store-btn">
+                <a href={GOOGLE_PLAY_URL ?? GET_THE_APP_URL} target="_blank" rel="noopener noreferrer" className="app-store-btn">
                   <svg width="28" height="28" viewBox="0 0 24 24" fill={TEXT} style={{ flexShrink: 0 }}>
                     <path d="M3 20.5v-17c0-.83.94-1.3 1.6-.8l15 8.5c.6.35.6 1.25 0 1.6l-15 8.5c-.66.5-1.6.03-1.6-.8z" />
                   </svg>
                   <div>
-                    <p style={{ color: "rgba(240,237,232,0.55)", fontSize: "0.65rem", lineHeight: 1, letterSpacing: "0.02em" }}>Get it on</p>
+                    <p style={{ color: "rgba(240,237,232,0.55)", fontSize: "0.65rem", lineHeight: 1, letterSpacing: "0.02em" }}>{GOOGLE_PLAY_URL ? "Get it on" : "Coming soon to"}</p>
                     <p style={{ color: TEXT, fontSize: "1.05rem", fontWeight: 800, lineHeight: 1.25, letterSpacing: "-0.01em" }}>Google Play</p>
                   </div>
                 </a>
@@ -211,7 +212,7 @@ export default function HomePage() {
               Flying in, headed to Atlantis, or exploring Cable Beach — HOP is how Nassau moves. Fixed fares, reliable pickups, and a safety net built for the island.
             </p>
             <div style={{ display: "flex", gap: "1rem", justifyContent: "center", flexWrap: "wrap" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" eventLabel="book_ride" eventLocation="hero_mid_section" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" eventLabel="book_ride" eventLocation="hero_mid_section" className="btn-primary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Get My Ride
               </TrackedLink>
               <Link href="/routes" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
@@ -262,7 +263,7 @@ export default function HomePage() {
                 ))}
               </ul>
               <a
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.875rem 1.75rem", backgroundColor: "rgba(255,255,255,0.08)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 999, color: TEXT, fontWeight: 700, fontSize: "0.95rem", textDecoration: "none", transition: "background-color 0.15s, border-color 0.15s" }}
@@ -490,7 +491,7 @@ export default function HomePage() {
             </p>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "1rem" }}>
               <TrackedLink
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 eventLabel="book_ride"

@@ -150,7 +150,7 @@ const sections = [
     scroll: 1.8,
     linger: 0.5,
     // The engine's ctaBtns() reads cta.primary/cta.secondary, not a flat {label,href}.
-    cta: { primary: { label: "Book a HOP", href: "https://app.hopbahamas.com" } },
+    cta: { primary: { label: "Book a HOP", href: "/get-the-app" } },
   },
 ];
 
@@ -181,7 +181,7 @@ export default function WorldMount() {
       <Script src="/world/scrub-engine.js" strategy="afterInteractive" onLoad={handleEngineLoad} />
       <BookingOpener active={openerUp} onDismiss={() => setDismissed(true)} />
       <a
-        href="https://app.hopbahamas.com"
+        href="/get-the-app"
         className="hop-world-pill"
         style={{
           position: "fixed",

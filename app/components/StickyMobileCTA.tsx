@@ -29,7 +29,7 @@ export default function StickyMobileCTA() {
       }}
     >
       <a
-        href="https://app.hopbahamas.com"
+        href="/get-the-app"
         target="_blank"
         rel="noopener noreferrer"
         onClick={() => trackEvent("cta_click", { label: "sticky_book_ride", location: "sticky_mobile" })}

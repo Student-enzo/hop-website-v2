@@ -106,7 +106,7 @@ export default function ServicesPage() {
             <FadeUp delay={0.2}>
               <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap" }}>
                 <a
-                  href="https://app.hopbahamas.com"
+                  href="/get-the-app"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary"
@@ -203,7 +203,7 @@ export default function ServicesPage() {
             <FadeUp delay={0.1}>
               <div style={{ marginTop: "2.5rem", display: "flex", gap: "1rem", flexWrap: "wrap" }}>
                 <a
-                  href="https://app.hopbahamas.com"
+                  href="/get-the-app"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="btn-primary"
@@ -310,7 +310,7 @@ export default function ServicesPage() {
             </p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "0.875rem" }}>
               <a
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"

@@ -501,7 +501,7 @@ export default async function BlogPostPage({ params }: Props) {
             </p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "0.75rem" }}>
               <TrackedLink
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"

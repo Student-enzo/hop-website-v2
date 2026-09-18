@@ -154,9 +154,9 @@ export async function sendAppCredentialsEmail(data: AppCredentialsEmailData) {
          style="display:block;background:#F5A020;color:#161616;font-weight:800;font-size:0.9rem;padding:0.875rem 1.5rem;border-radius:999px;text-decoration:none;text-align:center;">
         Download on iPhone — App Store →
       </a>
-      <a href="https://play.google.com/store/apps/details?id=com.hopbahamas.rider"
+      <a href="https://hopbahamas.com/get-the-app"
          style="display:block;background:rgba(255,255,255,0.06);color:#f0ede8;font-weight:700;font-size:0.9rem;padding:0.875rem 1.5rem;border-radius:999px;text-decoration:none;text-align:center;border:1px solid rgba(255,255,255,0.1);">
-        Download on Android — Google Play →
+        On Android? Book with us →
       </a>
     </div>
 
@@ -200,7 +200,7 @@ export async function sendWelcomeEmail(email: string, name?: string) {
     </p>
     <a href="https://apps.apple.com/us/app/hop-bahamas/id6756782428" style="display:inline-block;background:#F5A020;color:#161616;font-weight:700;font-size:0.9rem;padding:0.75rem 1.5rem;border-radius:999px;text-decoration:none;margin-bottom:0.75rem;">Download on App Store →</a>
     <br>
-    <a href="https://app.hopbahamas.com" style="display:inline-block;background:rgba(255,255,255,0.06);color:#f0ede8;font-weight:600;font-size:0.9rem;padding:0.75rem 1.5rem;border-radius:999px;text-decoration:none;border:1px solid rgba(255,255,255,0.1);">Book online →</a>
+    <a href="https://hopbahamas.com/get-the-app" style="display:inline-block;background:rgba(255,255,255,0.06);color:#f0ede8;font-weight:600;font-size:0.9rem;padding:0.75rem 1.5rem;border-radius:999px;text-decoration:none;border:1px solid rgba(255,255,255,0.1);">Book online →</a>
     <p style="color:#8a8070;font-size:0.75rem;margin-top:2rem;">
       © 2026 Quicky Solutions LLC (dba HOP Bahamas) · <a href="https://hopbahamas.com/privacy-policy" style="color:#F5A020;">Privacy Policy</a>
     </p>

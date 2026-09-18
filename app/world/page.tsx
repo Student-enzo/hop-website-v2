@@ -68,7 +68,7 @@ export default function WorldPage() {
         <p>From the second you land to the last toast of the night: one app, 24/7.</p>
 
         <p>
-          <a href="https://app.hopbahamas.com">Book a HOP</a>
+          <a href="/get-the-app">Book a HOP</a>
         </p>
       </div>
 

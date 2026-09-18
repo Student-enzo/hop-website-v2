@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import { trackEvent } from "@/lib/analytics"
+import { APP_STORE_URL, GET_THE_APP_URL, GOOGLE_PLAY_URL } from "@/lib/app-links"
 import { motion, AnimatePresence } from "framer-motion"
 
 const BG = "#161616"
@@ -126,9 +127,7 @@ const slideVariants = {
   exit: (dir: number) => ({ x: dir > 0 ? "-110%" : "110%", opacity: 0, transition: { duration: 0.3, ease: [0.32, 0.72, 0, 1] as [number, number, number, number] } }),
 }
 
-const APP_URL = "https://app.hopbahamas.com"
-const APP_STORE_URL = "https://apps.apple.com/us/app/hop-bahamas/id6756782428"
-const GOOGLE_PLAY_URL = "https://play.google.com/store/apps/details?id=com.hopbahamas.rider"
+const APP_URL = GET_THE_APP_URL
 
 export default function HeroBookingWidget() {
   const [step, setStep] = useState<"route" | "fares">("route")
@@ -263,14 +262,14 @@ export default function HeroBookingWidget() {
                     onClick={() => trackEvent("book_now_click", { pickup, dropoff, source: "widget_cta" })}
                     style={{ display: "block", width: "100%", padding: "0.95rem", backgroundColor: ORANGE, borderRadius: 999, color: BG, fontWeight: 800, fontSize: "1rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const, marginBottom: "0.5rem", boxShadow: "0 4px 20px rgba(245,160,32,0.28)" }}
                   >
-                    Book now at app.hopbahamas.com →
+                    Get the app to book →
                   </a>
                   <div style={{ display: "flex", gap: "0.5rem" }}>
                     <a href={APP_STORE_URL} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: "block", padding: "0.65rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 600, fontSize: "0.78rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const }}>
                       App Store
                     </a>
-                    <a href={GOOGLE_PLAY_URL} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: "block", padding: "0.65rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 600, fontSize: "0.78rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const }}>
-                      Google Play
+                    <a href={GOOGLE_PLAY_URL ?? GET_THE_APP_URL} target="_blank" rel="noopener noreferrer" style={{ flex: 1, display: "block", padding: "0.65rem", backgroundColor: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.1)", borderRadius: 999, color: TEXT, fontWeight: 600, fontSize: "0.78rem", textDecoration: "none", textAlign: "center", boxSizing: "border-box" as const }}>
+                      {GOOGLE_PLAY_URL ? "Google Play" : "Android"}
                     </a>
                   </div>
                 </div>

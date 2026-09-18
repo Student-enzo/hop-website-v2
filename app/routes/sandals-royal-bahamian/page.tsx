@@ -55,7 +55,7 @@ export default function SandalsPage() {
               HOP Luxury gets you to Sandals Royal Bahamian with a confirmed fare — no haggling, no meters. Arrive the right way.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_sandals_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>Book Ride to Sandals</TrackedLink>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_sandals_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>Book Ride to Sandals</TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>Download the App</Link>
             </div>
           </div>
@@ -98,7 +98,7 @@ export default function SandalsPage() {
             <h2 style={{ fontSize: "clamp(1.5rem, 3vw, 2rem)", fontWeight: 800, color: TEXT, letterSpacing: "-0.02em", marginBottom: "0.75rem" }}>Ready to arrive in style?</h2>
             <p style={{ color: MUTED, fontSize: "0.95rem", marginBottom: "2rem" }}>Book your HOP Luxury transfer to Sandals Royal Bahamian.</p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_sandals_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>Book via Web App</TrackedLink>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_sandals_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>Book via Web App</TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>Download the App</Link>
             </div>
           </div>

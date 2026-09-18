@@ -86,7 +86,7 @@ export const BLOG_POSTS: BlogPost[] = [
         { title: "Nassau Cruise Port Transportation 2026 — Every Option With Real Prices", slug: "nassau-cruise-port-transportation-guide" },
         { title: "Nassau Airport to Atlantis: Every Transfer Option Compared (2026 Prices)", slug: "nassau-airport-to-atlantis-transfer" },
       ]},
-      { type: "cta", text: "Book My Blue Lagoon Island Transfer", href: "https://app.hopbahamas.com", subtext: "Fixed fares from $26 to the Paradise Island Ferry Terminal. Pre-schedule both ways." },
+      { type: "cta", text: "Book My Blue Lagoon Island Transfer", href: "/get-the-app", subtext: "Fixed fares from $26 to the Paradise Island Ferry Terminal. Pre-schedule both ways." },
     ],
     faq: [
       { q: "How do you get to Blue Lagoon Island from Nassau?", a: "Blue Lagoon Island requires two steps: ground transport to the Paradise Island Ferry Terminal (10–15 minutes from Nassau Cruise Port, 25–30 minutes from the airport), then a 25-minute ferry operated by Dolphin Encounters. Pre-book a HOP transfer to the terminal from $26, and book your excursion directly through Dolphin Encounters." },
@@ -135,7 +135,7 @@ export const BLOG_POSTS: BlogPost[] = [
       ]},
       { type: "h2", text: "How to Book HOP Before You Arrive" },
       { type: "ol", items: [
-        "Go to app.hopbahamas.com (or grab the iOS/Android app)",
+        "Download the HOP app from the App Store",
         "Enter your pickup: Lynden Pindling International Airport, Terminal A",
         "Enter your destination: Atlantis, Baha Mar, your hotel address",
         "See your fixed fare — confirmed before you commit",
@@ -157,14 +157,14 @@ export const BLOG_POSTS: BlogPost[] = [
         { title: "Nassau Bahamas Taxi Fares 2026 — The Official Prices (No Surprises)", slug: "nassau-taxi-cost-guide-2026" },
         { title: "How to Get Around Nassau Bahamas in 2026 — Every Option Explained", slug: "how-to-get-around-nassau-bahamas" },
       ]},
-      { type: "cta", text: "Book My Ride — No Download Needed", href: "https://app.hopbahamas.com", subtext: "See your fixed fare before you commit. Free cancellation." },
+      { type: "cta", text: "Book My Ride — No Download Needed", href: "/get-the-app", subtext: "See your fixed fare before you commit. Free cancellation." },
     ],
     faq: [
-      { q: "Is there Uber in Nassau, Bahamas?", a: "No. Uber and Lyft do not operate in Nassau, Bahamas. The closest equivalent is HOP — a Nassau-built ride app with fixed fares, advance booking, and in-app safety features. You can book at app.hopbahamas.com without downloading anything." },
+      { q: "Is there Uber in Nassau, Bahamas?", a: "No. Uber and Lyft do not operate in Nassau, Bahamas. The closest equivalent is HOP — a Nassau-built ride app with fixed fares, advance booking, and in-app safety features. Download HOP free on the App Store to book." },
       { q: "What is the best way to get around Nassau without Uber?", a: "HOP is the most direct Uber alternative in Nassau. It offers on-demand and pre-scheduled rides with fixed fares shown before you confirm. For short trips around downtown, Nassau's jitney buses cost $1.25–$3.50 and cover the main Bay Street corridor." },
       { q: "Can I pre-book a ride in Nassau before I arrive?", a: "Yes. HOP lets you schedule a pickup before you land. Enter your arrival time and pickup location and your driver will be confirmed and tracking your flight when you arrive — no waiting in a taxi queue after a long flight." },
       { q: "Are taxis in Nassau safe?", a: "Licensed Nassau taxis are generally safe. Look for yellow plates beginning with 'TN' — these are government-regulated. Always agree on the fare before you get in. HOP removes that step entirely with fixed prices and verified drivers." },
-      { q: "Does HOP work without downloading an app?", a: "Yes. HOP's web app at app.hopbahamas.com works in any mobile browser with no download required. Useful when you land on roaming data and don't want to wait for an app install." },
+      { q: "Do I need to download the HOP app?", a: "Yes. Rides are booked in the HOP app, free on the App Store, and it is built to work on roaming data with Low Data Mode. The Android app is coming soon — Android users can book with us on WhatsApp at +1-242-428-5167 in the meantime." },
       { q: "How much does it cost to get around Nassau?", a: "It depends on the option. Jitney buses cost $1.25–$3.50. Licensed taxis range from $25 for cruise port trips to $55+ for airport routes. HOP offers fixed fares from $26 for cruise port routes and from $35 for airport trips — price shown before you confirm." },
     ],
   },
@@ -223,7 +223,7 @@ export const BLOG_POSTS: BlogPost[] = [
         { title: "No Uber in Nassau — Here's What Tourists Actually Use in 2026", slug: "no-uber-nassau-bahamas" },
         { title: "Why Pre-Scheduling Your Nassau Airport Transfer Is Always the Right Call", slug: "scheduled-rides-nassau-airport-transfer" },
       ]},
-      { type: "cta", text: "See My Fixed Fare Now", href: "https://app.hopbahamas.com", subtext: "No download needed. Free cancellation." },
+      { type: "cta", text: "See My Fixed Fare Now", href: "/get-the-app", subtext: "No download needed. Free cancellation." },
     ],
     faq: [
       { q: "How much does a taxi cost from Nassau airport to Atlantis?", a: "A licensed taxi from Lynden Pindling International Airport (LPIA) to Atlantis Paradise Island costs $45–$55 for 1–2 passengers, plus $3 per additional passenger. The Atlantis official shuttle costs $38 per adult. HOP offers a pre-bookable fixed fare from $50 — price shown before you confirm, no negotiation." },
@@ -275,7 +275,7 @@ export const BLOG_POSTS: BlogPost[] = [
         { title: "Nassau Bahamas Taxi Fares 2026 — The Official Prices (No Surprises)", slug: "nassau-taxi-cost-guide-2026" },
         { title: "Why Pre-Scheduling Your Nassau Airport Transfer Is Always the Right Call", slug: "scheduled-rides-nassau-airport-transfer" },
       ]},
-      { type: "cta", text: "Book My Nassau Airport Transfer", href: "https://app.hopbahamas.com", subtext: "Fixed fare from $50 to Atlantis. Free cancellation. No download needed." },
+      { type: "cta", text: "Book My Nassau Airport Transfer", href: "/get-the-app", subtext: "Fixed fare from $50 to Atlantis. Free cancellation. No download needed." },
     ],
     faq: [
       { q: "How much is the transfer from Nassau airport to Atlantis?", a: "The Atlantis official shuttle is $38 per adult ($76 for two). Licensed taxis are $45–$55 for 1–2 passengers. HOP offers pre-bookable fixed fares from $50 — price confirmed before you commit, driver tracking your flight when you land." },
@@ -328,7 +328,7 @@ export const BLOG_POSTS: BlogPost[] = [
         { title: "Group Transportation in Nassau Bahamas — What to Book and When", slug: "group-travel-bahamas-mini-bus" },
         { title: "How to Get Around Nassau Bahamas in 2026 — Every Option Explained", slug: "how-to-get-around-nassau-bahamas" },
       ]},
-      { type: "cta", text: "Pre-Book My Cruise Port Transfer", href: "https://app.hopbahamas.com", subtext: "Schedule your pickup before your ship docks. Fixed price, no negotiation." },
+      { type: "cta", text: "Pre-Book My Cruise Port Transfer", href: "/get-the-app", subtext: "Schedule your pickup before your ship docks. Fixed price, no negotiation." },
     ],
     faq: [
       { q: "How do I get from Nassau cruise port to Atlantis?", a: "Atlantis Paradise Island is 3.5 miles from Prince George Wharf. A taxi costs $25–$35 for 1–2 passengers and takes 10–20 minutes. Pre-book a HOP ride from $26 to have a confirmed driver waiting when you dock — no taxi queue, fixed price." },
@@ -395,13 +395,13 @@ export const BLOG_POSTS: BlogPost[] = [
         { title: "No Uber in Nassau — Here's What Tourists Actually Use in 2026", slug: "no-uber-nassau-bahamas" },
         { title: "Nassau Cruise Port Transportation 2026 — Every Option With Real Prices", slug: "nassau-cruise-port-transportation-guide" },
       ]},
-      { type: "cta", text: "Book My Nassau Ride", href: "https://app.hopbahamas.com", subtext: "Fixed fares. No download needed. Pre-book before you land." },
+      { type: "cta", text: "Book My Nassau Ride", href: "/get-the-app", subtext: "Fixed fares. No download needed. Pre-book before you land." },
     ],
     faq: [
       { q: "What is the best way to get around Nassau, Bahamas?", a: "For most tourists, HOP is the easiest all-around option — fixed fares, advance booking, and it works like the Uber you're used to. For budget travelers exploring the Bay Street area, jitneys at $1.25 are hard to beat. Rental cars only make sense for stays of 4+ days." },
       { q: "Is there public transportation in Nassau, Bahamas?", a: "Yes. Nassau's public minibus system (jitneys) runs routes across the island for $1.25–$3.50 per trip. Route 10 covers Bay Street and connects the cruise port to Cable Beach. Jitneys don't follow printed schedules — you flag them down on the road." },
       { q: "How much does transportation cost in Nassau?", a: "Jitneys: $1.25–$3.50. Taxis: $25–$55+ depending on route. HOP: fixed fares from $26 for cruise port routes, from $35 for airport trips. Resort shuttles: $38–$45 per person per trip. Walking: free, but only useful downtown." },
-      { q: "Can I use Uber or Lyft in Nassau, Bahamas?", a: "No. Neither Uber nor Lyft operates in Nassau. The local equivalent is HOP — a Nassau-built ride app with fixed fares and advance booking. Use it at app.hopbahamas.com." },
+      { q: "Can I use Uber or Lyft in Nassau, Bahamas?", a: "No. Neither Uber nor Lyft operates in Nassau. The local equivalent is HOP — a Nassau-built ride app with fixed fares and advance booking. Download it free on the App Store." },
       { q: "Is it safe to walk around Nassau?", a: "Downtown Nassau along Bay Street and the waterfront is generally safe for tourists during the day. The cruise port area, Rawson Square, and the British Colonial stretch are busy and well-traveled. For evening transport or trips outside the downtown core, use HOP or a licensed taxi." },
       { q: "Do I need to rent a car in Nassau?", a: "For most stays of 3 nights or fewer, no. HOP and taxis cover every tourist destination. For 5+ day stays where you want to explore eastern New Providence beyond the resort corridor, a rental car starts to make economic sense." },
     ],
@@ -449,7 +449,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "note", text: "Trusted contacts receive a live tracking link for every ride you take — not just in emergencies. For solo travelers with someone back home keeping tabs, this is the feature that matters most." },
       { type: "h2", text: "The Honest Bottom Line" },
       { type: "p", text: "Nassau isn't dangerous for tourists. Licensed taxis are fine for most trips. But if price transparency, driver verification, and a genuine safety net matter to you — especially alone, at night, or with kids — HOP covers everything licensed taxis don't." },
-      { type: "cta", text: "Book a Verified Nassau Ride", href: "https://app.hopbahamas.com", subtext: "Driver name, photo, and plate shown before every ride." },
+      { type: "cta", text: "Book a Verified Nassau Ride", href: "/get-the-app", subtext: "Driver name, photo, and plate shown before every ride." },
     ],
     faq: [
       { q: "Is it safe to take a taxi in Nassau, Bahamas?", a: "Yes, licensed Nassau taxis are generally safe. Use taxis with yellow TN plates from official taxi stands at the airport and cruise port. Always agree on the fare before entering. For driver verification and live tracking, HOP provides those features on every ride." },
@@ -478,7 +478,7 @@ export const BLOG_POSTS: BlogPost[] = [
       { type: "p", text: "Three options worth knowing: the Atlantis official shuttle ($38/person), a licensed Nassau taxi ($45–$55 for 1–2 passengers), and a pre-booked HOP ride (from $50, fixed price, confirmed before your plane lands). The journey time is the same on all three." },
       { type: "h2", text: "Why Pre-Booking Is Worth It" },
       { type: "p", text: "Booking before your flight departs means you walk out of Nassau arrivals directly into your confirmed ride. No taxi queue. No comparing quotes with someone who's more rested than you after a red-eye. Your driver has already been tracking your flight." },
-      { type: "cta", text: "Book My Airport Transfer", href: "https://app.hopbahamas.com", subtext: "Fixed fare from $50. Book before you land." },
+      { type: "cta", text: "Book My Airport Transfer", href: "/get-the-app", subtext: "Fixed fare from $50. Book before you land." },
     ],
     faq: [
       { q: "How much is the transfer from Nassau airport to Atlantis?", a: "The Atlantis official shuttle is $38 per adult. Licensed taxis charge $45–$55 for 1–2 passengers. HOP offers pre-bookable fixed fares from $50 — confirmed before you land, driver already tracking your flight." },
@@ -510,7 +510,7 @@ export const BLOG_POSTS: BlogPost[] = [
         "Confirm your fixed fare — no changes when you land",
         "Your driver is notified and tracks your flight in real time",
       ]},
-      { type: "cta", text: "Schedule My Nassau Airport Pickup", href: "https://app.hopbahamas.com", subtext: "Lock in your fare before you land." },
+      { type: "cta", text: "Schedule My Nassau Airport Pickup", href: "/get-the-app", subtext: "Lock in your fare before you land." },
     ],
     faq: [
       { q: "Can I book a Nassau airport pickup before I travel?", a: "Yes. HOP's scheduling feature lets you book days or weeks in advance. Enter your flight number and arrival time and your driver will be confirmed and waiting when you arrive." },
@@ -540,7 +540,7 @@ export const BLOG_POSTS: BlogPost[] = [
         ["Luxury Mini Bus", "Up to 15 passengers", "$190 flat, anywhere in Nassau"],
       ]},
       { type: "p", text: "The Mini Bus at $190 for 15 people is $12.67 per head — with AC, luggage space, and a confirmed driver. For a family reunion, wedding group, or tour party, the math is embarrassingly obvious." },
-      { type: "cta", text: "Book a Group Ride in Nassau", href: "https://app.hopbahamas.com", subtext: "All group sizes. Flat rates. Book before you arrive." },
+      { type: "cta", text: "Book a Group Ride in Nassau", href: "/get-the-app", subtext: "All group sizes. Flat rates. Book before you arrive." },
     ],
     faq: [
       { q: "How do I book group transportation in Nassau?", a: "Book through the HOP app or web app and select your vehicle type based on group size. Standard up to 4, Luxury SUV up to 7, Mini Bus up to 15. For groups larger than 15, contact HOP directly for custom arrangements." },
@@ -571,7 +571,7 @@ export const BLOG_POSTS: BlogPost[] = [
       ]},
       { type: "p", text: "The practical result: your ride stays tracked, your driver stays connected, and you know your ETA — even on the kind of patchy roaming signal that makes every other app useless. The map goes static, but everything that matters keeps working." },
       { type: "image", src: "/screenshots/low-data-mode.png", alt: "HOP Low Data Mode screen — map paused, tracking active", caption: "Low Data Mode pauses the live map but keeps tracking, ETA, and driver messaging running." },
-      { type: "cta", text: "Download HOP — Works Everywhere in Nassau", href: "https://app.hopbahamas.com", subtext: "Fixed fares. No download required. Works on weak Nassau signal." },
+      { type: "cta", text: "Download HOP — Works Everywhere in Nassau", href: "/get-the-app", subtext: "Fixed fares. No download required. Works on weak Nassau signal." },
     ],
     faq: [
       { q: "What happens if I lose signal during a HOP ride?", a: "Low Data Mode activates automatically. The ride continues, GPS tracking stays live, and the driver remains on route. The map animation pauses but all functional features — tracking, ETA, messaging — keep running." },
@@ -601,7 +601,7 @@ export const BLOG_POSTS: BlogPost[] = [
         ["Price transparency", "Ask and see", "Price confirmed before booking"],
       ]},
       { type: "p", text: "If you prefer the human touch of a concierge recommendation, traditional services deliver that. If you'd rather tap, confirm, and know exactly what you're paying before the car arrives — that's HOP Luxury." },
-      { type: "cta", text: "Book HOP Luxury in Nassau", href: "https://app.hopbahamas.com", subtext: "Flat-rate luxury. No calls, no negotiation." },
+      { type: "cta", text: "Book HOP Luxury in Nassau", href: "/get-the-app", subtext: "Flat-rate luxury. No calls, no negotiation." },
     ],
     faq: [
       { q: "How much does a luxury car service cost in Nassau Bahamas?", a: "Traditional Nassau luxury services typically charge $100–$180 depending on vehicle type and route. HOP Luxury offers transparent flat rates: Sedan $95, SUV $120, Mini Bus $190 — all-inclusive, anywhere in Nassau, booked in-app without a phone call." },
@@ -636,7 +636,7 @@ export const BLOG_POSTS: BlogPost[] = [
         "1,000 points — Top tier reward",
       ]},
       { type: "p", text: "One reel gets you 195 points. Three photos gets you 150. Posting consistently across a week in Nassau gets you to the first milestone without trying. The rewards apply to future HOP rides — which is useful if you're coming back, and Nassau tends to do that to people." },
-      { type: "cta", text: "Start Earning HOP Moments", href: "https://app.hopbahamas.com", subtext: "Book a ride. Share a photo. Earn points toward free rides." },
+      { type: "cta", text: "Start Earning HOP Moments", href: "/get-the-app", subtext: "Book a ride. Share a photo. Earn points toward free rides." },
     ],
     faq: [
       { q: "How do HOP Moments work?", a: "After each ride, share a photo or video from your Nassau experience through the HOP app. Photos earn 50 points, videos earn 100, and reels earn 195. Reach milestones at 250, 500, 750, and 1,000 points to unlock ride credits and rewards." },
@@ -658,7 +658,7 @@ export const BLOG_POSTS: BlogPost[] = [
     content: [
       { type: "p", text: "Nassau's cruise terminal at Prince George Wharf puts you right in downtown Nassau. The Straw Market is at the exit. Bay Street is 2 minutes on foot. But Atlantis, Cable Beach, and Blue Lagoon — the places most passengers want to spend their day — are 10–25 minutes away by road." },
       { type: "p", text: "The fastest option: pre-book your transfer through HOP before your ship docks. Your driver is confirmed and waiting when you walk off the gangway. For everything else, see our complete cruise port transportation guide for pricing and timing on every option." },
-      { type: "cta", text: "Pre-Book My Cruise Port Transfer", href: "https://app.hopbahamas.com", subtext: "Schedule before your ship docks. Fixed price." },
+      { type: "cta", text: "Pre-Book My Cruise Port Transfer", href: "/get-the-app", subtext: "Schedule before your ship docks. Fixed price." },
     ],
     faq: [
       { q: "How do I get from Nassau cruise port to Atlantis?", a: "Atlantis is 3.5 miles from Prince George Wharf. A taxi costs $25–$35 for 1–2 passengers and takes 10–20 minutes. Pre-book with HOP from $26 to have a driver confirmed and waiting when you dock — fixed price, no negotiation." },
@@ -689,7 +689,7 @@ export const BLOG_POSTS: BlogPost[] = [
         "In an SOS event, they're notified immediately with your location",
       ]},
       { type: "note", text: "Trusted contacts see your location on every ride, not just during SOS events. For solo travelers with someone tracking them from home, this is the feature that actually matters." },
-      { type: "cta", text: "Book a Safe Nassau Ride with HOP", href: "https://app.hopbahamas.com", subtext: "Driver verified, fare fixed, SOS ready. Every ride." },
+      { type: "cta", text: "Book a Safe Nassau Ride with HOP", href: "/get-the-app", subtext: "Driver verified, fare fixed, SOS ready. Every ride." },
     ],
     faq: [
       { q: "How does the HOP SOS button work?", a: "A 3-second countdown prevents accidental triggers. If not cancelled, HOP simultaneously calls Nassau 919, alerts the HOP Safety Desk, and sends your trusted contacts a notification with your live GPS location — all at once, not sequentially." },

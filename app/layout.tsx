@@ -64,7 +64,7 @@ const taxiServiceSchema = {
   },
   availableChannel: {
     "@type": "ServiceChannel",
-    serviceUrl: "https://app.hopbahamas.com",
+    serviceUrl: "https://hopbahamas.com/get-the-app",
     servicePhone: "+1-242-428-5167",
   },
   hasOfferCatalog: {
@@ -109,17 +109,17 @@ const faqSchema = {
     {
       "@type": "Question",
       name: "Is there Uber in Nassau, Bahamas?",
-      acceptedAnswer: { "@type": "Answer", text: "No. Uber and Lyft do not operate in Nassau, Bahamas. HOP is the local ride-hailing alternative — fixed fares, pre-booking before you land, and real-time GPS tracking. Book at app.hopbahamas.com." },
+      acceptedAnswer: { "@type": "Answer", text: "No. Uber and Lyft do not operate in Nassau, Bahamas. HOP is the local ride-hailing alternative — fixed fares, pre-booking before you land, and real-time GPS tracking. Book in the HOP app, free on the App Store." },
     },
     {
       "@type": "Question",
       name: "How much does it cost to get from Nassau Airport (LPIA) to Atlantis?",
-      acceptedAnswer: { "@type": "Answer", text: "HOP's fixed fare from Lynden Pindling International Airport to Atlantis on Paradise Island is $47 (ECO) or $58 (Standard). Government-regulated taxis charge $45–$55 plus a $1 bridge toll. Book HOP in advance at app.hopbahamas.com to lock in your fare before landing." },
+      acceptedAnswer: { "@type": "Answer", text: "HOP's fixed fare from Lynden Pindling International Airport to Atlantis on Paradise Island is $47 (ECO) or $58 (Standard). Government-regulated taxis charge $45–$55 plus a $1 bridge toll. Book HOP in advance in the app to lock in your fare before landing." },
     },
     {
       "@type": "Question",
       name: "How do I get from Nassau Airport to Cable Beach or Baha Mar?",
-      acceptedAnswer: { "@type": "Answer", text: "HOP's fixed fare from Nassau Airport (LPIA) to Cable Beach or Baha Mar is $32 (ECO) or $39 (Standard). The drive takes approximately 15–20 minutes. Book at app.hopbahamas.com." },
+      acceptedAnswer: { "@type": "Answer", text: "HOP's fixed fare from Nassau Airport (LPIA) to Cable Beach or Baha Mar is $32 (ECO) or $39 (Standard). The drive takes approximately 15–20 minutes. Book in the HOP app, free on the App Store." },
     },
     {
       "@type": "Question",
@@ -129,7 +129,7 @@ const faqSchema = {
     {
       "@type": "Question",
       name: "Can I pre-book a ride from Nassau Airport before I land?",
-      acceptedAnswer: { "@type": "Answer", text: "Yes. HOP lets you pre-book your Nassau airport transfer before your flight lands. Set your pickup time, see the fixed fare upfront, and your verified driver meets you at arrivals. Book at app.hopbahamas.com — no app download required." },
+      acceptedAnswer: { "@type": "Answer", text: "Yes. HOP lets you pre-book your Nassau airport transfer before your flight lands. Set your pickup time, see the fixed fare upfront, and your verified driver meets you at arrivals. Download HOP free on the App Store." },
     },
     {
       "@type": "Question",
@@ -138,13 +138,13 @@ const faqSchema = {
     },
     {
       "@type": "Question",
-      name: "Does HOP Bahamas require an app download?",
-      acceptedAnswer: { "@type": "Answer", text: "No. HOP works in your mobile browser at app.hopbahamas.com — no app download required. It also works on Nassau's spotty cellular network with Low Data Mode. The app is also available on the App Store for iOS users who prefer it." },
+      name: "Do I need the HOP app to book a ride?",
+      acceptedAnswer: { "@type": "Answer", text: "Yes. HOP rides are booked in the HOP app, free on the App Store. It is built for Nassau's spotty cellular network with Low Data Mode. The Android app is coming soon — until then, Android users can book with us on WhatsApp at +1-242-428-5167." },
     },
     {
       "@type": "Question",
       name: "How do I get from the Nassau cruise port to Atlantis?",
-      acceptedAnswer: { "@type": "Answer", text: "HOP's fixed fare from Nassau Cruise Port to Atlantis on Paradise Island starts from $26. The drive takes approximately 10–15 minutes across the Paradise Island Bridge. Book at app.hopbahamas.com — pre-schedule before your ship docks for guaranteed pickup." },
+      acceptedAnswer: { "@type": "Answer", text: "HOP's fixed fare from Nassau Cruise Port to Atlantis on Paradise Island starts from $26. The drive takes approximately 10–15 minutes across the Paradise Island Bridge. Book in the HOP app and pre-schedule before your ship docks for guaranteed pickup." },
     },
   ],
 };
@@ -166,9 +166,9 @@ const appSchema = {
   "@type": "MobileApplication",
   name: "HOP — Nassau Ride App",
   description: "Fixed-fare ride-hailing app for Nassau, Bahamas. Pre-book before you land, track in real time, one-tap SOS safety.",
-  url: "https://app.hopbahamas.com",
+  url: "https://apps.apple.com/us/app/hop-bahamas/id6756782428",
   applicationCategory: "TravelApplication",
-  operatingSystem: "iOS, Android",
+  operatingSystem: "iOS",
   offers: {
     "@type": "Offer",
     price: "0",

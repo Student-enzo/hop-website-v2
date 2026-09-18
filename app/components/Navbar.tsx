@@ -236,7 +236,7 @@ export default function Navbar() {
               Get App
             </Link>
             <a
-              href="https://app.hopbahamas.com"
+              href="/get-the-app"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => trackEvent("cta_click", { label: "nav_book_ride", location: "navbar_desktop" })}
@@ -336,7 +336,7 @@ export default function Navbar() {
           {/* Mobile CTAs */}
           <div style={{ marginTop: "1rem", display: "flex", flexDirection: "column", gap: "0.625rem" }}>
             <a
-              href="https://app.hopbahamas.com"
+              href="/get-the-app"
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => { trackEvent("cta_click", { label: "nav_book_ride", location: "navbar_mobile" }); setMobileOpen(false) }}

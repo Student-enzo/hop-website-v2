@@ -104,7 +104,7 @@ export default function HopMomentsSection() {
           </div>
 
           <a
-            href="https://app.hopbahamas.com"
+            href="/get-the-app"
             target="_blank"
             rel="noopener noreferrer"
             style={{ display: "inline-flex", alignItems: "center", gap: "0.5rem", padding: "0.875rem 1.75rem", backgroundColor: "rgba(255,255,255,0.08)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)", border: "1px solid rgba(255,255,255,0.2)", borderRadius: 999, color: TEXT, fontWeight: 700, fontSize: "0.95rem", textDecoration: "none" }}

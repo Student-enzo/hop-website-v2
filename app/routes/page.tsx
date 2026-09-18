@@ -121,7 +121,7 @@ export default function RoutesPage() {
               Fixed-price rides to every major Nassau destination. Book now, schedule ahead, or use the web app — no download needed.
             </p>
             <div style={{ display: "flex", gap: "0.75rem", flexWrap: "wrap", marginTop: "1.75rem" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Book a Ride Now
               </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
@@ -212,7 +212,7 @@ export default function RoutesPage() {
               Fixed price. No flagging. Book via web app or download HOP.
             </p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_cta_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_cta_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
                 Book via Web App
               </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>

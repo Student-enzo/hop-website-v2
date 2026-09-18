@@ -263,7 +263,7 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
       {/* CTAs */}
       <div className="flex w-full justify-center gap-4 flex-wrap items-center">
         <a
-          href="https://app.hopbahamas.com"
+          href="/get-the-app"
           target="_blank"
           rel="noopener noreferrer"
           className="btn-primary"

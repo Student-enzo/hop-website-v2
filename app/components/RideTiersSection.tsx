@@ -237,7 +237,7 @@ export default function RideTiersSection() {
         {/* CTAs */}
         <div style={{ marginTop: "2rem", display: "flex", gap: "1rem", alignItems: "center", flexWrap: "wrap" }}>
           <a
-            href="https://app.hopbahamas.com"
+            href="/get-the-app"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-primary"

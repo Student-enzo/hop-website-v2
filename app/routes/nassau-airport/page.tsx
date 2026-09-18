@@ -79,7 +79,7 @@ export default function NassauAirportPage() {
               Pre-book your LPIA airport transfer before you land. The price is locked in before your driver moves.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_airport_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_airport_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Book Airport Transfer
               </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
@@ -195,7 +195,7 @@ export default function NassauAirportPage() {
             </h2>
             <p style={{ color: MUTED, fontSize: "0.95rem", marginBottom: "2rem" }}>Fixed price. No flagging. Schedule before you land.</p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_airport_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_airport_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
                 Book via Web App
               </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>

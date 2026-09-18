@@ -201,7 +201,7 @@ export default function FareEstimator() {
               ))}
             </div>
             <a
-              href="https://app.hopbahamas.com"
+              href="/get-the-app"
               target="_blank"
               rel="noopener noreferrer"
               style={{
@@ -225,7 +225,7 @@ export default function FareEstimator() {
       {!match && from && to && (
         <p style={{ color: MUTED, fontSize: "0.8rem", marginTop: "0.75rem" }}>
           Route not in estimator —{" "}
-          <a href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" style={{ color: ORANGE, textDecoration: "none" }}>
+          <a href="/get-the-app" target="_blank" rel="noopener noreferrer" style={{ color: ORANGE, textDecoration: "none" }}>
             check the app for exact pricing
           </a>.
         </p>

@@ -76,7 +76,7 @@ export default function AtlantisPage() {
               The most requested route in Nassau. From the airport, downtown, or anywhere on the island — HOP gets you to Atlantis with a fare you agreed to before you moved.
             </p>
             <div style={{ display: "flex", gap: "1rem", flexWrap: "wrap" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_atlantis_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_atlantis_hero" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem" }}>
                 Book Ride to Atlantis
               </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 1.75rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>
@@ -168,7 +168,7 @@ export default function AtlantisPage() {
             </h2>
             <p style={{ color: MUTED, fontSize: "0.95rem", marginBottom: "2rem" }}>Fixed price. No flagging. Book now or schedule ahead.</p>
             <div style={{ display: "flex", justifyContent: "center", flexWrap: "wrap", gap: "1rem" }}>
-              <TrackedLink href="https://app.hopbahamas.com" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_atlantis_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
+              <TrackedLink href="/get-the-app" target="_blank" rel="noopener noreferrer" className="btn-primary" eventLabel="book_ride" eventLocation="routes_atlantis_bottom" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem" }}>
                 Book via Web App
               </TrackedLink>
               <Link href="/#download" className="btn-secondary" style={{ padding: "0.875rem 2rem", fontSize: "0.95rem", display: "inline-flex", alignItems: "center" }}>

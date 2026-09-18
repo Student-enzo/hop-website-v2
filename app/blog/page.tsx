@@ -117,7 +117,7 @@ export default function BlogPage() {
                 </p>
               </div>
               <a
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary shrink-0"
@@ -221,7 +221,7 @@ export default function BlogPage() {
             </p>
             <div className="flex justify-center flex-wrap gap-4">
               <a
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"

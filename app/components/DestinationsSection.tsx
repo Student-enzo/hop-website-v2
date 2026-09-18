@@ -128,7 +128,7 @@ export default function DestinationsSection() {
                 <p style={{ color: MUTED, fontSize: "0.8rem" }}>HOP goes anywhere in Nassau. Enter your address to get a fare.</p>
               </div>
               <a
-                href="https://app.hopbahamas.com"
+                href="/get-the-app"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn-primary"
