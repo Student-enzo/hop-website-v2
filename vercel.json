@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/fidelity",
+      "destination": "https://quick-b108e.web.app/fidelity/"
+    },
+    {
+      "source": "/fidelity/:path*",
+      "destination": "https://quick-b108e.web.app/fidelity/:path*"
+    }
+  ]
+}
