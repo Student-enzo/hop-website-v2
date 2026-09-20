@@ -1,6 +1,14 @@
 {
   "rewrites": [
     {
+      "source": "/split/:token*",
+      "destination": "https://us-central1-quick-b108e.cloudfunctions.net/billShare/:token*"
+    },
+    {
+      "source": "/split-status/:token*",
+      "destination": "https://us-central1-quick-b108e.cloudfunctions.net/billShareStatus/:token*"
+    },
+    {
       "source": "/fidelity",
       "destination": "https://quick-b108e.web.app/fidelity/"
     },
